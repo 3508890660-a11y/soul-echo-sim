@@ -1,0 +1,26 @@
+{
+  "name": "soul-echo-rule-engine",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "《灵魂回响》SE01 规则引擎、组卡器、双人对战与 12 模型 AI 脚本对阵台",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "test": "node tools/test.mjs",
+    "smoke": "node tools/smoke.mjs",
+    "rr": "node tools/round-robin.mjs",
+    "verify:ui": "node tools/verify-browser.mjs",
+    "sync-cards": "python tools/sync_cards.py",
+    "build:cards": "node tools/build-se01.mjs",
+    "fuzz": "node tools/fuzz-se01.mjs",
+    "verify:se01": "node tools/verify-se01-ui.mjs",
+    "brief": "node tools/build-agent-brief.mjs",
+    "agent:check": "node tools/agent-check.mjs",
+    "agent:ladder": "node tools/agent-ladder.mjs",
+    "agent:swiss": "node tools/agent-swiss.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

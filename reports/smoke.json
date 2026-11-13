@@ -1,0 +1,140 @@
+{
+  "generatedAt": "2026-11-13T04:45:21.751Z",
+  "scope": "脚本 AI 引擎不变量测试，不是真人平衡结论",
+  "passed": 12,
+  "failed": 0,
+  "records": [
+    {
+      "A": "灰色基准",
+      "B": "红色快攻",
+      "first": 0,
+      "seed": 9100,
+      "winner": 1,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 14,
+      "actions": 293,
+      "errors": []
+    },
+    {
+      "A": "灰色基准",
+      "B": "红色快攻",
+      "first": 1,
+      "seed": 9101,
+      "winner": 1,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 11,
+      "actions": 282,
+      "errors": []
+    },
+    {
+      "A": "红色快攻",
+      "B": "白色回复",
+      "first": 0,
+      "seed": 9110,
+      "winner": 1,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 16,
+      "actions": 385,
+      "errors": []
+    },
+    {
+      "A": "红色快攻",
+      "B": "白色回复",
+      "first": 1,
+      "seed": 9111,
+      "winner": 0,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 16,
+      "actions": 338,
+      "errors": []
+    },
+    {
+      "A": "白色回复",
+      "B": "紫色铺场",
+      "first": 0,
+      "seed": 9120,
+      "winner": 0,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 19,
+      "actions": 497,
+      "errors": []
+    },
+    {
+      "A": "白色回复",
+      "B": "紫色铺场",
+      "first": 1,
+      "seed": 9121,
+      "winner": 0,
+      "reason": "无牌可抽",
+      "turns": 35,
+      "actions": 987,
+      "errors": []
+    },
+    {
+      "A": "紫色铺场",
+      "B": "蓝色灵感",
+      "first": 0,
+      "seed": 9130,
+      "winner": 0,
+      "reason": "无牌可抽",
+      "turns": 25,
+      "actions": 751,
+      "errors": []
+    },
+    {
+      "A": "紫色铺场",
+      "B": "蓝色灵感",
+      "first": 1,
+      "seed": 9131,
+      "winner": 0,
+      "reason": "无牌可抽",
+      "turns": 22,
+      "actions": 648,
+      "errors": []
+    },
+    {
+      "A": "蓝色灵感",
+      "B": "黑色回收",
+      "first": 0,
+      "seed": 9140,
+      "winner": 1,
+      "reason": "无牌可抽",
+      "turns": 21,
+      "actions": 482,
+      "errors": []
+    },
+    {
+      "A": "蓝色灵感",
+      "B": "黑色回收",
+      "first": 1,
+      "seed": 9141,
+      "winner": 1,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 24,
+      "actions": 550,
+      "errors": []
+    },
+    {
+      "A": "黑色回收",
+      "B": "灰色基准",
+      "first": 0,
+      "seed": 9150,
+      "winner": 1,
+      "reason": "无牌可抽",
+      "turns": 23,
+      "actions": 580,
+      "errors": []
+    },
+    {
+      "A": "黑色回收",
+      "B": "灰色基准",
+      "first": 1,
+      "seed": 9151,
+      "winner": 1,
+      "reason": "生命卡组为空且仍需结算生命伤害",
+      "turns": 19,
+      "actions": 515,
+      "errors": []
+    }
+  ]
+}

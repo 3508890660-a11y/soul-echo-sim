@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11181b">
+  <title>组卡｜Soul Echo 灵魂回响</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath fill='%2311181b' d='M0 0h44v44H0z'/%3E%3Cpath fill='none' stroke='%23d3a55f' stroke-width='2' d='M22 4 38 13v18l-16 9-16-9V13Z'/%3E%3Ccircle fill='%23d3a55f' cx='22' cy='22' r='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 38 12v20L22 41 6 32V12Z"/><path d="M13 23c4-11 14-11 18 0-4 11-14 11-18 0Z"/><circle cx="22" cy="23" r="3"/></svg>
+      <div><h1>灵魂回响</h1><p>SOUL ECHO · SE01 第一声回响</p></div>
+    </div>
+    <nav class="mainnav" aria-label="主导航">
+      <a href="./index.html">观战台</a>
+      <a href="./deck.html" class="current" aria-current="page">组卡</a>
+      <a href="./duel.html">双人对战</a>
+    </nav>
+  </header>
+
+  <main class="deck-main">
+    <section class="pool-panel" aria-label="卡池">
+      <div class="pagehead">
+        <div>
+          <h2>卡池</h2>
+          <p id="pool-count">148 名目 · 点击卡牌加入卡组，右键移除</p>
+        </div>
+        <div class="searchbox">
+          <input id="search" type="search" placeholder="搜索卡名或效果文本" aria-label="搜索卡牌">
+        </div>
+      </div>
+
+      <div class="filters" role="group" aria-label="筛选">
+        <div class="filter-row" id="filter-color"></div>
+        <div class="filter-row" id="filter-type"></div>
+        <div class="filter-row" id="filter-rarity"></div>
+      </div>
+
+      <div class="pool-grid" id="pool"></div>
+    </section>
+
+    <aside class="deck-panel" aria-label="卡组">
+      <div class="deck-head">
+        <label class="field">卡组名<input id="deck-name" type="text" value="未命名卡组" maxlength="24"></label>
+        <label class="field">灵体<select id="deck-spirit"></select></label>
+        <div class="deck-meta">
+          <strong id="deck-total">0</strong><span>/ 40—60 张</span>
+          <span class="dot">·</span>
+          <span id="deck-status" class="status-pill">空</span>
+        </div>
+        <div class="deck-issues" id="deck-issues"></div>
+      </div>
+
+      <div class="curve" id="curve" aria-label="费用曲线"></div>
+
+      <div class="deck-list" id="deck-list"></div>
+
+      <div class="deck-actions">
+        <button class="primary" id="btn-save" type="button">保存卡组</button>
+        <button id="btn-new" type="button">新建</button>
+        <button id="btn-copy" type="button">复制</button>
+        <button id="btn-export" type="button">导出</button>
+        <button id="btn-import" type="button">导入</button>
+        <button class="quiet" id="btn-clear" type="button">清空</button>
+      </div>
+
+      <div class="saved">
+        <h3>我的卡组</h3>
+        <div id="saved-list" class="saved-list"></div>
+      </div>
+
+      <div class="saved">
+        <h3>载入预组</h3>
+        <div id="precon-list" class="precon-list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <dialog id="import-dialog" class="dialog">
+    <button class="dialog-close" data-close="import-dialog" aria-label="关闭" type="button">×</button>
+    <h2>导入卡组</h2>
+    <p class="hint">粘贴导出的 JSON，或从文件读取。</p>
+    <textarea id="import-text" rows="10" spellcheck="false"></textarea>
+    <div class="dialog-actions">
+      <label class="filelabel">选择文件<input id="import-file" type="file" accept="application/json,.json"></label>
+      <button class="primary" id="btn-import-confirm" type="button">导入</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./src/deck.js"></script>
+</body>
+</html>

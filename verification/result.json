@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "executable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "maxSteps": 509,
+  "desktop": {
+    "width": 1440,
+    "scroll": 1440,
+    "buttons": 51,
+    "resources": 9
+  },
+  "mobile": {
+    "width": 375,
+    "scroll": 375,
+    "minButton": 44
+  },
+  "httpErrors": [],
+  "consoleErrors": 0,
+  "checks": [
+    "页面加载",
+    "生成对局",
+    "播放推进",
+    "暂停",
+    "上一步",
+    "下一步",
+    "同种子重开",
+    "卡牌详情",
+    "实现范围",
+    "导出回放",
+    "桌面无横向溢出",
+    "手机无横向溢出",
+    "触控目标",
+    "零控制台错误",
+    "零 HTTP 错误"
+  ]
+}

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11181b">
+  <title>双人对战｜Soul Echo 灵魂回响</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath fill='%2311181b' d='M0 0h44v44H0z'/%3E%3Cpath fill='none' stroke='%23d3a55f' stroke-width='2' d='M22 4 38 13v18l-16 9-16-9V13Z'/%3E%3Ccircle fill='%23d3a55f' cx='22' cy='22' r='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 38 12v20L22 41 6 32V12Z"/><path d="M13 23c4-11 14-11 18 0-4 11-14 11-18 0Z"/><circle cx="22" cy="23" r="3"/></svg>
+      <div><h1>灵魂回响</h1><p>SOUL ECHO · SE01 第一声回响</p></div>
+    </div>
+    <nav class="mainnav" aria-label="主导航">
+      <a href="./index.html">观战台</a>
+      <a href="./deck.html">组卡</a>
+      <a href="./duel.html" class="current" aria-current="page">双人对战</a>
+    </nav>
+  </header>
+
+  <main class="duel-main">
+    <section class="duel-setup" id="setup" aria-label="对局设置">
+      <div class="setup-col">
+        <h2>玩家 A</h2>
+        <label class="field">卡组<select id="deck-a"></select></label>
+        <label class="field">灵体<select id="spirit-a"></select></label>
+      </div>
+      <div class="setup-col">
+        <h2>玩家 B</h2>
+        <label class="field">卡组<select id="deck-b"></select></label>
+        <label class="field">灵体<select id="spirit-b"></select></label>
+      </div>
+      <div class="setup-col narrow">
+        <label class="field">随机种子<input id="seed" type="number" value="20261113" step="1"></label>
+        <label class="field">先手<select id="first"><option value="0">玩家 A</option><option value="1">玩家 B</option><option value="random">随机</option></select></label>
+        <label class="check"><input id="privacy" type="checkbox" checked> 隐私模式（交接时遮挡手牌）</label>
+        <button class="primary" id="btn-start" type="button">开始对局</button>
+      </div>
+    </section>
+
+    <div class="statusline" id="status" role="status" aria-live="polite">双方各选一套 40—60 张卡组；没有存档时先用右侧预组。</div>
+
+    <div class="duel-layout" id="layout" hidden>
+      <section class="duel-board" aria-label="对局桌面">
+        <div class="duel-bar">
+          <div class="duel-bar-left"><span id="turn-label">—</span><strong id="phase-label">—</strong></div>
+          <div class="duel-bar-right">
+            <span class="who" id="who-label">—</span>
+            <button id="btn-pass" type="button">让过</button>
+            <button class="quiet" id="btn-concede" type="button">认输</button>
+          </div>
+        </div>
+
+        <section class="duel-side" id="side-opp" aria-label="对手"></section>
+
+        <section class="duel-mid">
+          <div id="chain" class="chain-items"><span class="empty">连锁为空</span></div>
+          <div id="combat" class="combat-state">当前没有挂起的攻击。</div>
+        </section>
+
+        <section class="duel-side" id="side-me" aria-label="我方"></section>
+
+        <div class="actionbar" id="actionbar" hidden></div>
+      </section>
+
+      <aside class="duel-aside">
+        <section class="event-panel">
+          <div class="panel-title"><h2>对局记录</h2><span id="log-count">0</span></div>
+          <div class="log" id="log"></div>
+        </section>
+        <section class="rules-note">
+          <h2>操作提示</h2>
+          <p>点击手牌 → 选择「使用」或「设为灵质」；点击场上卡 → 启动能力或宣告攻击。</p>
+          <p>每次操作后引擎会自动结算触发与状态检查，直到需要你再次决策。</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="handoff" id="handoff" hidden>
+    <div class="handoff-box">
+      <h2 id="handoff-name">请将设备交给下一位玩家</h2>
+      <p>交接期间不显示任何手牌。</p>
+      <button class="primary" id="handoff-ok" type="button">我准备好了</button>
+    </div>
+  </div>
+
+  <dialog id="card-dialog" class="dialog">
+    <button class="dialog-close" data-close="card-dialog" aria-label="关闭" type="button">×</button>
+    <div id="card-detail"></div>
+  </dialog>
+
+  <script type="module" src="./src/duel.js"></script>
+</body>
+</html>

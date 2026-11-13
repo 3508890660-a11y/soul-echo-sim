@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11181b">
+  <title>Soul Echo｜规则引擎观战台</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath fill='%2311181b' d='M0 0h44v44H0z'/%3E%3Cpath fill='none' stroke='%23d3a55f' stroke-width='2' d='M22 4 38 13v18l-16 9-16-9V13Z'/%3E%3Ccircle fill='%23d3a55f' cx='22' cy='22' r='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 38 12v20L22 41 6 32V12Z"/><path d="M13 23c4-11 14-11 18 0-4 11-14 11-18 0Z"/><circle cx="22" cy="23" r="3"/></svg>
+      <div><h1>灵魂回响</h1><p>SOUL ECHO · 第二版规则引擎</p></div>
+    </div>
+    <div class="top-actions">
+      <nav class="mainnav" aria-label="主导航">
+        <a href="./index.html" class="current" aria-current="page">观战台</a>
+        <a href="./deck.html">组卡</a>
+        <a href="./duel.html">双人对战</a>
+      </nav>
+      <span class="engine-state"><i></i>本地确定性运算</span>
+      <button class="quiet" id="btn-about" type="button">实现范围</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="setup" aria-label="对局设置">
+      <label>牌组 A<select id="deck-a"></select></label>
+      <label>牌组 B<select id="deck-b"></select></label>
+      <label>随机种子<input id="seed" type="number" value="20261112" step="1"></label>
+      <label>先手<select id="first"><option value="0">牌组 A</option><option value="1">牌组 B</option><option value="random">由种子决定</option></select></label>
+      <button class="primary" id="btn-start" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg>生成对局
+      </button>
+    </section>
+
+    <div class="statusline" id="status" role="status" aria-live="polite">选择两套预组，生成一局可逐帧检查的对局。</div>
+
+    <div class="workspace">
+      <section class="table" aria-label="对局回放">
+        <div class="matchbar">
+          <div><span id="turn-label">尚未开局</span><strong id="phase-label">等待生成</strong></div>
+          <div class="winner" id="winner-label"></div>
+        </div>
+
+        <section class="player" id="player-1" aria-label="牌组 B"></section>
+
+        <section class="chain-zone" aria-label="连锁与战斗状态">
+          <div class="chain-heading"><span>连锁区域</span><small>后进先出 · 当前结算项位于最右</small></div>
+          <div id="chain" class="chain-items"><span class="empty">连锁为空</span></div>
+          <div id="combat" class="combat-state">当前没有挂起的攻击。</div>
+        </section>
+
+        <section class="player" id="player-0" aria-label="牌组 A"></section>
+
+        <section class="transport" aria-label="回放控制">
+          <div class="transport-buttons">
+            <button id="btn-prev" type="button" title="上一步" aria-label="上一步"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7M7 5v14"/></svg></button>
+            <button class="play" id="btn-play" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><span>播放</span></button>
+            <button id="btn-next" type="button" title="下一步" aria-label="下一步"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7M17 5v14"/></svg></button>
+            <button id="btn-restart" type="button">同种子重开</button>
+          </div>
+          <label class="speed">速度<select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+          <label class="timeline"><span id="progress">0 / 0</span><input id="timeline" type="range" min="0" max="0" value="0" aria-label="回放进度"></label>
+          <button class="quiet" id="btn-export" type="button">导出回放</button>
+        </section>
+      </section>
+
+      <aside class="inspector">
+        <section class="event-panel">
+          <div class="panel-title"><h2>事件记录</h2><span id="event-number">—</span></div>
+          <div class="current-event" id="current-event">生成对局后，这里会显示当前动作及其完整状态。</div>
+          <div class="log" id="log" aria-label="历史事件"></div>
+        </section>
+        <section class="rules-note">
+          <h2>裁判注记</h2>
+          <p>全知回放会展示双方手牌。实际 AI 视图只提供对手手牌数量。</p>
+          <p>带“近似”标记的结算属于测试口径，不代表规则争议已经解决。</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="card-dialog" class="dialog">
+    <button class="dialog-close" data-close="card-dialog" aria-label="关闭卡牌详情" type="button">×</button>
+    <div id="card-detail"></div>
+  </dialog>
+  <dialog id="about-dialog" class="dialog wide">
+    <button class="dialog-close" data-close="about-dialog" aria-label="关闭实现范围" type="button">×</button>
+    <div id="about-detail"></div>
+  </dialog>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
