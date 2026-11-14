@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { playMatch, ENGINE_INFO } from '../../js/engine/rules.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const [aId, bId, mode, seedRaw, firstRaw] = process.argv.slice(2);
+const [aId, bId, mode, seedRaw, firstRaw, tag] = process.argv.slice(2);
 const seed = Number(seedRaw);
 const first = Number(firstRaw ?? 0);
 
@@ -45,7 +45,7 @@ const out = {
   log: run.log,
   result: { winner: run.winner, reason: run.reason, actions: run.actions, turns: run.steps[run.steps.length - 1].snap.turn },
 };
-const file = path.join(ROOT, 'videos', 'work', `match-${mode}-${seed}.json`);
+const file = path.join(ROOT, 'videos', 'work', `match-${mode}-${seed}${tag ? '-' + tag : ''}.json`);
 fs.writeFileSync(file, JSON.stringify(out), 'utf8');
 const finalLife = run.steps[run.steps.length - 1].snap.P.map((p) => p.life).join(':');
 console.log(file);

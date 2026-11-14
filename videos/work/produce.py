@@ -469,18 +469,18 @@ def final_content(scene):
 
 
 VIDEO1 = [
-    {"kind": "title", "min": 5.5, "narration": "一套卡牌，如何从一张模板，长成一座 AI 对阵台？"},
-    {"kind": "prototype", "min": 12, "narration": "项目最初经历了数月的素材积累。卡面、场地与角色设定逐步落盘，八色虚构层先后成形。先有世界，后有规则；每种颜色的机制，都从设定反推。"},
-    {"kind": "rules", "min": 12, "narration": "随后，分散的规则稿被集中整理。优先权、连锁、状态检查、战斗与生命结算形成闭环，三十项词条落定。自动化裁定通过后，六套原型进入真人测试；每色依赖灰色补位的问题，也随之显现。"},
-    {"kind": "resource", "min": 13, "narration": "双方以生命卡组和起手牌开局。主要阶段中，每回合通常可以将一张手牌设为灵质；横置灵质，产生对应颜色的灵能，用来支付灵像与灵感的费用。"},
-    {"kind": "combat", "min": 16, "narration": "一个回合从开始阶段的重置、能力与抽牌开始，依次经过主要阶段一、战斗阶段、主要阶段二，最后是结束步骤。未被阻挡地攻击对方灵体时，以冲击力削减生命卡组。生命卡逐张揭示，还可能触发效果。生命卡组打空不会立即落败；只有仍须结算至少一点生命伤害时，胜负才最终确定。"},
-    {"kind": "modes", "min": 13, "narration": "每名玩家有一张灵体。检视牌堆顶是它的通用能力，此外每张灵体还带一项写在卡面上的专属能力。四种模式只调整初始生命、起手数量与构筑条件，共用同一套核心回合和战斗规则。"},
-    {"kind": "first_set", "min": 12, "narration": "紧接着，第一弹《第一声回响》完成。一百四十八名目被拆分为卡包结构、逐张卡表与数值审计。绿与黄不是临时新造，而是扶正旧设计，再补全新卡。"},
-    {"kind": "constraint", "min": 14, "narration": "第一弹之后，构筑规则又收紧了一道：主卡组里与灵体同色的卡牌，必须占到六成。计数口径也一并定死：混色卡只按第一颜色算一次，灰卡只有灰灵体时才算，灵体本身不进分子也不进分母。规则生效当天，十二份卡组只有四份达标；于是旧规则废除，十二个模型全部重来。"},
-    {"kind": "engine", "min": 12, "narration": "引擎与工具并行搭建。卡表成为唯一数据源，九十五张新卡进入声明式效果表；观战台、组卡器、热座对战与卡面生成逐一接通，四种模式共用同一套接口。"},
-    {"kind": "ai", "min": 12, "narration": "十二个模型拿到彼此隔离的资料，各自组卡、各自决策，在四种模式里打满一千零五十六局循环赛，又加了三届瑞士轮。对阵不仅排出名次，也抓出了三处引擎缺陷，并纠正一处派发简报的错误。"},
-    {"kind": "results", "num": 11, "min": 17, "narration": "十二份卡组全部合规，同色率从六成五到八成四。主色从旧届的红九绿一白二，变成红七绿四白一。冠军第一次是红：赤蓝燃穿，五十张里三十四张红，七十一点八。上届冠军的白墙退到第三，上届亚军从七十一点八掉到五十一点四。"},
-    {"kind": "final", "min": 10, "narration": "从五十三个卡名到一百四十八个名目，从规则文档到对阵系统，灵魂回响已经可运行、可复现、可扩展。第一声回响，已经响起；下一轮测试，才刚刚开始。"},
+    {"kind": "title", "min": 8, "narration": "一套卡牌，如何从一张模板，长成一座 AI 对阵台？这条线走了三步：先把世界写出来，再把规则定下来，最后让机器和模型替我们打。"},
+    {"kind": "prototype", "min": 14, "narration": "第一步是素材。卡面、场地与角色设定陆续落盘，八色虚构层先后成形——先有世界，后有规则，每种颜色的机制都是从设定反推出来的。但设定写得再厚，也不等于能坐下来打一局。"},
+    {"kind": "rules", "min": 15, "narration": "于是第二步，把散落的规则稿收成一本。优先权、连锁、状态检查、战斗与生命结算逐一闭环，三十项词条落定；自动化裁定跑通之后，六套原型进入真人测试。测试暴露的问题很具体：每个颜色都得靠灰色补位。"},
+    {"kind": "resource", "min": 15, "narration": "补位之前，先看这局牌是怎么转起来的。双方以生命卡组和起手牌开局，主要阶段每回合通常可以把一张手牌设为灵质；横置灵质，产生对应颜色的灵能，用来支付灵像与灵感的费用。灵能不够，手上的牌再好也下不去。"},
+    {"kind": "combat", "min": 18, "narration": "有了灵能，才有回合。一个回合从开始阶段的重置、能力与抽牌开始，经过主要阶段一、战斗阶段、主要阶段二，最后是结束步骤。未被阻挡地攻击对方灵体时，以冲击力削减生命卡组。这里有个容易误解的地方：生命卡组打空不会立即落败，只有仍须结算至少一点生命伤害时，胜负才最终确定。"},
+    {"kind": "modes", "min": 15, "narration": "而同一套回合结构，可以调成四种节奏。每名玩家有一张灵体：检视牌堆顶是它的通用能力，此外每张灵体还带一项写在卡面上的专属能力。四种模式只调整初始生命、起手数量与构筑条件，核心回合和战斗规则完全共用。"},
+    {"kind": "first_set", "min": 14, "narration": "规则和模式都定了，可桌上只有六套原型、五十三个卡名，不够打。于是第一弹《第一声回响》补上：一百四十八个名目，拆成卡包结构、逐张卡表与数值审计。绿与黄不是临时新造，而是把设计稿里从没进过数据表的示例扶正，再补新卡。"},
+    {"kind": "constraint", "min": 17, "narration": "卡池一厚，新问题立刻出现：灵体只是个招牌，主力牌换个颜色照样能打。构筑规则于是收紧一道，主卡组里与灵体同色的卡牌必须占到六成。计数口径也一并定死：混色卡只按第一颜色算一次，灰卡只有灰灵体时才算，灵体本身不进分子也不进分母。规则生效当天，十二份卡组只有四份达标，旧规则废除，十二个模型全部重来。"},
+    {"kind": "engine", "min": 15, "narration": "模型要重来，先得有个能判定的裁判。引擎与工具并行搭建：卡表成为唯一数据源，九十五张新卡进入声明式效果表；观战台、组卡器、热座对战与卡面生成逐一接通，四种模式共用同一套接口。裁判就位，接下来才轮到选手。"},
+    {"kind": "ai", "min": 15, "narration": "十二个模型拿到的资料彼此隔离——只有接口、规则和卡面，没有胜率，也没有别人的脚本。它们各自组卡、各自决策，在四种模式里打满一千零五十六局循环赛，又加了三届瑞士轮。对阵排出名次，也顺手抓出三处引擎缺陷，并纠正一处派发简报的错误。"},
+    {"kind": "results", "num": 11, "min": 18, "narration": "名次是这样的。十二份卡组全部合规，同色率从六成五到八成四；主色从旧届的红九绿一白二，变成红七绿四白一。冠军第一次是红：赤蓝燃穿，五十张里三十四张红，七十一点八。上届冠军的白墙退到第三，上届亚军从七十一点八掉到五十一点四。"},
+    {"kind": "final", "min": 12, "narration": "回头再看这条线：五十三个卡名长到一百四十八个名目，一份规则文档长成一套能自我对战的系统，现在还能自己出片。灵魂回响已经可运行、可复现、可扩展；第一声回响，已经响起。"},
 ]
 
 
@@ -825,207 +825,365 @@ VIDEO2 = [
     dict(VIDEO2[9], num=18, min=14, narration="这次翻盘由三个环节共同完成：两张守卫轮流攻击，雷铸天兵把其中一张的冲击从两点提到三点，誓约之环与圣光聚合体又把生命从两张补到三张。白方不是在生命领先时获胜，而是在最后一次攻击里，让红方先走到无法继续结算的那一步。"),
 ]
 
-# ---------------------------------------------------------------- 视频 3：标准模式
-MAXLIFE3 = 10
-CFG3 = MATCH3["config"]
+# ---------------------------------------------------------------- 对局解说（多局通用）
+MODE_LABEL = {"standard": "标准模式", "blitz": "速攻模式", "grand": "长局", "duo": "双色模式"}
+MODE_LIFE = {"standard": 10, "blitz": 6, "grand": 15, "duo": 12}
+MATCH_FILES = {
+    "old": "match-standard-20300709.json",
+    "a": "match-standard-20300796-a.json",
+    "b": "match-standard-20269120-b.json",
+    "c": "match-standard-20332472-c.json",
+    "d": "match-standard-20332472-d.json",
+}
+MATCHES = {}
+for _key, _file in MATCH_FILES.items():
+    _path = WORK / _file
+    if _path.exists():
+        MATCHES[_key] = json.loads(_path.read_text(encoding="utf-8"))
 
 
-def find3(turn, contains, occurrence=0, after=0):
-    found = [i for i, step in enumerate(MATCH3["steps"])
+def match_of(scene):
+    return MATCHES[scene.get("m", "old")]
+
+
+def find_in(match, turn, contains, occurrence=0, after=0):
+    found = [i for i, step in enumerate(match["steps"])
              if i >= after and step["snap"]["turn"] == turn and contains in step["text"]]
     if not found:
         raise ValueError((turn, contains, occurrence))
     return found[min(occurrence, len(found) - 1)]
 
 
-ST3 = {
-    "start": 0,
-    "open": find3(1, "将 1 张手牌置于灵质区"),
-    "first": find3(5, "幼苗守望者 的生命伤害事件结束"),
-    "dog2": find3(6, "地狱犬 的生命伤害事件结束"),
-    "elephant": find3(7, "幼苗守望者 的生命伤害事件结束"),
-    "dog3": find3(8, "地狱犬 的生命伤害事件结束"),
-    "ram": find3(10, "碾压"),
-    "twin": find3(11, "森林战将 的生命伤害事件结束"),
-    "mt": find3(12, "受到 3000 点伤害（圣光打击）"),
-    "fire": find3(12, "火球术 的生命伤害事件结束"),
-    "final": find3(13, "落败"),
-}
+def duel_accent(cfg, side):
+    c = COLORS.get(cfg["colorA" if side == 0 else "colorB"], GOLD)
+    if cfg["colorA"] == cfg["colorB"] and side == 1:
+        return "#%02x%02x%02x" % mix(c, "#ffffff", 0.6)
+    return c
 
 
-def match3_content(scene, step_idx):
+def duel_label(cfg, side):
+    if cfg["colorA"] != cfg["colorB"]:
+        return f"{cfg['colorA'] if side == 0 else cfg['colorB']}方｜"
+    return "先手｜" if cfg.get("first", 0) == side else "后手｜"
+
+
+def auto_detail(step, limit=2):
+    skip = ("状态推进", "进入", "双方让过", "连锁", "支付")
+    lines = [line.strip() for line in step["text"].split("\n") if line.strip()]
+    keep = [line for line in lines if not line.startswith(skip)]
+    return "\n".join(keep[:limit]) or lines[0]
+
+
+def duel_content(scene, step_idx):
+    match = match_of(scene)
+    cfg = match["config"]
+    snap = match["steps"][step_idx]["snap"]
+    maxlife = scene.get("maxlife", MODE_LIFE.get(cfg["mode"], 10))
     img = BASE_RED.copy()
-    snap = MATCH3["steps"][step_idx]["snap"]
-    header(img, f"对局解说｜标准模式｜回合 {snap['turn']}", scene.get("num"))
+    header(img, scene.get("header") or f"对局解说｜{MODE_LABEL.get(cfg['mode'], cfg['mode'])}｜回合 {snap['turn']}", scene.get("num"))
     d = ImageDraw.Draw(img, "RGBA")
-    player_panel(d, snap, 1, (80, 130, 1840, 345), CFG3["deckNameB"], CFG3["nameB"], GREEN, "绿方｜", MAXLIFE3)
-    player_panel(d, snap, 0, (80, 535, 1840, 750), CFG3["deckNameA"], CFG3["nameA"], RED, "红方｜", MAXLIFE3)
+    player_panel(d, snap, 1, (80, 130, 1840, 345), cfg["deckNameB"], cfg["nameB"],
+                 duel_accent(cfg, 1), duel_label(cfg, 1), maxlife)
+    player_panel(d, snap, 0, (80, 535, 1840, 750), cfg["deckNameA"], cfg["nameA"],
+                 duel_accent(cfg, 0), duel_label(cfg, 0), maxlife)
     d.rounded_rectangle((80, 365, 1840, 515), radius=16, fill=(*rgb(PANEL2), 235), outline=(*rgb(GOLD), 80))
     d.text((110, 385), scene["event"], font=fnt(25, True), fill=GOLD)
-    event_text = scene.get("detail") or MATCH3["steps"][step_idx]["text"].strip().split("\n")[-1]
+    event_text = scene.get("detail") or auto_detail(match["steps"][step_idx])
     text_block(d, (110, 435), event_text, fnt(22), TEXT, 1660, 7, 2)
-    life_chart(d, step_idx, (120, 785, 1800, 855), MATCH3, MAXLIFE3, [(0, RED), (1, GREEN)])
+    life_chart(d, step_idx, (120, 785, 1800, 855), match, maxlife,
+               [(0, duel_accent(cfg, 0)), (1, duel_accent(cfg, 1))])
     subtitle(img, scene["narration"])
     return img
 
 
-def match3_title_content(scene):
+def duel_title_content(scene):
+    match = match_of(scene)
+    cfg = match["config"]
     img = BASE_RED.copy()
-    header(img, "高质量对局解说｜标准模式", 1)
+    header(img, scene.get("header") or f"对局解说｜{MODE_LABEL.get(cfg['mode'], cfg['mode'])}", scene.get("num"))
     d = ImageDraw.Draw(img, "RGBA")
-    d.text((960, 160), "十张生命，十三回合", font=fnt(62, True), fill=TEXT, anchor="mm")
-    d.text((960, 240), "10 : 10  →  8 : 6  →  3 : 1  →  1 : 1  →  1 : 0", font=fnt(40, True), fill=GOLD, anchor="mm")
-    d.text((960, 292), "比分按 绿 ： 红", font=fnt(21), fill=MUTED, anchor="mm")
-    d.rounded_rectangle((130, 330, 900, 670), radius=24, fill=(*rgb(GREEN), 15), outline=(*rgb(GREEN), 140), width=2)
-    d.text((515, 390), "绿方｜根脉奔流", font=fnt(42, True), fill=GREEN, anchor="mm")
-    d.text((515, 465), "GLM5.3", font=fnt(30), fill=TEXT, anchor="mm")
-    d.text((515, 550), "跳费 · 巨象 · 碾压", font=fnt(26), fill=MUTED, anchor="mm")
-    d.rounded_rectangle((1020, 330, 1790, 670), radius=24, fill=(*rgb(RED), 15), outline=(*rgb(RED), 140), width=2)
-    d.text((1405, 390), "红方｜赤蓝燃穿", font=fnt(42, True), fill=RED, anchor="mm")
-    d.text((1405, 465), "KIMI 3.1pro", font=fnt(30), fill=TEXT, anchor="mm")
-    d.text((1405, 550), "低费 · 暴击指示物 · 直伤", font=fnt(26), fill=MUTED, anchor="mm")
-    d.text((960, 745), "标准模式｜10 生命｜4 起手｜双方各 50 张，同色均为 68%", font=fnt(28), fill=TEXT, anchor="mm")
-    d.text((960, 805), "真实引擎回放｜种子 20300709", font=fnt(21), fill=MUTED, anchor="mm")
+    d.text((960, 158), scene["headline"], font=fnt(56, True), fill=TEXT, anchor="mm")
+    d.text((960, 238), scene["score"], font=fnt(36, True), fill=GOLD, anchor="mm")
+    d.text((960, 290), scene.get("score_note", ""), font=fnt(21), fill=MUTED, anchor="mm")
+    for side, box in ((0, (130, 330, 900, 670)), (1, (1020, 330, 1790, 670))):
+        accent = duel_accent(cfg, side)
+        d.rounded_rectangle(box, radius=24, fill=(*rgb(accent), 15), outline=(*rgb(accent), 140), width=2)
+        d.text((515 if side == 0 else 1405, 392), f"{duel_label(cfg, side).rstrip('｜')}｜{cfg['deckNameA' if side == 0 else 'deckNameB']}",
+               font=fnt(40, True), fill=accent, anchor="mm")
+        d.text((515 if side == 0 else 1405, 468), cfg["nameA" if side == 0 else "nameB"], font=fnt(30), fill=TEXT, anchor="mm")
+        d.text((515 if side == 0 else 1405, 552), scene["taglineA" if side == 0 else "taglineB"], font=fnt(25), fill=MUTED, anchor="mm")
+        d.text((515 if side == 0 else 1405, 620), scene["cardsA" if side == 0 else "cardsB"], font=fnt(20), fill=MUTED, anchor="mm")
+    d.text((960, 745), scene["footer"], font=fnt(27), fill=TEXT, anchor="mm")
+    d.text((960, 805), scene.get("footer2", ""), font=fnt(21), fill=MUTED, anchor="mm")
     subtitle(img, scene["narration"])
     return img
 
 
-def review3_content(scene):
+def duel_review_content(scene):
+    match = match_of(scene)
+    cfg = match["config"]
+    maxlife = scene.get("maxlife", MODE_LIFE.get(cfg["mode"], 10))
     img = BASE_RED.copy()
-    header(img, "复盘｜三个环节共同决定胜负", scene.get("num"))
+    header(img, scene.get("title", "复盘｜三个环节决定胜负"), scene.get("num"))
     d = ImageDraw.Draw(img, "RGBA")
-    d.text((960, 150), "最终剩余生命：绿方 1｜红方 0", font=fnt(48, True), fill=GOLD, anchor="mm")
+    d.text((960, 150), scene["final_text"], font=fnt(46, True), fill=GOLD, anchor="mm")
     d.rounded_rectangle((100, 235, 1820, 535), radius=20, fill=(*rgb(PANEL), 230))
-    life_chart(d, len(MATCH3["steps"]) - 1, (150, 275, 1770, 480), MATCH3, MAXLIFE3, [(0, RED), (1, GREEN)])
-    d.text((150, 495), "红方生命", font=fnt(18), fill=RED)
-    d.text((330, 495), "绿方生命", font=fnt(18), fill=GREEN)
-    items = [
-        ("① 灵质先起步", "第一回合就多置一张\n第五回合 7 比 2", GREEN),
-        ("② 碾压拒绝交换", "一千与两千点解牌\n全部被挡在 7000 之外", GOLD),
-        ("③ 红方的天花板", "每回合稳定两点\n地狱犬一倒就断档", RED),
-    ]
-    for i, (title, body, color) in enumerate(items):
+    same = cfg["colorA"] == cfg["colorB"]
+    ca, cb = duel_accent(cfg, 0), duel_accent(cfg, 1)
+    life_chart(d, len(match["steps"]) - 1, (150, 275, 1770, 480), match, maxlife, [(0, ca), (1, cb)])
+    tag_a = cfg["colorA"] if not same else cfg["deckNameA"][:2]
+    tag_b = cfg["colorB"] if not same else cfg["deckNameB"][:2]
+    d.text((150, 495), f"{tag_a}方生命", font=fnt(18), fill=ca)
+    lx = 150 + int(d.textlength(f"{tag_a}方生命", font=fnt(18))) + 26
+    d.text((lx, 495), f"{tag_b}方生命", font=fnt(18), fill=cb)
+    for i, (title, body, color) in enumerate(scene["items"]):
         x = 100 + i * 580
         d.rounded_rectangle((x, 590, x + 530, 815), radius=20, fill=(*rgb(color), 14), outline=(*rgb(color), 110))
-        d.text((x + 30, 620), title, font=fnt(31, True), fill=color)
-        d.multiline_text((x + 30, 690), body, font=fnt(25), fill=TEXT, spacing=14)
+        d.text((x + 30, 620), title, font=fnt(30, True), fill=color)
+        d.multiline_text((x + 30, 690), body, font=fnt(24), fill=TEXT, spacing=14)
     subtitle(img, scene["narration"])
     return img
 
 
-def closing3_content(scene):
+def duel_closing_content(scene):
     img = BASE_RED.copy()
     header(img, "结语", scene.get("num"))
     d = ImageDraw.Draw(img, "RGBA")
-    d.text((960, 230), "同一条六成线，两种解法", font=fnt(60, True), fill=GOLD, anchor="mm")
-    metric(d, 200, 420, 440, "68%", "双方同色比例", GREEN)
-    metric(d, 740, 420, 440, "13", "回合数", GOLD)
-    metric(d, 1280, 420, 440, "1 : 0", "终局生命（绿／红）", GREEN)
-    d.text((960, 690), "同色规则收紧的是配比，不是打法。", font=fnt(44, True), fill=TEXT, anchor="mm")
-    d.text((960, 780), "下一局，换一套卡组再来。", font=fnt(30), fill=MUTED, anchor="mm")
+    d.text((960, 226), scene["headline"], font=fnt(56, True), fill=GOLD, anchor="mm")
+    for i, (value, label, color) in enumerate(scene["metrics"]):
+        metric(d, 200 + i * 540, 400, 440, value, label, color)
+    for i, line in enumerate(scene["lines"]):
+        d.text((960, 690 + i * 76), line, font=fnt(40 if i == 0 else 28), fill=TEXT if i == 0 else MUTED, anchor="mm")
     subtitle(img, scene["narration"])
     return img
 
 
-def glossary3_content(scene):
-    img = BASE_RED.copy()
-    header(img, scene["title"], scene.get("num"))
-    d = ImageDraw.Draw(img, "RGBA")
-    for i, (name, body, color) in enumerate(scene["terms"]):
-        x = 100 + (i % 3) * 580
-        y = 160 + (i // 3) * 320
-        d.rounded_rectangle((x, y, x + 535, y + 285), radius=20, fill=(*rgb(color), 13), outline=(*rgb(color), 105))
-        d.text((x + 28, y + 24), name, font=fnt(31, True), fill=color)
-        text_block(d, (x + 28, y + 96), body, fnt(26), TEXT, 480, 12, 5)
-    subtitle(img, scene["narration"])
-    return img
-
-
-GLOSSARY3 = {
-    "kind": "glossary3", "num": 5, "min": 22,
-    "title": "本局词条｜先看懂这六个概念",
-    "terms": [
-        ("序曲", "从手牌使用时触发的能力。", GREEN),
-        ("ST｜能力触发", "卡从主卡组顶被检视并揭示时，处理它写着的能力。", GOLD),
-        ("CT｜暴击触发", "从生命卡组揭示时，为当前伤害事件追加 1 点；每个事件最多一次。", RED),
-        ("暴击指示物", "灵体上的指示物。攻击时移除 1 个，本次 +1000 攻击、+1 冲击。", GOLD),
-        ("碾压", "这一次伤害不足以破坏它时，伤害完全被防止。", GREEN),
-        ("预制", "进场的当回合就可以宣告攻击。", MUTED),
-    ],
-    "narration": "先看懂这六个概念。序曲是从手牌使用时触发。ST 是卡从牌堆顶被揭示时处理的能力；CT 是从生命里揭示时为伤害事件追加一点。暴击指示物挂在灵体上，攻击时移除，换一千攻击与一点冲击。碾压只判断伤害够不够致命。预制让巨兽落地就能攻击。",
-}
-
-VIDEO3 = [
-    {"kind": "match_title3", "num": 1, "min": 10,
-     "narration": "同一条六成线，两种完全不同的解法。绿方用灵质跳费，红方用暴击指示物。十张生命，十三回合，比分一路咬到一比一，最后一个回合才分出胜负。"},
-    {"kind": "match3", "num": 2, "min": 14, "event": "开局｜灵质从第一回合就开始拉差距", "steps": [ST3["start"], ST3["open"]],
-     "detail": "GLM5.3 将 1 张手牌置于灵质区。\nGLM5.3 从主卡组抽 1 张。",
-     "narration": "标准模式，双方各十张生命。绿方先手，第一回合就把一张手牌放进灵质区，再靠灵体能力多放一张、抽一张。到第五回合，绿方七张灵质，红方只有两张。"},
-    {"kind": "match3", "num": 3, "min": 13, "event": "第一次伤害｜两费小生物先开口", "steps": [ST3["first"]],
-     "detail": "KIMI 3.1pro 受到 1 点生命伤害（幼苗守望者），逐点处理。\n生命揭示【火球术】进入分解区。",
-     "narration": "第五回合，绿方两费的幼苗守望者先动手。一点冲击力，红方生命从十张降到九张。这是全场第一次伤害。"},
-    {"kind": "match3", "num": 4, "min": 14, "event": "红方反击｜地狱犬加暴击指示物", "steps": [ST3["dog2"]],
-     "detail": "GLM5.3 受到 2 点生命伤害（地狱犬），逐点处理。\n生命揭示【藤蔓编织者】进入分解区。",
-     "narration": "红方的反击来得很快。两费的地狱犬带预制，进场的当回合就能攻击；再叠上灵体给的暴击指示物，冲击力翻倍，绿方生命从十张掉到八张。"},
-    GLOSSARY3,
-    {"kind": "match3", "num": 6, "min": 15, "event": "巨象落地｜七费在第七回合打出", "steps": [ST3["elephant"]],
-     "detail": "KIMI 3.1pro 受到 2 点生命伤害（王牌巨象），逐点处理。\nKIMI 3.1pro 受到 1 点生命伤害（幼苗守望者），逐点处理。",
-     "narration": "第七回合，绿方打出七费的王牌巨象：五绿两灰。它带预制，落地就能攻击；冲击力两点，加上幼苗守望者的一点，红方一回合掉三点，从九张到六张。"},
-    {"kind": "gallery", "num": 7, "min": 23, "title": "卡牌效果①｜七费的巨象为什么能提前落地？",
-     "cards": [
-         {"name": "根脉育苗者", "meta": "绿｜灵体专属能力", "stats": "", "keywords": "横置发动", "color": "绿",
-          "text": "横置，将 1 张手牌置于灵质区：抽 1 张。", "note": "每回合多一张灵质，还补一张手牌。"},
-         {"name": "自然生长", "meta": "2 费·绿｜灵感", "stats": "", "keywords": "无", "color": "绿",
-          "text": "将主卡组顶部 1 张置于灵质区。", "note": "两费换一张灵质，本局打出两张。"},
-         {"name": "王牌巨象", "meta": "7 费·绿｜灵像", "stats": "6000 攻｜2 冲｜7000 生", "keywords": "预制·碾压·践踏·超冲击", "color": "绿",
-          "text": "无额外效果文本。", "note": "第七回合落地，当回合就能攻击。"},
+VIDEO_A = [
+    {"kind": "duel_title", "m": "a", "num": 1, "min": 14,
+     "headline": "六回合不动手，最后五回合连着反超",
+     "score": "10:10  →  9:10  →  8:7  →  5:7  →  5:2  →  1:2  →  1:0",
+     "score_note": "比分按 红 ： 白",
+     "taglineA": "低费直伤 · 焚尽 · 火球术", "taglineB": "守护单位 · 每回合 1 点",
+     "cardsA": "50 张｜红 34 蓝 16｜同色 68%", "cardsB": "56 张｜白 45 黄 11｜同色 80%",
+     "footer": "标准模式｜10 生命｜4 起手｜红方后手",
+     "footer2": "真实引擎回放｜种子 20300796",
+     "narration": "红白对局，十张生命。前六个回合双方一次都没打穿，第七回合才第一次见血；之后五个回合，比分连着换手五次。"},
+    {"kind": "duel", "m": "a", "num": 2, "min": 14, "steps": [16],
+     "event": "开局｜前六回合，谁都不肯先动",
+     "detail": "双方各将 1 张手牌置于灵质区。\n场上只有低费灵像，谁先进攻谁先亏牌。",
+     "narration": "标准模式，白方先手。第一回合双方各把一张手牌放进灵质区，之后每回合只加一张——六个回合过去，比分还是十比十。"},
+    {"kind": "duel", "m": "a", "num": 3, "min": 14, "steps": [121],
+     "event": "第一次见血｜一点冲击力就够",
+     "detail": "攻击未被阻挡，以 1 点冲击力造成伤害。\nKIMI 3.1pro 揭示生命卡【灰烬小僧】，待结算 0 点。",
+     "narration": "第七回合，白方的光能守护者无人阻挡，一点冲击力打穿。红方生命从十张变九张——这是全场第一次伤害。"},
+    {"kind": "duel", "m": "a", "num": 4, "min": 14, "steps": [214],
+     "event": "第一次反超｜一回合打掉三点",
+     "detail": "KIMI 3.1pro 使用【火球术】，两点击穿灵体。\n白方本回合共失去 3 点生命，比分 红 8 : 白 7。",
+     "narration": "红方的回答很直接：火球术两点直伤，再加场上单位补刀，白方从十张掉到七张。第十回合，红方第一次领先。"},
+    {"kind": "duel", "m": "a", "num": 5, "min": 15, "steps": [262],
+     "event": "白方回敬｜三只小单位，三刀一点",
+     "detail": "光能守护者、圣所守卫、光能守护者依次攻击。\n三刀各 1 点，红方从 8 张掉到 5 张。",
+     "narration": "第十一回合，白方三只单位轮流攻击，每只一点。红方从八张被砍到五张，比分又翻回白方领先。"},
+    {"kind": "duel", "m": "a", "num": 6, "min": 14, "steps": [292],
+     "event": "红方拉开｜一次焚尽，五点在同一个回合",
+     "detail": "KIMI 3.1pro 使用【焚尽】，连续结算两段生命伤害，共 5 点。\n白方从 7 张掉到 2 张。",
+     "narration": "第十二回合，红方一次焚尽连续结算两段，白方从七张掉到两张。这是全场单回合最大的一次伤害。"},
+    {"kind": "duel", "m": "a", "num": 7, "min": 14, "steps": [348],
+     "event": "只差一刀｜白方四只单位砍到只剩一张",
+     "detail": "圣光祷告者加入连锁，随后四只单位依次攻击。\n红方从 5 张掉到 1 张。",
+     "narration": "第十三回合，白方四只单位连着砍，红方从五张被砍到一张。只差一刀，可这一刀始终没有落到。"},
+    {"kind": "duel", "m": "a", "num": 8, "min": 15, "steps": [365],
+     "event": "终局｜生命卡组空了，还要把伤害结算完",
+     "detail": "KIMI 3.1pro 使用【焚尽】，白方揭示最后两张生命。\n白方因「生命卡组为空且仍需结算生命伤害」落败。",
+     "narration": "第十四回合，红方第二次焚尽。白方只剩两张生命，揭示完之后卡组空了，但这次伤害还有剩余没有结算——胜负就在这一点上确定。一比零，红方赢。"},
+    {"kind": "duel_review", "m": "a", "num": 9, "min": 16, "title": "复盘｜两种伤害模型的对抗",
+     "final_text": "最终剩余生命：红方 1｜白方 0",
+     "items": [
+         ("① 白方的一刀一点", "四只守护单位\n单回合最多 4 点\n稳定但慢", WHITE),
+         ("② 红方的一刀三点", "焚尽两次\n一次 5 点、一次致命\n爆发换时间", RED),
+         ("③ 空卡组不等于落败", "白方卡组先空\n仍须结算伤害才判负\n规则给了最后一回合", GOLD),
      ],
-     "narration": "灵体根脉育苗者横置一次，就把一张手牌置为灵质，再抽一张；自然生长两费，直接把牌库顶变成灵质。加上幼苗守望者的序曲，绿方每回合都在多放灵质。跳费两回合，七费巨象就能提前落地。"},
-    {"kind": "match3", "num": 8, "min": 14, "event": "红方的解法｜先解节奏点，再补刀", "steps": [ST3["dog3"]],
-     "detail": "【幼苗守望者】被状态检查破坏。\nGLM5.3 受到 2 点生命伤害（地狱犬），逐点处理。",
-     "narration": "红方没有急着换巨象，先解掉绿方的节奏点：预案引燃两点伤害，打掉幼苗守望者；地狱犬再打两点，暴击指示物又追加一点。绿方从八张掉到五张。"},
-    {"kind": "match3", "num": 9, "min": 14, "event": "巨象吃不掉｜两张解牌全部落空", "steps": [ST3["ram"]],
-     "detail": "【王牌巨象】的碾压防止 1000 点非致命伤害。\n【王牌巨象】的碾压防止 2000 点非致命伤害。",
-     "narration": "红方两张解牌一起指向巨象，全部无效。爆燃一千点，奥术飞弹两千点，都低于巨象的剩余生命——碾压把非致命伤害完全挡掉，巨象一点伤都没受。"},
-    {"kind": "trigger", "num": 10, "min": 19, "title": "触发展示｜碾压为什么能挡住两张解牌", "color": GREEN,
-     "labels": ["解牌指向巨象", "伤害低于剩余生命", "全部防止"],
-     "narration": "碾压的判断只有一条：这次伤害能不能直接杀死它。伤害低于剩余生命，就完全不生效；达到或超过，才照常结算。所以一千点、两千点对一张七千生命的巨象，等于零。",
-     "stages": [
-         {"title": "解牌指向巨象", "subtitle": "爆燃 1 费、奥术飞弹 2 费，先加入连锁", "cards": [("爆燃", "1000 点伤害"), ("奥术飞弹", "2000 点伤害")], "log": "两张解牌依次加入连锁"},
-         {"title": "逐段结算", "subtitle": "先结算爆燃，巨象满生命 7000", "cards": [("巨象生命", "7000"), ("本次伤害", "1000")], "log": "【王牌巨象】的碾压防止 1000 点非致命伤害。"},
-         {"title": "第二段也被挡", "subtitle": "伤害仍然低于剩余生命", "cards": [("巨象生命", "7000"), ("本次伤害", "2000")], "formula": "1000 < 7000　2000 < 7000", "log": "【王牌巨象】的碾压防止 2000 点非致命伤害。"},
-     ]},
-    {"kind": "match3", "num": 11, "min": 14, "event": "第二张巨兽｜六费森林战将到场", "steps": [ST3["twin"]],
-     "detail": "KIMI 3.1pro 受到 2 点生命伤害（王牌巨象），逐点处理。\nKIMI 3.1pro 受到 1 点生命伤害（森林战将），逐点处理。",
-     "narration": "第十一回合，绿方的第二张巨兽也到了：六费的森林战将，同样带预制。巨象两点、战将一点，红方从四张被压到一张。"},
-    {"kind": "gallery", "num": 12, "min": 21, "title": "卡牌效果②｜红方的输出只有两件东西",
-     "cards": [
-         {"name": "地狱犬", "meta": "2 费·红｜灵像", "stats": "2000 攻｜1 冲｜2500 生", "keywords": "预制·自愈 / CT", "color": "红",
-          "text": "无额外效果文本。", "note": "本局唯一的稳定打手，每次两点。"},
-         {"name": "火球术", "meta": "3 费·红｜灵感", "stats": "", "keywords": "无", "color": "红",
-          "text": "对对手灵体造成 2 点伤害。", "note": "不经过战斗，直接削减生命。"},
-         {"name": "预案引燃", "meta": "3 费·红｜灵感", "stats": "", "keywords": "无", "color": "红",
-          "text": "抽 1 张；对对手场上 1 张灵像造成 2000 点伤害。", "note": "兼职解场，本局打掉幼苗守望者。"},
+     "narration": "白方赢在稳定，红方赢在爆发。白方每回合最多四点，一刀一刀砍；红方憋一次焚尽就是五点。最后那一回合，白方卡组先空，可伤害还没结算完，胜负只能等它结算完才定。"},
+    {"kind": "duel_closing", "m": "a", "num": 10, "min": 11,
+     "headline": "慢开局，急收尾",
+     "metrics": [("6", "回合零伤害", GREEN), ("5", "次领先易手", GOLD), ("1 : 0", "终局（红／白）", RED)],
+     "lines": ["白方每回合一点，红方每回合三点。", "同一条六成线，长出了两种完全不同的节奏。"],
+     "narration": "六个回合不动手，五个回合连着换手。同一条六成线，一方靠稳定，一方靠爆发——这就是构筑规则收紧之后，剩下的空间。"},
+]
+
+VIDEO_B = [
+    {"kind": "duel_title", "m": "b", "num": 1, "min": 14,
+     "headline": "第三回合就见血，第九回合五刀",
+     "score": "10:10  →  9:10  →  8:7  →  6:7  →  6:4  →  1:4  →  0:2",
+     "score_note": "比分按 红 ： 绿",
+     "taglineA": "自伤换节奏 · 燃魂 · 火球术", "taglineB": "低费铺场 · 五只小单位 · 巨象收尾",
+     "cardsA": "50 张｜红 41 黑 4 灰 5｜同色 82%", "cardsB": "50 张｜绿 34 白 16｜同色 68%",
+     "footer": "标准模式｜10 生命｜4 起手｜绿方先手",
+     "footer2": "真实引擎回放｜种子 20269120",
+     "narration": "红绿对局，十一回合。这一局没有铺垫：第三回合就见血，第九回合绿方一口气砍了五刀。"},
+    {"kind": "duel", "m": "b", "num": 2, "min": 13, "steps": [18],
+     "event": "开局｜绿方先手，两边都在抢低费",
+     "detail": "绿方将 1 张手牌置于灵质区。\n红方用自伤牌换节奏，血量先松手。",
+     "narration": "标准模式，绿方先手。双方第一回合都在铺低费单位，红方甚至用自伤牌换节奏——它准备比谁更快。"},
+    {"kind": "duel", "m": "b", "num": 3, "min": 13, "steps": [50],
+     "event": "第三回合｜第一次见血",
+     "detail": "绿方单位未被阻挡，1 点冲击力打穿。\n红方揭示生命卡【自杀式袭击】，待结算 0 点。",
+     "narration": "第三回合，绿方的单位直接打穿，红方掉到九张。全场第一次伤害，来得比上一局早了四个回合。"},
+    {"kind": "duel", "m": "b", "num": 4, "min": 14, "steps": [127],
+     "event": "第六回合｜红方用燃魂扳回三点",
+     "detail": "MiniMax M3 使用【燃魂】，一次结算 2 点；场上单位再补 1 点。\n绿方从 10 张掉到 7 张。",
+     "narration": "红方的反击靠燃魂：一次两点，加上场上补刀，绿方从十张掉到七张。第六回合，红方第一次领先。"},
+    {"kind": "duel", "m": "b", "num": 5, "min": 14, "steps": [196],
+     "event": "第八回合｜火球术再拆三点",
+     "detail": "MiniMax M3 使用【火球术】，两点直伤；场上单位再补 1 点。\n绿方从 7 张掉到 4 张。",
+     "narration": "第八回合，火球术再打两点，场上单位补上一点，绿方只剩四张。看起来红方已经把节奏攥在手里。"},
+    {"kind": "duel", "m": "b", "num": 6, "min": 15, "steps": [258],
+     "event": "第九回合｜五只单位，五刀一点",
+     "detail": "幼苗守望者、幼苗守望者、晨祷侍从、古树牧者、森林战将依次攻击。\n五刀各 1 点，红方从 6 张掉到 1 张。",
+     "narration": "第九回合，绿方把场面全部转成伤害：五只单位依次攻击，每只一点。红方从六张被砍到一张——五刀，刀刀见血。"},
+    {"kind": "duel", "m": "b", "num": 7, "min": 13, "steps": [293],
+     "event": "第十回合｜红方最后的两点",
+     "detail": "MiniMax M3 使用【烈焰斗士】并攻击。\n绿方从 4 张掉到 2 张。",
+     "narration": "红方没有认输，烈焰斗士补上两点，绿方也只剩两张。一比四之后，红方把比分追到一比二。"},
+    {"kind": "duel", "m": "b", "num": 8, "min": 14, "steps": [323],
+     "event": "终局｜巨象补上最后一刀",
+     "detail": "GLM5.3 使用【王牌巨象】，幼苗守望者随后攻击 1 点。\n红方生命卡组为空且仍需结算伤害，落败。",
+     "narration": "第十一回合，绿方打出王牌巨象，幼苗守望者再补一刀。红方只剩一张生命，结算完就空了——零比二，绿方赢。"},
+    {"kind": "duel_review", "m": "b", "num": 9, "min": 15, "title": "复盘｜五刀与两点的差距",
+     "final_text": "最终剩余生命：红方 0｜绿方 2",
+     "items": [
+         ("① 绿方的宽度", "五只单位各 1 点\n单回合 5 点\n铺场就是伤害", GREEN),
+         ("② 红方的上限", "燃魂、火球术\n单次最多 2 点\n爆发不够快", RED),
+         ("③ 收尾", "第十一回合\n巨象补最后一刀\n红方卡组耗尽", GOLD),
      ],
-     "narration": "红方的输出全靠两件东西：地狱犬每回合稳定的两点冲击，和火球术、预案引燃这类直伤。效率很高，但天花板也清楚——每回合最多两点，而且都要经过地狱犬这只生物。"},
-    {"kind": "match3", "num": 13, "min": 15, "event": "最后反击｜火球术压到一张，代价是引擎", "steps": [ST3["mt"], ST3["fire"]],
-     "detail": "【地狱犬】被状态检查破坏。\nGLM5.3 受到 2 点生命伤害（火球术），逐点处理。",
-     "narration": "第十二回合，红方用火球术把绿方压到一张生命。可就在同一段伤害里，绿方揭示了圣光打击——混合触发，三千点伤害直接打在地狱犬身上。"},
-    {"kind": "trigger", "num": 14, "min": 19, "title": "触发展示｜圣光打击 MT 打在谁身上", "color": WHITE,
-     "labels": ["火球术 2 点", "生命揭示 MT", "3000 点杀地狱犬"],
-     "narration": "圣光打击从生命里被揭示，不会进场，序曲不发动；发动的是混合触发那一侧：对场上任意一张灵像造成三千点伤害。地狱犬只有两千五百生命，状态检查随即把它破坏。红方唯一的输出引擎，被自己的生命卡打掉。",
+     "narration": "绿方赢在宽度：五只小单位各打一点，一回合就是五点。红方单次最多两点，靠燃魂和火球术追，追到只差一张，还是没追上。"},
+    {"kind": "duel_closing", "m": "b", "num": 10, "min": 11,
+     "headline": "五刀砍不死，就轮到巨象",
+     "metrics": [("5", "单回合最多刀数", GREEN), ("2", "红方单次上限", RED), ("0 : 2", "终局（红／绿）", GREEN)],
+     "lines": ["绿方把场面全换成了伤害。", "红方追到只差一张，但那一张始终没拿回来。"],
+     "narration": "这一局没有奇迹，只有数量：五刀对两点，铺场对爆发。绿方把每一只小单位都换成了伤害，红方追到只差一张，还是慢了一步。"},
+]
+
+VIDEO_C = [
+    {"kind": "duel_title", "m": "c", "num": 1, "min": 16,
+     "headline": "劲爆大象部落",
+     "score": "10:10  →  10:7  →  7:3  →  2:3  →  2:1  →  0:1",
+     "score_note": "比分按 根脉 ： 回响",
+     "taglineA": "两只小单位 · 每回合磨 2 点", "taglineB": "一只巨象 · 反复清场",
+     "cardsA": "50 张｜绿 34 白 16｜同色 68%", "cardsB": "50 张｜绿 34 白 16｜同色 68%",
+     "footer": "标准模式｜10 生命｜4 起手｜回响方先手",
+     "footer2": "真实引擎回放｜种子 20332472",
+     "narration": "两套绿，卡组几乎一模一样：都是三十四张绿、十六张白，同色都是六成八，连灵体都是同一张根脉育苗者。真正的区别只有一个——一边养了一头大象，一边养了两只小单位。"},
+    {"kind": "duel", "m": "c", "num": 2, "min": 13, "steps": [15],
+     "event": "开局｜两套绿，同一条跳费线",
+     "detail": "双方第一回合都在把牌放进灵质区。\n两套卡组的骨架几乎完全相同。",
+     "narration": "标准模式，回响方先手。第一回合两边都在铺灵质——这套绿的核心只有一件事：比别人早一回合到七费，把巨象放出来。"},
+    {"kind": "duel", "m": "c", "num": 3, "min": 15, "steps": [165],
+     "event": "第八回合｜根脉方先动手，一个回合三张",
+     "detail": "古树牧者 1 点；圣光聚合体打进去时翻出的生命卡带暴击，本次伤害追加 1 点。\n回响方从 10 张掉到 7 张。",
+     "narration": "第八回合，根脉方两只低费单位先动手。第一只一点，第二只打进去翻出的生命卡带暴击，这一次伤害再追加一点——一个回合，回响方掉了三张。第一次伤害来得不算早，可一来就是三点。"},
+    {"kind": "duel", "m": "c", "num": 4, "min": 15, "steps": [195],
+     "event": "第九回合｜巨象落地，只推了两张",
+     "detail": "deepseek v4pro 以【王牌巨象】攻击，碾压把超出的伤害全部挡下。\n【圣光聚合体】【守林圣骑士】被状态检查破坏，生命只掉 2 张。",
+     "narration": "回响方的回答是一张巨象。它一落地就清掉两张阻挡者，可这一击只推进了两张生命——六千攻的大象，打脸的时候收着打。场面被抹平，血量却没怎么动。"},
+    {"kind": "duel", "m": "c", "num": 5, "min": 14, "steps": [232],
+     "event": "第十回合｜根脉方用两只一点还回去",
+     "detail": "古树牧者与森林战将各 1 点，都未被阻挡。\n回响方从 7 张掉到 5 张。",
+     "narration": "根脉方没有大象，就用最笨的办法：两只单位各打一点。回响方从七张掉到五张。慢，但每一刀都落在了实处。"},
+    {"kind": "duel", "m": "c", "num": 6, "min": 15, "steps": [298],
+     "event": "第十二回合｜七比三，看上去要结束了",
+     "detail": "根脉方两只单位各 1 点，回响方从 5 张掉到 3 张。\n根脉 7 : 回响 3，根脉方领先四张。",
+     "narration": "接下来两个回合是纯粹的互换：回响方打一点，根脉方还两点。第十二回合结束，七比三，根脉方领先四张。看上去这一局已经没有悬念了。"},
+    {"kind": "duel", "m": "c", "num": 7, "min": 15, "steps": [347],
+     "event": "第十三回合｜同一只巨象，五张生命",
+     "detail": "回响方的【王牌巨象】清掉两张阻挡者，结算 4 点；\n森林战将再补 1 点。根脉方从 7 张掉到 2 张，反超为 根脉 2 : 回响 3。",
+     "narration": "第十三回合，那只巨象还在场上。践踏先抹掉两张阻挡者，这一次它没有收手——四点打进生命，森林战将再补一点。根脉方从七张掉到两张，一个回合，从领先四张变成落后一张。"},
+    {"kind": "trigger", "m": "c", "num": 8, "min": 20, "title": "图解｜践踏：一张巨象清两张", "color": GREEN,
+     "labels": ["巨象宣告攻击", "打穿阻挡者", "剩余转给其他灵像"],
+     "narration": "践踏的结算分两步：先用攻击力打阻挡者，打穿之后剩下的攻击力不浪费，转给其他灵像。所以一张巨象可以同时清掉两张。至于打向灵体，那是碾压管的事——超出致命线的伤害会被防止，这也是回响方清场快、收尾慢的原因。",
      "stages": [
-         {"title": "先确定原伤害", "subtitle": "火球术对绿方灵体造成 2 点生命伤害", "cards": [("火球术", "3 费·红｜灵感"), ("生命伤害", "原事件＝2 点")], "log": "【火球术】造成 2 点生命伤害"},
-         {"title": "生命揭示圣光打击", "subtitle": "MT＝同时具有 LT 与 ST；从生命揭示时按 MT 结算", "cards": [("圣光打击", "MT｜混合触发"), ("连锁区", "3000 点伤害待结算")], "log": "【圣光打击】MT 触发加入连锁"},
-         {"title": "打掉地狱犬", "subtitle": "3000 超过 2500 生命，状态检查破坏", "cards": [("地狱犬", "2500 生命"), ("受到 3000", "field → grave")], "formula": "3000  ≥  2500", "log": "【地狱犬】被状态检查破坏"},
+         {"title": "巨象宣告攻击", "subtitle": "对方用守林圣骑士阻挡", "cards": [("王牌巨象", "6000 攻｜2 冲"), ("守林圣骑士", "4000 生")], "log": "进入宣告阻挡者步骤"},
+         {"title": "打穿阻挡者", "subtitle": "6000 打 4000，剩余 2000", "cards": [("守林圣骑士", "受到 6000"), ("剩余攻击力", "2000")], "formula": "6000  >  4000", "log": "【守林圣骑士】被状态检查破坏"},
+         {"title": "剩余攻击力转给其他灵像", "subtitle": "一次攻击，两张一起倒", "cards": [("剩余 2000", "转给其他灵像"), ("同一次攻击", "两张被破坏")], "formula": "1  →  2", "log": "【圣光聚合体】被状态检查破坏"},
      ]},
-    {"kind": "match3", "num": 15, "min": 14, "event": "终局｜生命卡组空了，还要把伤害结算完", "steps": [ST3["final"]],
-     "detail": "KIMI 3.1pro 揭示生命卡【灰烬小僧】，待结算 1 点。\nKIMI 3.1pro 因「生命卡组为空且仍需结算生命伤害」落败。",
-     "narration": "第十三回合，王牌巨象再一次攻击，两点冲击。红方只剩一张生命，揭示灰烬小僧之后，生命卡组空了，但这次伤害仍有一点没有结算——胜负就在这一点上确定。"},
-    {"kind": "review3", "num": 16, "min": 16,
-     "narration": "绿方赢在三件事：灵质从第一回合就开始跳，巨象因此提前两回合落地；碾压让红方的解牌全部作废；红方每回合两点伤害的天花板，撑不到巨象倒下。"},
-    {"kind": "closing3", "num": 17, "min": 9,
-     "narration": "两套五十张、同色都是六成八的卡组，用同一条构筑线，打出了两种完全不同的节奏。同色规则收紧的是配比，不是打法。"},
+    {"kind": "duel", "m": "c", "num": 9, "min": 15, "steps": [387],
+     "event": "第十四回合｜两根小刀，又抢回来一次",
+     "detail": "古树牧者与森林战将各 1 点。\n回响方从 3 张掉到 1 张，根脉 2 : 回响 1。",
+     "narration": "根脉方只剩两张生命，可它还有两只单位。各打一点，回响方从三张掉到一张，二比一——最后三个回合，第二次易手。"},
+    {"kind": "duel", "m": "c", "num": 10, "min": 15, "steps": [419],
+     "event": "终局｜还是那只巨象，两点刚好够",
+     "detail": "回响方的【王牌巨象】清掉【森林狼王】【晨祷侍从】，结算 2 点；\n根脉方生命卡组为空且仍需结算伤害，落败。",
+     "narration": "第十五回合，还是那只巨象。践踏再清两张，这一次对方只剩两张生命，两点刚好够——根脉方卡组空了，伤害结算完，零比一。回响方赢下这场镜像。"},
+    {"kind": "duel_review", "m": "c", "num": 11, "min": 16, "title": "复盘｜一只大象，三次清场",
+     "final_text": "最终剩余生命：根脉 0｜回响 1",
+     "items": [
+         ("① 巨象的清场", "三次攻击\n每次抹掉两张阻挡者", GREEN),
+         ("② 小单位的钝刀", "根脉方没有巨象\n靠两只单位每回合 2 点", GOLD),
+         ("③ 最后三回合", "2:3 → 2:1 → 0:1\n三次易手", MUTED),
+     ],
+     "narration": "这一局的分水岭不是谁先出大象，而是场面和血量是两笔账。巨象每次都能清场，可每次只推进两点；根脉方没有巨象，靠两只单位每回合磨两点，一路磨到七比三。最后三个回合三次易手，赢的那一边只多一张生命。"},
+    {"kind": "duel_closing", "m": "c", "num": 12, "min": 12,
+     "headline": "劲爆大象部落",
+     "metrics": [("3", "同一只巨象攻击", GREEN), ("6", "被清掉的阻挡者", GOLD), ("0 : 1", "终局（根脉／回响）", GREEN)],
+     "lines": ["场面赢了三个回合，血量只赢最后一张。", "同一条六成线，同一张灵体，胜负在最后一点上。"],
+     "narration": "一只巨象，三次攻击，抹掉六张阻挡者，最后只赢一张生命。劲爆大象部落——同一条六成线，同一张灵体，胜负就在最后那一点上。"},
+]
+
+VIDEO_D = [
+    {"kind": "duel_title", "m": "d", "num": 1, "min": 15,
+     "headline": "同一张灵体，两种红",
+     "score": "10:10  →  7:9  →  7:6  →  5:6  →  5:4  →  5:1  →  5:0",
+     "score_note": "比分按 赤蓝 ： 叠刃",
+     "taglineA": "地狱犬连击 · 血怒 · 直伤", "taglineB": "叠刃 · 燃魂 · 火焰鸟",
+     "cardsA": "50 张｜红 34 蓝 16｜同色 68%", "cardsB": "50 张｜红 39 黑 8 灰 3｜同色 78%",
+     "footer": "标准模式｜10 生命｜4 起手｜叠刃方先手",
+     "footer2": "真实引擎回放｜种子 20332472",
+     "narration": "红内战，双方用同一张灵体余烬执火者。同一个灵体、同一条六成线，卡组却是两种思路：一边靠地狱犬反复连击，一边靠叠刃堆伤害。"},
+    {"kind": "duel", "m": "d", "num": 2, "min": 13, "steps": [16],
+     "event": "开局｜同一张灵体，两套红",
+     "detail": "双方第一回合都在铺低费单位。\n灵体相同，卡组思路不同。",
+     "narration": "标准模式，叠刃方先手。双方的灵体完全一样，区别在主卡组：一边把地狱犬当核心，一边把叠刃堆成爆发。"},
+    {"kind": "duel", "m": "d", "num": 3, "min": 13, "steps": [72],
+     "event": "第四回合｜赤蓝方先破防",
+     "detail": "KIMI 3.1pro 的地狱犬以 1 点冲击力打穿。\n叠刃方从 10 张掉到 9 张。",
+     "narration": "第四回合，赤蓝方的地狱犬先打穿，叠刃方掉到九张。第一次伤害，比想象中晚。"},
+    {"kind": "duel", "m": "d", "num": 4, "min": 15, "steps": [116],
+     "event": "第五回合｜叠刃方一次三点",
+     "detail": "MiniMax M3.1flash 的地狱犬以 2 点冲击力打穿，生命卡暴击追加 1 点。\n赤蓝方从 10 张掉到 7 张。",
+     "narration": "叠刃方的反击更狠：地狱犬两点冲击，打进去翻出的生命卡再追加一点。赤蓝方从十张掉到七张——第五回合，叠刃方第一次领先。"},
+    {"kind": "duel", "m": "d", "num": 5, "min": 15, "steps": [147],
+     "event": "第六回合｜赤蓝方用血怒抢回来",
+     "detail": "KIMI 3.1pro 使用【血怒】，地狱犬以 3 点冲击力打穿。\n叠刃方从 9 张掉到 6 张。",
+     "narration": "赤蓝方的回答是一张血怒：地狱犬冲到三点冲击，叠刃方从九张掉到六张。七比六，只差一张，赤蓝方又把比分抢了回来。"},
+    {"kind": "duel", "m": "d", "num": 6, "min": 14, "steps": [176],
+     "event": "第七回合｜叠刃方再抢一次",
+     "detail": "MiniMax M3.1flash 的地狱犬以 2 点冲击力打穿。\n赤蓝方从 7 张掉到 5 张。",
+     "narration": "第七回合，叠刃方的地狱犬也打穿两点。赤蓝方从七张掉到五张——前八回合，比分第四次翻面。"},
+    {"kind": "duel", "m": "d", "num": 7, "min": 14, "steps": [205],
+     "event": "第八回合｜赤蓝方回到领先",
+     "detail": "KIMI 3.1pro 的地狱犬以 2 点冲击力打穿。\n叠刃方从 6 张掉到 4 张。",
+     "narration": "赤蓝方马上还以颜色，地狱犬两点打穿。叠刃方只剩四张，五比四——四次易手，全部集中在前八个回合。"},
+    {"kind": "duel", "m": "d", "num": 8, "min": 14, "steps": [270],
+     "event": "第十回合｜两刀三点",
+     "detail": "地狱犬 2 点、烈焰斗士 1 点。\n叠刃方从 4 张掉到 1 张。",
+     "narration": "第十回合，赤蓝方两刀砍下三点：地狱犬两点、烈焰斗士一点。叠刃方从四张掉到一张，这一局的天平彻底倒过去了。"},
+    {"kind": "duel", "m": "d", "num": 9, "min": 15, "steps": [306],
+     "event": "终局｜烈焰斗士补完最后一点",
+     "detail": "KIMI 3.1pro 以【烈焰斗士】攻击，2 点冲击力，只揭示 1 张。\n叠刃方生命卡组为空且仍需结算伤害，落败。",
+     "narration": "第十二回合，烈焰斗士打出两点，可叠刃方只剩一张生命——揭示完，卡组空了，还有一点没结算。五比零，赤蓝方赢下这场内战。"},
+    {"kind": "duel_review", "m": "d", "num": 10, "min": 16, "title": "复盘｜连击与堆叠的分水岭",
+     "final_text": "最终剩余生命：赤蓝 5｜叠刃 0",
+     "items": [
+         ("① 地狱犬", "赤蓝方的核心\n每回合稳定 2—3 点", RED),
+         ("② 前八回合", "四次领先易手\n七比六时只差一张", GOLD),
+         ("③ 5 : 0", "比分看着悬殊\n过程完全相反", MUTED),
+     ],
+     "narration": "前八回合四次易手，七比六的时候谁都可能赢。分出胜负的是第九回合之后：赤蓝方的地狱犬每回合都能攻击，叠刃方的高费件一直没凑齐。"},
+    {"kind": "duel_closing", "m": "d", "num": 11, "min": 12,
+     "headline": "同一个灵体，两种红",
+     "metrics": [("4", "前八回合易手", GOLD), ("3", "地狱犬最大单击", RED), ("5 : 0", "终局（赤蓝／叠刃）", RED)],
+     "lines": ["同一个灵体，同一条六成线。", "决定胜负的不是颜色，是卡组里有没有稳定的每回合输出。"],
+     "narration": "同一个灵体，两套红，最后打成五比零。可真正的差距不在比分，而在第九回合之后——一边每回合都能攻击，一边一直在等牌。"},
 ]
 
 CONTENT_BUILDERS = {
@@ -1042,14 +1200,14 @@ CONTENT_BUILDERS = {
     "results": results_content,
     "final": final_content,
     "match_title": match_title_content,
+    "match": None,
     "glossary": glossary_content,
     "gallery": gallery_content,
     "review": review_content,
-    "match_title3": match3_title_content,
-    "match3": match3_content,
-    "review3": review3_content,
-    "closing3": closing3_content,
-    "glossary3": glossary3_content,
+    "duel_title": duel_title_content,
+    "duel": None,
+    "duel_review": duel_review_content,
+    "duel_closing": duel_closing_content,
 }
 
 
@@ -1113,8 +1271,8 @@ def write_audio(scenes, prefix, starts, durations, total, match=False):
 def scene_frames(scene):
     if scene["kind"] == "match":
         return [match_content(scene, idx) for idx in scene["steps"]]
-    if scene["kind"] == "match3":
-        return [match3_content(scene, idx) for idx in scene["steps"]]
+    if scene["kind"] == "duel":
+        return [duel_content(scene, idx) for idx in scene["steps"]]
     if scene["kind"] == "trigger":
         return [trigger_content(scene, i) for i in range(len(scene["stages"]))]
     return [CONTENT_BUILDERS[scene["kind"]](scene)]
@@ -1196,8 +1354,17 @@ def main():
         render_video(VIDEO2, "video2x", OUT / "02_灵魂回响_高质量对局解说.mp4", "02_对局解说_封面.png")
         contact_sheet(VIDEO2, "video2x")
     if which in ("video3", "all"):
-        render_video(VIDEO3, "video3", OUT / "03_灵魂回响_标准对局解说.mp4", "03_对局解说_封面.png")
-        contact_sheet(VIDEO3, "video3")
+        render_video(VIDEO_A, "video3a", OUT / "03_灵魂回响_红白拉锯解说.mp4", "03_红白拉锯_封面.png")
+        contact_sheet(VIDEO_A, "video3a")
+    if which in ("video4", "all"):
+        render_video(VIDEO_B, "video3b", OUT / "04_灵魂回响_速攻与反速攻.mp4", "04_速攻反攻_封面.png")
+        contact_sheet(VIDEO_B, "video3b")
+    if which in ("video5", "all"):
+        render_video(VIDEO_C, "video3c", OUT / "05_灵魂回响_劲爆大象部落.mp4", "05_劲爆大象_封面.png")
+        contact_sheet(VIDEO_C, "video3c")
+    if which in ("video6", "all"):
+        render_video(VIDEO_D, "video3d", OUT / "06_灵魂回响_同灵体两种红.mp4", "06_同灵体两种红_封面.png")
+        contact_sheet(VIDEO_D, "video3d")
 
 
 if __name__ == "__main__":
