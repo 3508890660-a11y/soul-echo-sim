@@ -1099,7 +1099,7 @@ VIDEO_B = [
 
 VIDEO_C = [
     {"kind": "duel_title", "m": "c", "num": 1, "min": 16,
-     "headline": "劲爆大象部落",
+     "headline": "大象，很神奇吧",
      "score": "10:10  →  10:7  →  7:3  →  2:3  →  2:1  →  0:1",
      "score_note": "比分按 根脉 ： 回响",
      "taglineA": "两只小单位 · 每回合磨 2 点", "taglineB": "一只巨象 · 反复清场",
@@ -1174,10 +1174,10 @@ VIDEO_C = [
      ],
      "narration": "这一局的分水岭不是谁先出大象，而是场面和血量是两笔账。巨象每次都能清场，可每次只推进两点；根脉方没有巨象，靠两只单位每回合磨两点，一路磨到七比三。最后三个回合三次易手，赢的那一边只多一张生命。"},
     {"kind": "duel_closing", "m": "c", "num": 12, "min": 12,
-     "headline": "劲爆大象部落",
+     "headline": "大象，很神奇吧",
      "metrics": [("3", "同一只巨象攻击", GREEN), ("6", "被清掉的阻挡者", GOLD), ("0 : 1", "终局（根脉／回响）", GREEN)],
      "lines": ["场面赢了三个回合，血量只赢最后一张。", "同一条六成线，同一张灵体，胜负在最后一点上。"],
-     "narration": "一只巨象，三次攻击，抹掉六张阻挡者，最后只赢一张生命。劲爆大象部落——同一条六成线，同一张灵体，胜负就在最后那一点上。"},
+     "narration": "一只巨象，三次攻击，抹掉六张阻挡者，最后只赢一张生命。大象，很神奇吧——同一条六成线，同一张灵体，胜负就在最后那一点上。"},
 ]
 
 VIDEO_D = [
@@ -1483,7 +1483,7 @@ def main():
         render_video(VIDEO_B, "video3b", OUT / "04_灵魂回响_速攻与反速攻.mp4", "04_速攻反攻_封面.png")
         contact_sheet(VIDEO_B, "video3b")
     if which in ("video5", "all"):
-        render_video(VIDEO_C, "video3c", OUT / "05_灵魂回响_劲爆大象部落.mp4", "05_劲爆大象_封面.png")
+        render_video(VIDEO_C, "video3c", OUT / "05_灵魂回响_大象很神奇吧.mp4", "05_大象很神奇吧_封面.png")
         contact_sheet(VIDEO_C, "video3c")
     if which in ("video6", "all"):
         render_video(VIDEO_D, "video3d", OUT / "06_灵魂回响_同灵体两种红.mp4", "06_同灵体两种红_封面.png")
