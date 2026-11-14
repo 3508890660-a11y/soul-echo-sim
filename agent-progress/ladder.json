@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T05:26:24.877Z",
+  "generatedAt": "2026-11-14T07:42:42.449Z",
   "seedsPerPair": 2,
   "modes": {
     "standard": {
@@ -19,10 +19,10 @@
           "plays": 44,
           "actions": 11260,
           "anomalies": 0,
-          "ms": 319,
+          "ms": 399,
           "winrate": 0.7272727272727273,
           "avgActions": 256,
-          "avgMs": 7
+          "avgMs": 9
         },
         {
           "id": "minimaxm3",
@@ -33,12 +33,12 @@
           "loss": 14,
           "draw": 0,
           "plays": 44,
-          "actions": 10393,
+          "actions": 10308,
           "anomalies": 0,
-          "ms": 316,
+          "ms": 374,
           "winrate": 0.6818181818181818,
-          "avgActions": 236,
-          "avgMs": 7
+          "avgActions": 234,
+          "avgMs": 9
         },
         {
           "id": "deepseekv41flash",
@@ -49,28 +49,28 @@
           "loss": 14,
           "draw": 0,
           "plays": 44,
-          "actions": 16427,
+          "actions": 16409,
           "anomalies": 0,
-          "ms": 519,
+          "ms": 614,
           "winrate": 0.6818181818181818,
           "avgActions": 373,
-          "avgMs": 12
+          "avgMs": 14
         },
         {
           "id": "minimaxm31flash",
           "model": "MiniMax M3.1flash",
           "primaryMode": "blitz",
           "strategy": "余烬叠刃",
-          "win": 27,
-          "loss": 17,
+          "win": 28,
+          "loss": 16,
           "draw": 0,
           "plays": 44,
-          "actions": 11502,
+          "actions": 11308,
           "anomalies": 0,
-          "ms": 359,
-          "winrate": 0.6136363636363636,
-          "avgActions": 261,
-          "avgMs": 8
+          "ms": 419,
+          "winrate": 0.6363636363636364,
+          "avgActions": 257,
+          "avgMs": 10
         },
         {
           "id": "deepseekv4pro",
@@ -81,12 +81,12 @@
           "loss": 18,
           "draw": 0,
           "plays": 44,
-          "actions": 12187,
+          "actions": 12135,
           "anomalies": 0,
-          "ms": 358,
+          "ms": 425,
           "winrate": 0.5909090909090909,
-          "avgActions": 277,
-          "avgMs": 8
+          "avgActions": 276,
+          "avgMs": 10
         },
         {
           "id": "mimov26pro",
@@ -99,10 +99,10 @@
           "plays": 44,
           "actions": 11435,
           "anomalies": 0,
-          "ms": 343,
+          "ms": 432,
           "winrate": 0.5909090909090909,
           "avgActions": 260,
-          "avgMs": 8
+          "avgMs": 10
         },
         {
           "id": "glm53",
@@ -113,28 +113,28 @@
           "loss": 19,
           "draw": 0,
           "plays": 44,
-          "actions": 13273,
+          "actions": 13250,
           "anomalies": 0,
-          "ms": 425,
+          "ms": 508,
           "winrate": 0.5681818181818182,
-          "avgActions": 302,
-          "avgMs": 10
+          "avgActions": 301,
+          "avgMs": 12
         },
         {
           "id": "step5preview",
           "model": "step5preview",
           "primaryMode": "grand",
           "strategy": "深根圣所",
-          "win": 20,
-          "loss": 24,
+          "win": 19,
+          "loss": 25,
           "draw": 0,
           "plays": 44,
-          "actions": 14235,
+          "actions": 13971,
           "anomalies": 0,
-          "ms": 468,
-          "winrate": 0.45454545454545453,
-          "avgActions": 324,
-          "avgMs": 11
+          "ms": 558,
+          "winrate": 0.4318181818181818,
+          "avgActions": 318,
+          "avgMs": 13
         },
         {
           "id": "glm53flash",
@@ -145,12 +145,12 @@
           "loss": 29,
           "draw": 0,
           "plays": 44,
-          "actions": 13392,
+          "actions": 13372,
           "anomalies": 0,
-          "ms": 388,
+          "ms": 502,
           "winrate": 0.3409090909090909,
           "avgActions": 304,
-          "avgMs": 9
+          "avgMs": 11
         },
         {
           "id": "kimi28preview",
@@ -161,44 +161,44 @@
           "loss": 30,
           "draw": 0,
           "plays": 44,
-          "actions": 12594,
+          "actions": 12617,
           "anomalies": 0,
-          "ms": 329,
+          "ms": 410,
           "winrate": 0.3181818181818182,
-          "avgActions": 286,
-          "avgMs": 7
+          "avgActions": 287,
+          "avgMs": 9
         },
         {
           "id": "hy3",
           "model": "hy3",
           "primaryMode": "grand",
           "strategy": "翠林根基",
-          "win": 12,
-          "loss": 32,
+          "win": 11,
+          "loss": 33,
           "draw": 0,
           "plays": 44,
-          "actions": 13553,
+          "actions": 13100,
           "anomalies": 0,
-          "ms": 523,
-          "winrate": 0.2727272727272727,
-          "avgActions": 308,
-          "avgMs": 12
+          "ms": 605,
+          "winrate": 0.25,
+          "avgActions": 298,
+          "avgMs": 14
         },
         {
           "id": "hy4",
           "model": "hy4",
           "primaryMode": "standard",
           "strategy": "赤烬疾袭",
-          "win": 7,
-          "loss": 37,
+          "win": 8,
+          "loss": 36,
           "draw": 0,
           "plays": 44,
-          "actions": 11275,
+          "actions": 11193,
           "anomalies": 0,
-          "ms": 469,
-          "winrate": 0.1590909090909091,
-          "avgActions": 256,
-          "avgMs": 11
+          "ms": 562,
+          "winrate": 0.18181818181818182,
+          "avgActions": 254,
+          "avgMs": 13
         }
       ]
     },
@@ -219,10 +219,10 @@
           "plays": 44,
           "actions": 7642,
           "anomalies": 0,
-          "ms": 306,
+          "ms": 235,
           "winrate": 0.7954545454545454,
           "avgActions": 174,
-          "avgMs": 7
+          "avgMs": 5
         },
         {
           "id": "mimov26pro",
@@ -235,10 +235,10 @@
           "plays": 44,
           "actions": 7588,
           "anomalies": 0,
-          "ms": 315,
+          "ms": 245,
           "winrate": 0.7272727272727273,
           "avgActions": 172,
-          "avgMs": 7
+          "avgMs": 6
         },
         {
           "id": "glm53",
@@ -249,11 +249,11 @@
           "loss": 15,
           "draw": 0,
           "plays": 44,
-          "actions": 9508,
+          "actions": 9400,
           "anomalies": 0,
-          "ms": 297,
+          "ms": 292,
           "winrate": 0.6590909090909091,
-          "avgActions": 216,
+          "avgActions": 214,
           "avgMs": 7
         },
         {
@@ -265,11 +265,27 @@
           "loss": 17,
           "draw": 0,
           "plays": 44,
-          "actions": 7961,
+          "actions": 7842,
           "anomalies": 0,
-          "ms": 299,
+          "ms": 251,
           "winrate": 0.6136363636363636,
-          "avgActions": 181,
+          "avgActions": 178,
+          "avgMs": 6
+        },
+        {
+          "id": "kimi28preview",
+          "model": "KIMI 2.8preview",
+          "primaryMode": "blitz",
+          "strategy": "余烬速燃",
+          "win": 24,
+          "loss": 20,
+          "draw": 0,
+          "plays": 44,
+          "actions": 9665,
+          "anomalies": 0,
+          "ms": 295,
+          "winrate": 0.5454545454545454,
+          "avgActions": 220,
           "avgMs": 7
         },
         {
@@ -281,28 +297,12 @@
           "loss": 21,
           "draw": 0,
           "plays": 44,
-          "actions": 8198,
+          "actions": 8162,
           "anomalies": 0,
-          "ms": 329,
+          "ms": 273,
           "winrate": 0.5227272727272727,
           "avgActions": 186,
-          "avgMs": 7
-        },
-        {
-          "id": "kimi28preview",
-          "model": "KIMI 2.8preview",
-          "primaryMode": "blitz",
-          "strategy": "余烬速燃",
-          "win": 23,
-          "loss": 21,
-          "draw": 0,
-          "plays": 44,
-          "actions": 9686,
-          "anomalies": 0,
-          "ms": 325,
-          "winrate": 0.5227272727272727,
-          "avgActions": 220,
-          "avgMs": 7
+          "avgMs": 6
         },
         {
           "id": "deepseekv4pro",
@@ -313,12 +313,12 @@
           "loss": 21,
           "draw": 0,
           "plays": 44,
-          "actions": 9241,
+          "actions": 9195,
           "anomalies": 0,
-          "ms": 368,
+          "ms": 297,
           "winrate": 0.5227272727272727,
-          "avgActions": 210,
-          "avgMs": 8
+          "avgActions": 209,
+          "avgMs": 7
         },
         {
           "id": "glm53flash",
@@ -331,10 +331,10 @@
           "plays": 44,
           "actions": 9438,
           "anomalies": 0,
-          "ms": 321,
+          "ms": 271,
           "winrate": 0.45454545454545453,
           "avgActions": 215,
-          "avgMs": 7
+          "avgMs": 6
         },
         {
           "id": "step5preview",
@@ -345,28 +345,12 @@
           "loss": 28,
           "draw": 0,
           "plays": 44,
-          "actions": 10678,
+          "actions": 10622,
           "anomalies": 0,
-          "ms": 482,
+          "ms": 368,
           "winrate": 0.36363636363636365,
-          "avgActions": 243,
-          "avgMs": 11
-        },
-        {
-          "id": "deepseekv41flash",
-          "model": "deepseek v4.1flash",
-          "primaryMode": "grand",
-          "strategy": "圣所铁壁·二阶冲击",
-          "win": 15,
-          "loss": 29,
-          "draw": 0,
-          "plays": 44,
-          "actions": 11824,
-          "anomalies": 0,
-          "ms": 498,
-          "winrate": 0.3409090909090909,
-          "avgActions": 269,
-          "avgMs": 11
+          "avgActions": 241,
+          "avgMs": 8
         },
         {
           "id": "hy4",
@@ -379,10 +363,26 @@
           "plays": 44,
           "actions": 8156,
           "anomalies": 0,
-          "ms": 263,
+          "ms": 253,
           "winrate": 0.3181818181818182,
           "avgActions": 185,
           "avgMs": 6
+        },
+        {
+          "id": "deepseekv41flash",
+          "model": "deepseek v4.1flash",
+          "primaryMode": "grand",
+          "strategy": "圣所铁壁·二阶冲击",
+          "win": 14,
+          "loss": 30,
+          "draw": 0,
+          "plays": 44,
+          "actions": 11796,
+          "anomalies": 0,
+          "ms": 440,
+          "winrate": 0.3181818181818182,
+          "avgActions": 268,
+          "avgMs": 10
         },
         {
           "id": "hy3",
@@ -393,12 +393,12 @@
           "loss": 37,
           "draw": 0,
           "plays": 44,
-          "actions": 10852,
+          "actions": 10764,
           "anomalies": 0,
-          "ms": 321,
+          "ms": 356,
           "winrate": 0.1590909090909091,
-          "avgActions": 247,
-          "avgMs": 7
+          "avgActions": 245,
+          "avgMs": 8
         }
       ]
     },
@@ -413,48 +413,48 @@
           "model": "GLM5.3",
           "primaryMode": "standard",
           "strategy": "根脉奔流",
-          "win": 32,
-          "loss": 12,
-          "draw": 0,
-          "plays": 44,
-          "actions": 15314,
-          "anomalies": 0,
-          "ms": 811,
-          "winrate": 0.7272727272727273,
-          "avgActions": 348,
-          "avgMs": 18
-        },
-        {
-          "id": "deepseekv41flash",
-          "model": "deepseek v4.1flash",
-          "primaryMode": "grand",
-          "strategy": "圣所铁壁·二阶冲击",
           "win": 31,
           "loss": 13,
           "draw": 0,
           "plays": 44,
-          "actions": 17670,
+          "actions": 15291,
           "anomalies": 0,
-          "ms": 817,
+          "ms": 504,
           "winrate": 0.7045454545454546,
-          "avgActions": 402,
-          "avgMs": 19
+          "avgActions": 348,
+          "avgMs": 11
         },
         {
           "id": "minimaxm3",
           "model": "MiniMax M3",
           "primaryMode": "duo",
           "strategy": "余烬共鸣",
-          "win": 28,
-          "loss": 16,
+          "win": 30,
+          "loss": 14,
           "draw": 0,
           "plays": 44,
-          "actions": 13667,
+          "actions": 13451,
           "anomalies": 0,
-          "ms": 656,
-          "winrate": 0.6363636363636364,
-          "avgActions": 311,
-          "avgMs": 15
+          "ms": 427,
+          "winrate": 0.6818181818181818,
+          "avgActions": 306,
+          "avgMs": 10
+        },
+        {
+          "id": "deepseekv41flash",
+          "model": "deepseek v4.1flash",
+          "primaryMode": "grand",
+          "strategy": "圣所铁壁·二阶冲击",
+          "win": 30,
+          "loss": 14,
+          "draw": 0,
+          "plays": 44,
+          "actions": 17476,
+          "anomalies": 0,
+          "ms": 620,
+          "winrate": 0.6818181818181818,
+          "avgActions": 397,
+          "avgMs": 14
         },
         {
           "id": "step5preview",
@@ -465,12 +465,12 @@
           "loss": 16,
           "draw": 0,
           "plays": 44,
-          "actions": 16438,
+          "actions": 16329,
           "anomalies": 0,
-          "ms": 739,
+          "ms": 566,
           "winrate": 0.6363636363636364,
-          "avgActions": 374,
-          "avgMs": 17
+          "avgActions": 371,
+          "avgMs": 13
         },
         {
           "id": "kimi31pro",
@@ -483,10 +483,10 @@
           "plays": 44,
           "actions": 14942,
           "anomalies": 0,
-          "ms": 790,
+          "ms": 471,
           "winrate": 0.6136363636363636,
           "avgActions": 340,
-          "avgMs": 18
+          "avgMs": 11
         },
         {
           "id": "deepseekv4pro",
@@ -497,12 +497,12 @@
           "loss": 17,
           "draw": 0,
           "plays": 44,
-          "actions": 13910,
+          "actions": 13906,
           "anomalies": 0,
-          "ms": 580,
+          "ms": 436,
           "winrate": 0.6136363636363636,
           "avgActions": 316,
-          "avgMs": 13
+          "avgMs": 10
         },
         {
           "id": "minimaxm31flash",
@@ -513,12 +513,12 @@
           "loss": 22,
           "draw": 0,
           "plays": 44,
-          "actions": 15803,
+          "actions": 15692,
           "anomalies": 0,
-          "ms": 861,
+          "ms": 485,
           "winrate": 0.5,
-          "avgActions": 359,
-          "avgMs": 20
+          "avgActions": 357,
+          "avgMs": 11
         },
         {
           "id": "mimov26pro",
@@ -529,12 +529,12 @@
           "loss": 24,
           "draw": 0,
           "plays": 44,
-          "actions": 14306,
+          "actions": 14316,
           "anomalies": 0,
-          "ms": 592,
+          "ms": 468,
           "winrate": 0.45454545454545453,
           "avgActions": 325,
-          "avgMs": 13
+          "avgMs": 11
         },
         {
           "id": "glm53flash",
@@ -545,12 +545,12 @@
           "loss": 25,
           "draw": 0,
           "plays": 44,
-          "actions": 16968,
+          "actions": 16952,
           "anomalies": 0,
-          "ms": 899,
+          "ms": 550,
           "winrate": 0.4318181818181818,
-          "avgActions": 386,
-          "avgMs": 20
+          "avgActions": 385,
+          "avgMs": 13
         },
         {
           "id": "hy3",
@@ -561,12 +561,12 @@
           "loss": 32,
           "draw": 0,
           "plays": 44,
-          "actions": 16945,
+          "actions": 16848,
           "anomalies": 0,
-          "ms": 864,
+          "ms": 559,
           "winrate": 0.2727272727272727,
-          "avgActions": 385,
-          "avgMs": 20
+          "avgActions": 383,
+          "avgMs": 13
         },
         {
           "id": "kimi28preview",
@@ -577,12 +577,12 @@
           "loss": 32,
           "draw": 0,
           "plays": 44,
-          "actions": 15880,
+          "actions": 15843,
           "anomalies": 0,
-          "ms": 689,
+          "ms": 486,
           "winrate": 0.2727272727272727,
-          "avgActions": 361,
-          "avgMs": 16
+          "avgActions": 360,
+          "avgMs": 11
         },
         {
           "id": "hy4",
@@ -593,12 +593,12 @@
           "loss": 38,
           "draw": 0,
           "plays": 44,
-          "actions": 14119,
+          "actions": 13992,
           "anomalies": 0,
-          "ms": 782,
+          "ms": 446,
           "winrate": 0.13636363636363635,
-          "avgActions": 321,
-          "avgMs": 18
+          "avgActions": 318,
+          "avgMs": 10
         }
       ]
     },
@@ -617,12 +617,12 @@
           "loss": 12,
           "draw": 0,
           "plays": 44,
-          "actions": 11942,
+          "actions": 11834,
           "anomalies": 0,
-          "ms": 530,
+          "ms": 353,
           "winrate": 0.7272727272727273,
-          "avgActions": 271,
-          "avgMs": 12
+          "avgActions": 269,
+          "avgMs": 8
         },
         {
           "id": "kimi31pro",
@@ -633,44 +633,44 @@
           "loss": 12,
           "draw": 0,
           "plays": 44,
-          "actions": 13450,
+          "actions": 13373,
           "anomalies": 0,
-          "ms": 499,
+          "ms": 398,
           "winrate": 0.7272727272727273,
-          "avgActions": 306,
-          "avgMs": 11
-        },
-        {
-          "id": "deepseekv4pro",
-          "model": "deepseek v4pro",
-          "primaryMode": "standard",
-          "strategy": "回响巨像",
-          "win": 31,
-          "loss": 13,
-          "draw": 0,
-          "plays": 44,
-          "actions": 12715,
-          "anomalies": 0,
-          "ms": 530,
-          "winrate": 0.7045454545454546,
-          "avgActions": 289,
-          "avgMs": 12
+          "avgActions": 304,
+          "avgMs": 9
         },
         {
           "id": "deepseekv41flash",
           "model": "deepseek v4.1flash",
           "primaryMode": "grand",
           "strategy": "圣所铁壁·二阶冲击",
+          "win": 31,
+          "loss": 13,
+          "draw": 0,
+          "plays": 44,
+          "actions": 16334,
+          "anomalies": 0,
+          "ms": 524,
+          "winrate": 0.7045454545454546,
+          "avgActions": 371,
+          "avgMs": 12
+        },
+        {
+          "id": "deepseekv4pro",
+          "model": "deepseek v4pro",
+          "primaryMode": "standard",
+          "strategy": "回响巨像",
           "win": 30,
           "loss": 14,
           "draw": 0,
           "plays": 44,
-          "actions": 16457,
+          "actions": 12677,
           "anomalies": 0,
-          "ms": 717,
+          "ms": 401,
           "winrate": 0.6818181818181818,
-          "avgActions": 374,
-          "avgMs": 16
+          "avgActions": 288,
+          "avgMs": 9
         },
         {
           "id": "glm53",
@@ -681,12 +681,12 @@
           "loss": 20,
           "draw": 0,
           "plays": 44,
-          "actions": 14901,
+          "actions": 14918,
           "anomalies": 0,
-          "ms": 604,
+          "ms": 475,
           "winrate": 0.5454545454545454,
           "avgActions": 339,
-          "avgMs": 14
+          "avgMs": 11
         },
         {
           "id": "mimov26pro",
@@ -699,10 +699,10 @@
           "plays": 44,
           "actions": 12865,
           "anomalies": 0,
-          "ms": 532,
+          "ms": 406,
           "winrate": 0.5454545454545454,
           "avgActions": 292,
-          "avgMs": 12
+          "avgMs": 9
         },
         {
           "id": "step5preview",
@@ -713,28 +713,28 @@
           "loss": 23,
           "draw": 0,
           "plays": 44,
-          "actions": 16173,
+          "actions": 16099,
           "anomalies": 0,
-          "ms": 683,
+          "ms": 541,
           "winrate": 0.4772727272727273,
-          "avgActions": 368,
-          "avgMs": 16
+          "avgActions": 366,
+          "avgMs": 12
         },
         {
           "id": "minimaxm31flash",
           "model": "MiniMax M3.1flash",
           "primaryMode": "blitz",
           "strategy": "余烬叠刃",
-          "win": 19,
-          "loss": 25,
+          "win": 20,
+          "loss": 24,
           "draw": 0,
           "plays": 44,
-          "actions": 13972,
+          "actions": 13906,
           "anomalies": 0,
-          "ms": 611,
-          "winrate": 0.4318181818181818,
-          "avgActions": 318,
-          "avgMs": 14
+          "ms": 427,
+          "winrate": 0.45454545454545453,
+          "avgActions": 316,
+          "avgMs": 10
         },
         {
           "id": "kimi28preview",
@@ -745,12 +745,12 @@
           "loss": 27,
           "draw": 0,
           "plays": 44,
-          "actions": 14310,
+          "actions": 14262,
           "anomalies": 0,
-          "ms": 607,
+          "ms": 408,
           "winrate": 0.38636363636363635,
-          "avgActions": 325,
-          "avgMs": 14
+          "avgActions": 324,
+          "avgMs": 9
         },
         {
           "id": "glm53flash",
@@ -761,28 +761,28 @@
           "loss": 29,
           "draw": 0,
           "plays": 44,
-          "actions": 15509,
+          "actions": 15601,
           "anomalies": 0,
-          "ms": 669,
+          "ms": 456,
           "winrate": 0.3409090909090909,
-          "avgActions": 352,
-          "avgMs": 15
+          "avgActions": 355,
+          "avgMs": 10
         },
         {
           "id": "hy3",
           "model": "hy3",
           "primaryMode": "grand",
           "strategy": "翠林根基",
-          "win": 14,
-          "loss": 30,
+          "win": 13,
+          "loss": 31,
           "draw": 0,
           "plays": 44,
-          "actions": 16257,
+          "actions": 15802,
           "anomalies": 0,
-          "ms": 803,
-          "winrate": 0.3181818181818182,
-          "avgActions": 369,
-          "avgMs": 18
+          "ms": 534,
+          "winrate": 0.29545454545454547,
+          "avgActions": 359,
+          "avgMs": 12
         },
         {
           "id": "hy4",
@@ -793,12 +793,12 @@
           "loss": 39,
           "draw": 0,
           "plays": 44,
-          "actions": 13035,
+          "actions": 12917,
           "anomalies": 0,
-          "ms": 521,
+          "ms": 389,
           "winrate": 0.11363636363636363,
-          "avgActions": 296,
-          "avgMs": 12
+          "avgActions": 294,
+          "avgMs": 9
         }
       ]
     }
@@ -818,27 +818,27 @@
       "model": "MiniMax M3",
       "primaryMode": "duo",
       "strategy": "余烬共鸣",
-      "weighted": 1.6931818181818181,
+      "weighted": 1.7159090909090908,
       "weight": 2.5,
-      "score": 0.6772727272727272
+      "score": 0.6863636363636363
     },
     {
       "id": "deepseekv41flash",
       "model": "deepseek v4.1flash",
       "primaryMode": "grand",
       "strategy": "圣所铁壁·二阶冲击",
-      "weighted": 1.5568181818181817,
+      "weighted": 1.534090909090909,
       "weight": 2.5,
-      "score": 0.6227272727272727
+      "score": 0.6136363636363635
     },
     {
       "id": "glm53",
       "model": "GLM5.3",
       "primaryMode": "standard",
       "strategy": "根脉奔流",
-      "weighted": 1.534090909090909,
+      "weighted": 1.5227272727272727,
       "weight": 2.5,
-      "score": 0.6136363636363635
+      "score": 0.6090909090909091
     },
     {
       "id": "mimov26pro",
@@ -854,36 +854,36 @@
       "model": "deepseek v4pro",
       "primaryMode": "standard",
       "strategy": "回响巨像",
-      "weighted": 1.5113636363636365,
+      "weighted": 1.5,
       "weight": 2.5,
-      "score": 0.6045454545454546
+      "score": 0.6
     },
     {
       "id": "minimaxm31flash",
       "model": "MiniMax M3.1flash",
       "primaryMode": "blitz",
       "strategy": "余烬叠刃",
-      "weighted": 1.2954545454545454,
+      "weighted": 1.3181818181818181,
       "weight": 2.5,
-      "score": 0.5181818181818182
+      "score": 0.5272727272727272
     },
     {
       "id": "step5preview",
       "model": "step5preview",
       "primaryMode": "grand",
       "strategy": "深根圣所",
-      "weighted": 1.2840909090909092,
+      "weighted": 1.272727272727273,
       "weight": 2.5,
-      "score": 0.5136363636363637
+      "score": 0.5090909090909091
     },
     {
       "id": "kimi28preview",
       "model": "KIMI 2.8preview",
       "primaryMode": "blitz",
       "strategy": "余烬速燃",
-      "weighted": 1.0113636363636362,
+      "weighted": 1.034090909090909,
       "weight": 2.5,
-      "score": 0.4045454545454545
+      "score": 0.4136363636363636
     },
     {
       "id": "glm53flash",
@@ -899,18 +899,18 @@
       "model": "hy3",
       "primaryMode": "grand",
       "strategy": "翠林根基",
-      "weighted": 0.6477272727272727,
+      "weighted": 0.625,
       "weight": 2.5,
-      "score": 0.2590909090909091
+      "score": 0.25
     },
     {
       "id": "hy4",
       "model": "hy4",
       "primaryMode": "standard",
       "strategy": "赤烬疾袭",
-      "weighted": 0.4431818181818182,
+      "weighted": 0.46590909090909094,
       "weight": 2.5,
-      "score": 0.17727272727272728
+      "score": 0.18636363636363637
     }
   ]
 }

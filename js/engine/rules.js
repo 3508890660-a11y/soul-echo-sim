@@ -285,7 +285,7 @@ export function moveCard(g, uid, dest, side = null, options = {}) {
   if (dest !== 'field') resetBattleState(c);
   c.zone = dest;
   if (dest === 'field') {
-    c.damage = 0; c.tapped = false; c.mods = []; c.doomed = false; c.enteredTurn = g.turn;
+    c.damage = 0; c.tapped = false; c.mods = []; c.doomed = false; c.enteredTurn = g.turn; c.blockCount = 0;
     p.field.push(uid);
   } else if (dest === 'removed') {
     // 衍生物在终曲入链后移出本局；实例保留供事件快照核查。
@@ -1033,6 +1033,7 @@ function startTurn(g) {
   p.firstInspUsed = false;
   for (const uid of [...p.field, ...p.essence]) {
     const c = card(g, uid);
+    c.blockCount = 0;
     if (c.lockUntap) { c.lockUntap = false; g.log.push(`【${rawOf(c).name}】受根须缠绕，跳过本次重置。`); continue; }
     c.tapped = false;
   }
@@ -1102,7 +1103,16 @@ function toggleBlock(g, side, uid) {
   const cb = g.combat, c = card(g, uid);
   if (!cb || cb.stage !== 'blockers' || cb.attacker === side || !c || c.zone !== 'field') return false;
   const i = cb.blockers.indexOf(uid);
-  if (i >= 0) { cb.blockers.splice(i, 1); g.log.push(`【${rawOf(c).name}】取消阻挡。`); return true; }
+  if (i >= 0) {
+    cb.blockers.splice(i, 1);
+    // 取消宣告＝这次阻挡未成立，把本回合的阻挡次数退回。
+    c.blockCount = Math.max(0, (c.blockCount || 0) - 1);
+    g.log.push(`【${rawOf(c).name}】取消阻挡。`); return true;
+  }
+  if ((c.blockCount || 0) >= 1 && !keywords(g, uid).includes('守护')) {
+    g.log.push(`【${rawOf(c).name}】本回合已阻挡过，不能再次阻挡。`); return false;
+  }
+  c.blockCount = (c.blockCount || 0) + 1;
   cb.blockers.push(uid); g.log.push(`【${rawOf(c).name}】宣告阻挡。`); return true;
 }
 
@@ -1134,8 +1144,10 @@ function resolveCombat(g) {
   } else strikeBlocked(g, cb);
   if (!g.over) {
     const a = card(g, aUid);
-    if (a?.zone === 'field' && keywords(g, aUid).includes('毁灭')) for (const uid of cb.blockers) if (onField(g, uid)) destroy(g, uid, '毁灭');
-    for (const uid of cb.blockers) if (onField(g, uid) && keywords(g, uid).includes('毁灭') && a?.zone === 'field') destroy(g, aUid, '毁灭');
+    // 词条「毁灭」：战斗结算后，破坏所有仍存在于战场上的本次阻挡者／被阻挡的攻击者。
+    // 「碾压」可以防止此破坏（「践踏」不行）。已离场者不在破坏范围内。
+    if (a?.zone === 'field' && keywords(g, aUid).includes('毁灭')) for (const uid of cb.blockers) if (onField(g, uid) && !keywords(g, uid).includes('碾压')) destroy(g, uid, '毁灭');
+    for (const uid of cb.blockers) if (onField(g, uid) && keywords(g, uid).includes('毁灭') && a?.zone === 'field' && !keywords(g, aUid).includes('碾压')) destroy(g, aUid, '毁灭');
     if (a?.zone === 'field' && keywords(g, aUid).includes('超冲击') && cb.blockers.length) {
       const allLethal = cb.blockers.every((uid) => !onField(g, uid) || card(g, uid).damage >= unitHp(g, uid));
       if (allLethal) dealLifeDamage(g, dSide, unitImp(g, aUid, cb), `${rawOf(a).name}·超冲击`, 'combat');
@@ -1164,28 +1176,45 @@ function strikeUnblockedUnit(g, cb, aUid, tUid) {
 function strikeBlocked(g, cb) {
   const aUid = cb.attackerUid, blockers = [...cb.blockers];
   const aFirst = keywords(g, aUid).includes('先攻');
-  const bFirst = blockers.some((uid) => keywords(g, uid).includes('先攻'));
-  let remaining = unitAtk(g, aUid, cb);
+  const atkPower = unitAtk(g, aUid, cb);
+  const trample = keywords(g, aUid).includes('践踏');
+  let remaining = atkPower;
   const allocations = [];
-  for (const uid of blockers) {
-    const lethal = Math.max(0, unitHp(g, uid) - card(g, uid).damage);
-    const assigned = Math.min(lethal, remaining);
-    allocations.push([uid, assigned]); remaining -= assigned;
+  // 单阻挡且无践踏：按「阻挡者与被阻挡者进行一次正常交战」结算，
+  // 攻击者以全部攻击力打击阻挡者（溢出浪费），而不是截断为「恰好致命」。
+  // 多阻挡沿用 7.2 的分配制；有践踏时沿用「致命后剩余」的分配制。
+  if (blockers.length === 1 && !trample) {
+    allocations.push([blockers[0], atkPower]);
+    remaining = 0;
+  } else {
+    for (const uid of blockers) {
+      const lethal = Math.max(0, unitHp(g, uid) - card(g, uid).damage);
+      const assigned = Math.min(lethal, remaining);
+      allocations.push([uid, assigned]); remaining -= assigned;
+    }
   }
   if (remaining > 0 && keywords(g, aUid).includes('践踏')) {
     const defender = g.players[OPP(cb.attacker)];
-    const others = defender.field.filter((uid) => !blockers.includes(uid));
+    // 践踏只能「分配给对手场上其他灵像」，不能落到灵性卡上。
+    const others = defender.field.filter((uid) => !blockers.includes(uid) && rawOf(card(g, uid)).type === '灵像');
     if (others.length) {
       const target = others.sort((a, b) => (unitHp(g, a) - card(g, a).damage) - (unitHp(g, b) - card(g, b).damage))[0];
       allocations.push([target, remaining]); remaining = 0;
       g.log.push(`践踏将剩余攻击力分配给【${rawOf(card(g, target)).name}】，不直接伤害灵体。`);
     }
   }
-  const attackerHits = () => { for (const [uid, n] of allocations) if (onField(g, uid)) damageUnit(g, uid, n, '阻挡战斗'); };
-  const blockersHit = () => { for (const uid of blockers) if (onField(g, uid)) damageUnit(g, aUid, unitAtk(g, uid, null), '阻挡者反击'); };
-  if (aFirst && !bFirst) { attackerHits(); stateCheck(g); blockersHit(); }
-  else if (bFirst && !aFirst) { blockersHit(); stateCheck(g); if (onField(g, aUid)) attackerHits(); }
-  else { attackerHits(); blockersHit(); }
+  // 先攻只属于带「先攻」的单位本身，不会传染给同队的其他阻挡者。
+  // 战斗中按两个伤害窗口结算：窗口一＝带先攻者造成伤害，窗口二＝其余单位造成伤害。
+  // 同一窗口内的伤害同时施加（先快照来源，再一起结算），不因先后顺序改变结果。
+  const firstBlockers = blockers.filter((uid) => keywords(g, uid).includes('先攻'));
+  const normalBlockers = blockers.filter((uid) => !keywords(g, uid).includes('先攻'));
+  const strikeWindow = (attackerActs, counterSubset) => {
+    const counters = counterSubset.filter((uid) => onField(g, uid)).map((uid) => [uid, unitAtk(g, uid, null)]);
+    if (attackerActs && onField(g, aUid)) for (const [uid, n] of allocations) if (onField(g, uid)) damageUnit(g, uid, n, '阻挡战斗');
+    for (const [uid, n] of counters) damageUnit(g, aUid, n, '阻挡者反击');
+  };
+  if (aFirst) { strikeWindow(true, firstBlockers); stateCheck(g); strikeWindow(false, normalBlockers); }
+  else { strikeWindow(false, firstBlockers); stateCheck(g); strikeWindow(true, normalBlockers); }
   stateCheck(g);
 }
 
@@ -1208,6 +1237,8 @@ export function legalMoves(g) {
       if (cb.blockers.includes(uid)) { out.push({ type: 'block', uid }); continue; }
       if (rawOf(c).type !== '灵像') continue;
       if (c.tapped && !keywords(g, uid).includes('守护')) continue;
+      // 规则 7.1-4：每只灵像每回合只能阻挡一次；「守护」不受此限。
+      if ((c.blockCount || 0) >= 1 && !keywords(g, uid).includes('守护')) continue;
       if (agile && !keywords(g, uid).includes('敏捷') && !(c.tapped && keywords(g, uid).includes('守护'))) continue;
       out.push({ type: 'block', uid });
     }
@@ -1222,7 +1253,11 @@ export function legalMoves(g) {
       if (rawOf(c).type !== '灵像') continue;
       if (c.tapped || (c.enteredTurn === g.turn && !keywords(g, uid).includes('预制'))) continue;
       out.push({ type: 'attack', uid, target: 'spirit' });
-      for (const target of g.players[OPP(side)].field) if (!keywords(g, target).includes('威慑')) out.push({ type: 'attack', uid, target });
+      for (const target of g.players[OPP(side)].field) {
+        // 规则 7.1-2：攻击目标只能是「对方灵体或 1 只合法灵像」，灵性卡不是合法目标。
+        if (rawOf(card(g, target)).type !== '灵像') continue;
+        if (!keywords(g, target).includes('威慑')) out.push({ type: 'attack', uid, target });
+      }
     }
     out.push({ type: 'pass' }); return out;
   }

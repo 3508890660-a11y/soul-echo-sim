@@ -5,7 +5,7 @@ import {
 } from '../js/engine/rules.js';
 import { PRECONS } from '../js/engine/precons.js';
 import { TACTICIAN } from '../js/ai/builtin.js';
-import { CARD_DATA } from '../js/engine/cards.js';
+import { CARD_DATA, BY_NAME } from '../js/engine/cards.js';
 
 let passed = 0, failed = 0;
 const results = [];
@@ -223,6 +223,98 @@ test('敏捷只能由敏捷或已横置守护阻挡', () => {
   g.priority = 1;
   const blocks = legalMoves(g).filter((m) => m.type === 'block').map((m) => m.uid);
   assert.deepEqual(new Set(blocks), new Set([agile, guard]));
+});
+
+test('攻击目标只能是灵像，灵性卡不在合法目标内', () => {
+  const g = game();
+  const a = T.put(g, 0, '烈焰斗士', 'field');
+  const unit = T.put(g, 1, '新人冒险者', 'field');
+  const relic = T.put(g, 1, '骸骨祭坛', 'field');
+  T.setCombat(g, { stage: 'attackers', attackerUid: null, blockers: [] });
+  g.active = 0; g.priority = 0;
+  const targets = legalMoves(g).filter((m) => m.type === 'attack' && m.uid === a).map((m) => m.target);
+  assert.ok(targets.includes('spirit'), '应可攻击灵体');
+  assert.ok(targets.includes(unit), '应可攻击灵像');
+  assert.ok(!targets.includes(relic), '灵性卡不是攻击目标');
+});
+
+test('践踏溢出只分配给灵像，不落到灵性卡', () => {
+  const g = game();
+  const a = T.put(g, 0, '焚城巨兵', 'field');
+  const blocker = T.put(g, 1, '新人冒险者', 'field');
+  const relic = T.put(g, 1, '骸骨祭坛', 'field');
+  T.setCombat(g, { stage: 'damage', attacker: 0, attackerUid: a, target: 'spirit', blockers: [blocker], supportAtk: 0, supportImp: 0 });
+  T.resolveCombat(g);
+  assert.equal(g.cards[blocker].zone, 'grave');
+  assert.equal(g.cards[relic].zone, 'field');
+  assert.equal(g.cards[relic].damage, 0);
+});
+
+test('单阻挡按正常交战结算，攻击者以全部攻击力打击阻挡者', () => {
+  const g = game();
+  const a = T.put(g, 0, '烈焰战将', 'field');
+  const b = T.put(g, 1, '光能守护者', 'field');
+  T.setCombat(g, { stage: 'damage', attacker: 0, attackerUid: a, target: 'spirit', blockers: [b], supportAtk: 0, supportImp: 0 });
+  T.resolveCombat(g);
+  assert.ok(g.log.some((x) => x.includes('【光能守护者】受到 6000 点伤害')),
+    '应记录全部 6000 攻击力，而不是截断为 4000 致命值');
+  assert.equal(g.cards[b].zone, 'grave');
+});
+
+test('一只灵像每回合只能阻挡一次，守护除外', () => {
+  const g = game();
+  const atk = T.put(g, 0, '烈焰战将', 'field');
+  const plain = T.put(g, 1, '新人冒险者', 'field');
+  const guard = T.put(g, 1, '光能守护者', 'field');
+  const openBlockers = () => T.setCombat(g, { stage: 'blockers', attacker: 0, attackerUid: atk, target: 'spirit', blockers: [], supportAtk: 0, supportImp: 0 });
+  openBlockers(); g.priority = 1;
+  assert.ok(legalMoves(g).some((m) => m.type === 'block' && m.uid === plain));
+  applyMove(g, { type: 'block', uid: plain });
+  assert.equal(g.cards[plain].blockCount, 1);
+  openBlockers(); g.priority = 1;
+  const moves = legalMoves(g);
+  assert.ok(!moves.some((m) => m.type === 'block' && m.uid === plain), '普通灵像本回合已阻挡过');
+  assert.ok(moves.some((m) => m.type === 'block' && m.uid === guard), '守护不受每回合一次限制');
+});
+
+test('先攻只属于带先攻的单位，不会传染给同队阻挡者', () => {
+  const g = game();
+  const atk = T.put(g, 0, '烈焰战将', 'field'); // 6000/6000，无先攻
+  const first = T.put(g, 1, '烈焰斗士', 'field'); // 3500/2000，先攻
+  const plain = T.put(g, 1, '守林圣骑士', 'field'); // 4000/5000，无先攻
+  T.setCombat(g, { stage: 'damage', attacker: 0, attackerUid: atk, target: 'spirit', blockers: [first, plain], supportAtk: 0, supportImp: 0 });
+  T.resolveCombat(g);
+  assert.equal(g.cards[first].zone, 'grave', '先攻阻挡者应先造成伤害，再吃攻击者 2000');
+  assert.equal(g.cards[plain].damage, 4000, '非先攻阻挡者在攻击者造成伤害后才反击');
+  assert.equal(g.cards[atk].zone, 'grave', '两名阻挡者合计 7500 反击，攻击者应被破坏');
+});
+
+test('践踏不免疫毁灭，只有碾压免疫', () => {
+  const g = game();
+  const atk = T.put(g, 0, '焚城巨兵', 'field'); // 6500/7000，践踏，无碾压
+  const def = T.put(g, 1, '雷云巨像', 'field'); // 6500/7000，双方都扛得住
+  const defData = BY_NAME.get('雷云巨像');
+  defData.keywords.push('毁灭');
+  try {
+    T.setCombat(g, { stage: 'damage', attacker: 0, attackerUid: atk, target: 'spirit', blockers: [def], supportAtk: 0, supportImp: 0 });
+    T.resolveCombat(g);
+    assert.equal(g.cards[def].zone, 'field', '阻挡者受 6500 后剩 500');
+    assert.equal(g.cards[atk].zone, 'grave', '带践踏不带碾压的攻击者应被毁灭破坏');
+  } finally { defData.keywords.pop(); }
+});
+
+test('碾压不会被毁灭破坏', () => {
+  const g = game();
+  const atk = T.put(g, 0, '焚城巨兵', 'field');
+  const def = T.put(g, 1, '王牌巨象', 'field');
+  const defData = BY_NAME.get('焚城巨兵');
+  defData.keywords.push('毁灭');
+  try {
+    T.setCombat(g, { stage: 'damage', attacker: 0, attackerUid: atk, target: 'spirit', blockers: [def], supportAtk: 0, supportImp: 0 });
+    T.resolveCombat(g);
+    assert.equal(g.cards[atk].zone, 'field', '攻击者应存活');
+    assert.equal(g.cards[def].zone, 'field', '碾压不受毁灭影响');
+  } finally { defData.keywords.pop(); }
 });
 
 test('次元超越阈值累积减费且每玩家每局限一次', () => {

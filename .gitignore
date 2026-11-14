@@ -15,3 +15,6 @@ videos/work/*.json
 videos/work/*.png
 videos/work/*.jpg
 videos/work/*.wav
+
+# 归档目录里只留赛果与说明，对局快照与 videos/work/*.json 同为可重建产物
+_prevblock_*/matches/

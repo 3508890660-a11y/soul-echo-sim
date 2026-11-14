@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T05:26:39.254Z",
+  "generatedAt": "2026-11-14T07:42:42.465Z",
   "rounds": 5,
   "seasonsPerMode": 3,
   "modes": {
@@ -12,130 +12,193 @@
           "masterSeed": 20261113,
           "standings": [
             {
-              "id": "kimi31pro",
-              "model": "KIMI 3.1pro",
-              "strategy": "赤蓝燃穿",
-              "primaryMode": "duo",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
-              "draw": 0,
-              "opps": [
-                "minimaxm31flash",
-                "glm53",
-                "mimov26pro",
-                "deepseekv41flash",
-                "step5preview"
-              ],
-              "anomalies": 0,
-              "actions": 1485,
-              "buchholz": 48,
-              "rank": 1
-            },
-            {
               "id": "deepseekv41flash",
               "model": "deepseek v4.1flash",
               "strategy": "圣所铁壁·二阶冲击",
               "primaryMode": "grand",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
+              "mp": 15,
+              "win": 5,
+              "loss": 0,
               "draw": 0,
               "opps": [
                 "hy4",
                 "glm53flash",
                 "glm53",
                 "kimi31pro",
-                "mimov26pro"
+                "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1765,
-              "buchholz": 42,
-              "rank": 2
-            },
-            {
-              "id": "mimov26pro",
-              "model": "MIMO-v2.6-pro",
-              "strategy": "烬火速攻",
-              "primaryMode": "blitz",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
-              "draw": 0,
-              "opps": [
-                "step5preview",
-                "minimaxm3",
-                "kimi31pro",
-                "glm53flash",
-                "deepseekv41flash"
-              ],
-              "anomalies": 0,
-              "actions": 1078,
-              "buchholz": 42,
-              "rank": 3
-            },
-            {
-              "id": "glm53",
-              "model": "GLM5.3",
-              "strategy": "根脉奔流",
-              "primaryMode": "standard",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
-                "deepseekv4pro",
-                "kimi31pro",
-                "deepseekv41flash",
-                "hy3",
-                "kimi28preview"
-              ],
-              "anomalies": 0,
-              "actions": 1554,
+              "actions": 1985,
               "buchholz": 39,
-              "rank": 4
-            },
-            {
-              "id": "minimaxm31flash",
-              "model": "MiniMax M3.1flash",
-              "strategy": "余烬叠刃",
-              "primaryMode": "blitz",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
-                "kimi31pro",
-                "deepseekv4pro",
-                "kimi28preview",
-                "minimaxm3",
-                "glm53flash"
-              ],
-              "anomalies": 0,
-              "actions": 1177,
-              "buchholz": 36,
-              "rank": 5
+              "rank": 1
             },
             {
               "id": "glm53flash",
               "model": "GLM5.3flash",
               "strategy": "赤雷迅斩",
               "primaryMode": "duo",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
+              "mp": 12,
+              "win": 4,
+              "loss": 1,
               "draw": 0,
               "opps": [
                 "kimi28preview",
                 "deepseekv41flash",
                 "hy4",
                 "mimov26pro",
-                "minimaxm31flash"
+                "kimi31pro"
               ],
               "anomalies": 0,
-              "actions": 1920,
+              "actions": 1810,
               "buchholz": 42,
+              "rank": 2
+            },
+            {
+              "id": "kimi31pro",
+              "model": "KIMI 3.1pro",
+              "strategy": "赤蓝燃穿",
+              "primaryMode": "duo",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "minimaxm31flash",
+                "glm53",
+                "mimov26pro",
+                "deepseekv41flash",
+                "glm53flash"
+              ],
+              "anomalies": 0,
+              "actions": 1369,
+              "buchholz": 45,
+              "rank": 3
+            },
+            {
+              "id": "kimi28preview",
+              "model": "KIMI 2.8preview",
+              "strategy": "余烬速燃",
+              "primaryMode": "blitz",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "glm53flash",
+                "step5preview",
+                "minimaxm31flash",
+                "minimaxm3",
+                "hy4"
+              ],
+              "anomalies": 0,
+              "actions": 1637,
+              "buchholz": 36,
+              "rank": 4
+            },
+            {
+              "id": "minimaxm3",
+              "model": "MiniMax M3",
+              "strategy": "余烬共鸣",
+              "primaryMode": "duo",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "hy3",
+                "mimov26pro",
+                "step5preview",
+                "kimi28preview",
+                "deepseekv41flash"
+              ],
+              "anomalies": 0,
+              "actions": 1148,
+              "buchholz": 36,
+              "rank": 5
+            },
+            {
+              "id": "deepseekv4pro",
+              "model": "deepseek v4pro",
+              "strategy": "回响巨像",
+              "primaryMode": "standard",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "glm53",
+                "minimaxm31flash",
+                "hy3",
+                "hy4",
+                "mimov26pro"
+              ],
+              "anomalies": 0,
+              "actions": 1130,
+              "buchholz": 21,
               "rank": 6
+            },
+            {
+              "id": "mimov26pro",
+              "model": "MIMO-v2.6-pro",
+              "strategy": "烬火速攻",
+              "primaryMode": "blitz",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "step5preview",
+                "minimaxm3",
+                "kimi31pro",
+                "glm53flash",
+                "deepseekv4pro"
+              ],
+              "anomalies": 0,
+              "actions": 1110,
+              "buchholz": 45,
+              "rank": 7
+            },
+            {
+              "id": "glm53",
+              "model": "GLM5.3",
+              "strategy": "根脉奔流",
+              "primaryMode": "standard",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "deepseekv4pro",
+                "kimi31pro",
+                "deepseekv41flash",
+                "minimaxm31flash",
+                "hy3"
+              ],
+              "anomalies": 0,
+              "actions": 1596,
+              "buchholz": 39,
+              "rank": 8
+            },
+            {
+              "id": "minimaxm31flash",
+              "model": "MiniMax M3.1flash",
+              "strategy": "余烬叠刃",
+              "primaryMode": "blitz",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "kimi31pro",
+                "deepseekv4pro",
+                "kimi28preview",
+                "glm53",
+                "step5preview"
+              ],
+              "anomalies": 0,
+              "actions": 1241,
+              "buchholz": 39,
+              "rank": 9
             },
             {
               "id": "step5preview",
@@ -150,75 +213,12 @@
                 "mimov26pro",
                 "kimi28preview",
                 "minimaxm3",
-                "hy4",
-                "kimi31pro"
-              ],
-              "anomalies": 0,
-              "actions": 1424,
-              "buchholz": 39,
-              "rank": 7
-            },
-            {
-              "id": "kimi28preview",
-              "model": "KIMI 2.8preview",
-              "strategy": "余烬速燃",
-              "primaryMode": "blitz",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
-                "glm53flash",
-                "step5preview",
-                "minimaxm31flash",
-                "deepseekv4pro",
-                "glm53"
-              ],
-              "anomalies": 0,
-              "actions": 1641,
-              "buchholz": 36,
-              "rank": 8
-            },
-            {
-              "id": "minimaxm3",
-              "model": "MiniMax M3",
-              "strategy": "余烬共鸣",
-              "primaryMode": "duo",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
                 "hy3",
-                "mimov26pro",
-                "step5preview",
-                "minimaxm31flash",
-                "deepseekv4pro"
+                "minimaxm31flash"
               ],
               "anomalies": 0,
-              "actions": 1012,
-              "buchholz": 36,
-              "rank": 9
-            },
-            {
-              "id": "deepseekv4pro",
-              "model": "deepseek v4pro",
-              "strategy": "回响巨像",
-              "primaryMode": "standard",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
-                "glm53",
-                "minimaxm31flash",
-                "hy3",
-                "kimi28preview",
-                "minimaxm3"
-              ],
-              "anomalies": 0,
-              "actions": 1249,
-              "buchholz": 33,
+              "actions": 1393,
+              "buchholz": 30,
               "rank": 10
             },
             {
@@ -234,12 +234,12 @@
                 "deepseekv41flash",
                 "hy3",
                 "glm53flash",
-                "step5preview",
-                "hy3"
+                "deepseekv4pro",
+                "kimi28preview"
               ],
               "anomalies": 0,
-              "actions": 1472,
-              "buchholz": 30,
+              "actions": 1400,
+              "buchholz": 45,
               "rank": 11
             },
             {
@@ -247,20 +247,20 @@
               "model": "hy3",
               "strategy": "翠林根基",
               "primaryMode": "grand",
-              "mp": 3,
-              "win": 1,
-              "loss": 4,
+              "mp": 0,
+              "win": 0,
+              "loss": 5,
               "draw": 0,
               "opps": [
                 "minimaxm3",
                 "hy4",
                 "deepseekv4pro",
-                "glm53",
-                "hy4"
+                "step5preview",
+                "glm53"
               ],
               "anomalies": 0,
-              "actions": 1347,
-              "buchholz": 27,
+              "actions": 1489,
+              "buchholz": 33,
               "rank": 12
             }
           ],
@@ -369,7 +369,7 @@
                   "b": "hy3",
                   "first": 1,
                   "winner": 0,
-                  "actions": 274,
+                  "actions": 269,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -427,8 +427,8 @@
                   "a": "minimaxm3",
                   "b": "step5preview",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 201,
+                  "winner": 0,
+                  "actions": 168,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -437,7 +437,7 @@
                   "b": "deepseekv4pro",
                   "first": 1,
                   "winner": 1,
-                  "actions": 385,
+                  "actions": 340,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -456,47 +456,47 @@
                 },
                 {
                   "table": 2,
-                  "a": "glm53flash",
-                  "b": "mimov26pro",
+                  "a": "mimov26pro",
+                  "b": "glm53flash",
                   "first": 0,
                   "winner": 1,
-                  "actions": 279,
+                  "actions": 252,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "kimi28preview",
-                  "b": "deepseekv4pro",
+                  "a": "minimaxm3",
+                  "b": "kimi28preview",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 245,
+                  "winner": 0,
+                  "actions": 216,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "step5preview",
+                  "a": "deepseekv4pro",
                   "b": "hy4",
                   "first": 0,
                   "winner": 0,
-                  "actions": 325,
+                  "actions": 213,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
-                  "a": "minimaxm3",
+                  "a": "glm53",
                   "b": "minimaxm31flash",
                   "first": 1,
                   "winner": 1,
-                  "actions": 166,
+                  "actions": 220,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "glm53",
+                  "a": "step5preview",
                   "b": "hy3",
                   "first": 0,
                   "winner": 0,
-                  "actions": 239,
+                  "actions": 350,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -507,55 +507,55 @@
                 {
                   "table": 1,
                   "a": "deepseekv41flash",
-                  "b": "mimov26pro",
+                  "b": "minimaxm3",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 144,
+                  "winner": 0,
+                  "actions": 364,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "kimi31pro",
-                  "b": "step5preview",
+                  "a": "glm53flash",
+                  "b": "kimi31pro",
                   "first": 1,
                   "winner": 0,
-                  "actions": 383,
+                  "actions": 267,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "minimaxm31flash",
-                  "b": "glm53flash",
+                  "a": "mimov26pro",
+                  "b": "deepseekv4pro",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 350,
+                  "winner": 1,
+                  "actions": 203,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
                   "a": "kimi28preview",
-                  "b": "glm53",
+                  "b": "hy4",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 281,
+                  "winner": 0,
+                  "actions": 306,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
-                  "a": "deepseekv4pro",
-                  "b": "minimaxm3",
+                  "a": "minimaxm31flash",
+                  "b": "step5preview",
                   "first": 0,
                   "winner": 1,
-                  "actions": 245,
+                  "actions": 360,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "hy4",
+                  "a": "glm53",
                   "b": "hy3",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 261,
+                  "winner": 0,
+                  "actions": 342,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -751,7 +751,7 @@
                 "glm53flash"
               ],
               "anomalies": 0,
-              "actions": 1480,
+              "actions": 1431,
               "buchholz": 45,
               "rank": 9
             },
@@ -793,7 +793,7 @@
                 "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1751,
+              "actions": 1702,
               "buchholz": 36,
               "rank": 11
             },
@@ -924,7 +924,7 @@
                   "b": "kimi28preview",
                   "first": 1,
                   "winner": 1,
-                  "actions": 409,
+                  "actions": 360,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -1222,7 +1222,7 @@
                 "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1418,
+              "actions": 1411,
               "buchholz": 39,
               "rank": 5
             },
@@ -1285,7 +1285,7 @@
                 "kimi28preview"
               ],
               "anomalies": 0,
-              "actions": 1185,
+              "actions": 1178,
               "buchholz": 39,
               "rank": 8
             },
@@ -1529,7 +1529,7 @@
                   "b": "glm53",
                   "first": 1,
                   "winner": 1,
-                  "actions": 307,
+                  "actions": 300,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -1680,17 +1680,17 @@
           "strategy": "赤蓝燃穿",
           "primaryMode": "duo",
           "ranks": [
-            1,
+            3,
             2,
             2
           ],
-          "mp": 36,
-          "win": 12,
-          "loss": 3,
+          "mp": 33,
+          "win": 11,
+          "loss": 4,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 1.6666666666666667,
-          "titles": 1,
+          "avgRank": 2.3333333333333335,
+          "titles": 0,
           "top4": 3
         },
         {
@@ -1699,18 +1699,18 @@
           "strategy": "烬火速攻",
           "primaryMode": "blitz",
           "ranks": [
-            3,
+            7,
             3,
             1
           ],
-          "mp": 33,
-          "win": 11,
-          "loss": 4,
+          "mp": 27,
+          "win": 9,
+          "loss": 6,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 2.3333333333333335,
+          "avgRank": 3.6666666666666665,
           "titles": 1,
-          "top4": 3
+          "top4": 2
         },
         {
           "id": "glm53",
@@ -1718,18 +1718,18 @@
           "strategy": "根脉奔流",
           "primaryMode": "standard",
           "ranks": [
-            4,
+            8,
             1,
             5
           ],
-          "mp": 33,
-          "win": 11,
-          "loss": 4,
+          "mp": 30,
+          "win": 10,
+          "loss": 5,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 3.3333333333333335,
+          "avgRank": 4.666666666666667,
           "titles": 1,
-          "top4": 2
+          "top4": 1
         },
         {
           "id": "glm53flash",
@@ -1737,37 +1737,18 @@
           "strategy": "赤雷迅斩",
           "primaryMode": "duo",
           "ranks": [
-            6,
+            2,
             6,
             6
           ],
-          "mp": 24,
-          "win": 8,
-          "loss": 7,
+          "mp": 30,
+          "win": 10,
+          "loss": 5,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 6,
+          "avgRank": 4.666666666666667,
           "titles": 0,
-          "top4": 0
-        },
-        {
-          "id": "deepseekv41flash",
-          "model": "deepseek v4.1flash",
-          "strategy": "圣所铁壁·二阶冲击",
-          "primaryMode": "grand",
-          "ranks": [
-            2,
-            12,
-            4
-          ],
-          "mp": 24,
-          "win": 8,
-          "loss": 7,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 6,
-          "titles": 0,
-          "top4": 2
+          "top4": 1
         },
         {
           "id": "minimaxm3",
@@ -1775,16 +1756,54 @@
           "strategy": "余烬共鸣",
           "primaryMode": "duo",
           "ranks": [
-            9,
+            5,
             7,
             3
+          ],
+          "mp": 30,
+          "win": 10,
+          "loss": 5,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 5,
+          "titles": 0,
+          "top4": 1
+        },
+        {
+          "id": "deepseekv41flash",
+          "model": "deepseek v4.1flash",
+          "strategy": "圣所铁壁·二阶冲击",
+          "primaryMode": "grand",
+          "ranks": [
+            1,
+            12,
+            4
           ],
           "mp": 27,
           "win": 9,
           "loss": 6,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 6.333333333333333,
+          "avgRank": 5.666666666666667,
+          "titles": 1,
+          "top4": 2
+        },
+        {
+          "id": "deepseekv4pro",
+          "model": "deepseek v4pro",
+          "strategy": "回响巨像",
+          "primaryMode": "standard",
+          "ranks": [
+            6,
+            4,
+            7
+          ],
+          "mp": 24,
+          "win": 8,
+          "loss": 7,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 5.666666666666667,
           "titles": 0,
           "top4": 1
         },
@@ -1794,51 +1813,13 @@
           "strategy": "余烬叠刃",
           "primaryMode": "blitz",
           "ranks": [
-            5,
+            9,
             5,
             9
-          ],
-          "mp": 24,
-          "win": 8,
-          "loss": 7,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 6.333333333333333,
-          "titles": 0,
-          "top4": 0
-        },
-        {
-          "id": "deepseekv4pro",
-          "model": "deepseek v4pro",
-          "strategy": "回响巨像",
-          "primaryMode": "standard",
-          "ranks": [
-            10,
-            4,
-            7
           ],
           "mp": 21,
           "win": 7,
           "loss": 8,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 7,
-          "titles": 0,
-          "top4": 1
-        },
-        {
-          "id": "step5preview",
-          "model": "step5preview",
-          "strategy": "深根圣所",
-          "primaryMode": "grand",
-          "ranks": [
-            7,
-            8,
-            8
-          ],
-          "mp": 18,
-          "win": 6,
-          "loss": 9,
           "draw": 0,
           "anomalies": 0,
           "avgRank": 7.666666666666667,
@@ -1851,16 +1832,35 @@
           "strategy": "余烬速燃",
           "primaryMode": "blitz",
           "ranks": [
-            8,
+            4,
             9,
             11
           ],
-          "mp": 12,
-          "win": 4,
-          "loss": 11,
+          "mp": 15,
+          "win": 5,
+          "loss": 10,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 9.333333333333334,
+          "avgRank": 8,
+          "titles": 0,
+          "top4": 1
+        },
+        {
+          "id": "step5preview",
+          "model": "step5preview",
+          "strategy": "深根圣所",
+          "primaryMode": "grand",
+          "ranks": [
+            10,
+            8,
+            8
+          ],
+          "mp": 18,
+          "win": 6,
+          "loss": 9,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 8.666666666666666,
           "titles": 0,
           "top4": 0
         },
@@ -1893,9 +1893,9 @@
             11,
             10
           ],
-          "mp": 9,
-          "win": 3,
-          "loss": 12,
+          "mp": 6,
+          "win": 2,
+          "loss": 13,
           "draw": 0,
           "anomalies": 0,
           "avgRank": 11,
@@ -2118,7 +2118,7 @@
                 "hy4"
               ],
               "anomalies": 0,
-              "actions": 1219,
+              "actions": 1110,
               "buchholz": 36,
               "rank": 10
             },
@@ -2160,7 +2160,7 @@
                 "hy3"
               ],
               "anomalies": 0,
-              "actions": 1293,
+              "actions": 1184,
               "buchholz": 30,
               "rank": 12
             }
@@ -2456,7 +2456,7 @@
                   "b": "hy4",
                   "first": 1,
                   "winner": 1,
-                  "actions": 406,
+                  "actions": 297,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -2467,27 +2467,6 @@
           "season": 2,
           "masterSeed": 20267264,
           "standings": [
-            {
-              "id": "kimi31pro",
-              "model": "KIMI 3.1pro",
-              "strategy": "赤蓝燃穿",
-              "primaryMode": "duo",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
-              "draw": 0,
-              "opps": [
-                "minimaxm31flash",
-                "hy3",
-                "deepseekv4pro",
-                "mimov26pro",
-                "minimaxm3"
-              ],
-              "anomalies": 0,
-              "actions": 870,
-              "buchholz": 42,
-              "rank": 1
-            },
             {
               "id": "mimov26pro",
               "model": "MIMO-v2.6-pro",
@@ -2506,6 +2485,27 @@
               ],
               "anomalies": 0,
               "actions": 917,
+              "buchholz": 42,
+              "rank": 1
+            },
+            {
+              "id": "kimi31pro",
+              "model": "KIMI 3.1pro",
+              "strategy": "赤蓝燃穿",
+              "primaryMode": "duo",
+              "mp": 12,
+              "win": 4,
+              "loss": 1,
+              "draw": 0,
+              "opps": [
+                "minimaxm31flash",
+                "hy3",
+                "deepseekv4pro",
+                "mimov26pro",
+                "minimaxm3"
+              ],
+              "anomalies": 0,
+              "actions": 870,
               "buchholz": 36,
               "rank": 2
             },
@@ -2547,7 +2547,7 @@
                 "hy4"
               ],
               "anomalies": 0,
-              "actions": 1080,
+              "actions": 1094,
               "buchholz": 42,
               "rank": 4
             },
@@ -2569,7 +2569,7 @@
               ],
               "anomalies": 0,
               "actions": 659,
-              "buchholz": 39,
+              "buchholz": 36,
               "rank": 5
             },
             {
@@ -2589,8 +2589,8 @@
                 "glm53flash"
               ],
               "anomalies": 0,
-              "actions": 1585,
-              "buchholz": 27,
+              "actions": 1435,
+              "buchholz": 30,
               "rank": 6
             },
             {
@@ -2610,72 +2610,9 @@
                 "glm53"
               ],
               "anomalies": 0,
-              "actions": 851,
+              "actions": 865,
               "buchholz": 45,
               "rank": 7
-            },
-            {
-              "id": "step5preview",
-              "model": "step5preview",
-              "strategy": "深根圣所",
-              "primaryMode": "grand",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
-                "deepseekv4pro",
-                "glm53flash",
-                "minimaxm3",
-                "hy4",
-                "hy3"
-              ],
-              "anomalies": 0,
-              "actions": 1083,
-              "buchholz": 36,
-              "rank": 8
-            },
-            {
-              "id": "hy3",
-              "model": "hy3",
-              "strategy": "翠林根基",
-              "primaryMode": "grand",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
-                "deepseekv41flash",
-                "kimi31pro",
-                "minimaxm31flash",
-                "kimi28preview",
-                "step5preview"
-              ],
-              "anomalies": 0,
-              "actions": 1220,
-              "buchholz": 33,
-              "rank": 9
-            },
-            {
-              "id": "minimaxm31flash",
-              "model": "MiniMax M3.1flash",
-              "strategy": "余烬叠刃",
-              "primaryMode": "blitz",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
-                "kimi31pro",
-                "minimaxm3",
-                "hy3",
-                "glm53flash",
-                "kimi28preview"
-              ],
-              "anomalies": 0,
-              "actions": 821,
-              "buchholz": 33,
-              "rank": 10
             },
             {
               "id": "glm53flash",
@@ -2694,18 +2631,18 @@
                 "deepseekv41flash"
               ],
               "anomalies": 0,
-              "actions": 1273,
-              "buchholz": 30,
-              "rank": 11
+              "actions": 1123,
+              "buchholz": 33,
+              "rank": 8
             },
             {
               "id": "kimi28preview",
               "model": "KIMI 2.8preview",
               "strategy": "余烬速燃",
               "primaryMode": "blitz",
-              "mp": 0,
-              "win": 0,
-              "loss": 5,
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
               "draw": 0,
               "opps": [
                 "mimov26pro",
@@ -2715,8 +2652,71 @@
                 "minimaxm31flash"
               ],
               "anomalies": 0,
-              "actions": 1256,
-              "buchholz": 39,
+              "actions": 1225,
+              "buchholz": 33,
+              "rank": 9
+            },
+            {
+              "id": "step5preview",
+              "model": "step5preview",
+              "strategy": "深根圣所",
+              "primaryMode": "grand",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "deepseekv4pro",
+                "glm53flash",
+                "minimaxm3",
+                "hy4",
+                "hy3"
+              ],
+              "anomalies": 0,
+              "actions": 1082,
+              "buchholz": 33,
+              "rank": 10
+            },
+            {
+              "id": "hy3",
+              "model": "hy3",
+              "strategy": "翠林根基",
+              "primaryMode": "grand",
+              "mp": 3,
+              "win": 1,
+              "loss": 4,
+              "draw": 0,
+              "opps": [
+                "deepseekv41flash",
+                "kimi31pro",
+                "minimaxm31flash",
+                "kimi28preview",
+                "step5preview"
+              ],
+              "anomalies": 0,
+              "actions": 1117,
+              "buchholz": 36,
+              "rank": 11
+            },
+            {
+              "id": "minimaxm31flash",
+              "model": "MiniMax M3.1flash",
+              "strategy": "余烬叠刃",
+              "primaryMode": "blitz",
+              "mp": 3,
+              "win": 1,
+              "loss": 4,
+              "draw": 0,
+              "opps": [
+                "kimi31pro",
+                "minimaxm3",
+                "hy3",
+                "glm53flash",
+                "kimi28preview"
+              ],
+              "anomalies": 0,
+              "actions": 892,
+              "buchholz": 36,
               "rank": 12
             }
           ],
@@ -2951,8 +2951,8 @@
                   "a": "hy3",
                   "b": "kimi28preview",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 372,
+                  "winner": 1,
+                  "actions": 270,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -2980,38 +2980,38 @@
                 },
                 {
                   "table": 3,
-                  "a": "glm53flash",
-                  "b": "deepseekv41flash",
+                  "a": "deepseekv41flash",
+                  "b": "glm53flash",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 441,
+                  "winner": 0,
+                  "actions": 291,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "glm53",
-                  "b": "hy4",
+                  "a": "hy4",
+                  "b": "glm53",
                   "first": 1,
-                  "winner": 0,
-                  "actions": 214,
+                  "winner": 1,
+                  "actions": 228,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
-                  "a": "hy3",
-                  "b": "step5preview",
+                  "a": "kimi28preview",
+                  "b": "minimaxm31flash",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 295,
+                  "winner": 0,
+                  "actions": 232,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "minimaxm31flash",
-                  "b": "kimi28preview",
+                  "a": "hy3",
+                  "b": "step5preview",
                   "first": 1,
-                  "winner": 0,
-                  "actions": 161,
+                  "winner": 1,
+                  "actions": 294,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -3023,67 +3023,88 @@
           "masterSeed": 20273415,
           "standings": [
             {
-              "id": "step5preview",
-              "model": "step5preview",
-              "strategy": "深根圣所",
-              "primaryMode": "grand",
+              "id": "kimi31pro",
+              "model": "KIMI 3.1pro",
+              "strategy": "赤蓝燃穿",
+              "primaryMode": "duo",
               "mp": 15,
               "win": 5,
               "loss": 0,
               "draw": 0,
               "opps": [
-                "glm53flash",
-                "hy3",
-                "kimi31pro",
-                "minimaxm31flash",
-                "mimov26pro"
+                "glm53",
+                "hy4",
+                "kimi28preview",
+                "deepseekv4pro",
+                "step5preview"
               ],
               "anomalies": 0,
-              "actions": 1487,
-              "buchholz": 36,
+              "actions": 831,
+              "buchholz": 39,
               "rank": 1
             },
             {
-              "id": "minimaxm31flash",
-              "model": "MiniMax M3.1flash",
-              "strategy": "余烬叠刃",
-              "primaryMode": "blitz",
+              "id": "minimaxm3",
+              "model": "MiniMax M3",
+              "strategy": "余烬共鸣",
+              "primaryMode": "duo",
               "mp": 12,
               "win": 4,
               "loss": 1,
               "draw": 0,
               "opps": [
-                "mimov26pro",
-                "hy4",
-                "kimi28preview",
+                "deepseekv41flash",
                 "step5preview",
-                "kimi31pro"
+                "deepseekv4pro",
+                "minimaxm31flash",
+                "kimi28preview"
               ],
               "anomalies": 0,
-              "actions": 989,
-              "buchholz": 36,
+              "actions": 889,
+              "buchholz": 39,
               "rank": 2
             },
             {
-              "id": "mimov26pro",
-              "model": "MIMO-v2.6-pro",
-              "strategy": "烬火速攻",
+              "id": "kimi28preview",
+              "model": "KIMI 2.8preview",
+              "strategy": "余烬速燃",
               "primaryMode": "blitz",
               "mp": 9,
               "win": 3,
               "loss": 2,
               "draw": 0,
               "opps": [
+                "hy3",
                 "minimaxm31flash",
-                "glm53flash",
-                "hy4",
+                "kimi31pro",
                 "glm53",
-                "step5preview"
+                "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1006,
-              "buchholz": 45,
+              "actions": 1094,
+              "buchholz": 48,
               "rank": 3
+            },
+            {
+              "id": "deepseekv4pro",
+              "model": "deepseek v4pro",
+              "strategy": "回响巨像",
+              "primaryMode": "standard",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "hy4",
+                "glm53flash",
+                "minimaxm3",
+                "kimi31pro",
+                "deepseekv41flash"
+              ],
+              "anomalies": 0,
+              "actions": 978,
+              "buchholz": 36,
+              "rank": 4
             },
             {
               "id": "glm53",
@@ -3096,120 +3117,120 @@
               "draw": 0,
               "opps": [
                 "kimi31pro",
-                "deepseekv41flash",
-                "minimaxm3",
                 "mimov26pro",
-                "hy4"
+                "glm53flash",
+                "kimi28preview",
+                "hy3"
               ],
               "anomalies": 0,
-              "actions": 981,
+              "actions": 1206,
               "buchholz": 36,
-              "rank": 4
+              "rank": 5
             },
             {
-              "id": "deepseekv41flash",
-              "model": "deepseek v4.1flash",
-              "strategy": "圣所铁壁·二阶冲击",
+              "id": "step5preview",
+              "model": "step5preview",
+              "strategy": "深根圣所",
               "primaryMode": "grand",
               "mp": 9,
               "win": 3,
               "loss": 2,
               "draw": 0,
               "opps": [
+                "glm53flash",
                 "minimaxm3",
-                "glm53",
-                "hy3",
-                "kimi31pro",
-                "glm53flash"
-              ],
-              "anomalies": 0,
-              "actions": 1484,
-              "buchholz": 33,
-              "rank": 5
-            },
-            {
-              "id": "minimaxm3",
-              "model": "MiniMax M3",
-              "strategy": "余烬共鸣",
-              "primaryMode": "duo",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
-                "deepseekv41flash",
-                "kimi31pro",
-                "glm53",
                 "hy4",
-                "hy3"
+                "deepseekv41flash",
+                "kimi31pro"
               ],
               "anomalies": 0,
-              "actions": 793,
-              "buchholz": 30,
+              "actions": 1357,
+              "buchholz": 36,
               "rank": 6
             },
             {
-              "id": "kimi31pro",
-              "model": "KIMI 3.1pro",
-              "strategy": "赤蓝燃穿",
-              "primaryMode": "duo",
+              "id": "deepseekv41flash",
+              "model": "deepseek v4.1flash",
+              "strategy": "圣所铁壁·二阶冲击",
+              "primaryMode": "grand",
               "mp": 6,
               "win": 2,
               "loss": 3,
               "draw": 0,
               "opps": [
-                "glm53",
                 "minimaxm3",
+                "hy3",
+                "minimaxm31flash",
                 "step5preview",
-                "deepseekv41flash",
-                "minimaxm31flash"
+                "deepseekv4pro"
               ],
               "anomalies": 0,
-              "actions": 988,
-              "buchholz": 54,
+              "actions": 1166,
+              "buchholz": 42,
               "rank": 7
             },
             {
-              "id": "glm53flash",
-              "model": "GLM5.3flash",
-              "strategy": "赤雷迅斩",
-              "primaryMode": "duo",
+              "id": "minimaxm31flash",
+              "model": "MiniMax M3.1flash",
+              "strategy": "余烬叠刃",
+              "primaryMode": "blitz",
               "mp": 6,
               "win": 2,
               "loss": 3,
               "draw": 0,
               "opps": [
-                "step5preview",
                 "mimov26pro",
-                "deepseekv4pro",
                 "kimi28preview",
-                "deepseekv41flash"
+                "deepseekv41flash",
+                "minimaxm3",
+                "hy4"
               ],
               "anomalies": 0,
-              "actions": 1669,
-              "buchholz": 42,
+              "actions": 974,
+              "buchholz": 36,
               "rank": 8
             },
             {
-              "id": "deepseekv4pro",
-              "model": "deepseek v4pro",
-              "strategy": "回响巨像",
-              "primaryMode": "standard",
+              "id": "hy3",
+              "model": "hy3",
+              "strategy": "翠林根基",
+              "primaryMode": "grand",
               "mp": 6,
               "win": 2,
               "loss": 3,
               "draw": 0,
               "opps": [
-                "hy4",
                 "kimi28preview",
-                "glm53flash",
-                "hy3",
-                "kimi28preview"
+                "deepseekv41flash",
+                "mimov26pro",
+                "hy4",
+                "glm53"
               ],
               "anomalies": 0,
-              "actions": 1164,
-              "buchholz": 18,
+              "actions": 1506,
+              "buchholz": 33,
               "rank": 9
+            },
+            {
+              "id": "mimov26pro",
+              "model": "MIMO-v2.6-pro",
+              "strategy": "烬火速攻",
+              "primaryMode": "blitz",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "minimaxm31flash",
+                "glm53",
+                "hy3",
+                "glm53flash",
+                "glm53flash"
+              ],
+              "anomalies": 0,
+              "actions": 985,
+              "buchholz": 21,
+              "rank": 10
             },
             {
               "id": "hy4",
@@ -3222,56 +3243,35 @@
               "draw": 0,
               "opps": [
                 "deepseekv4pro",
-                "minimaxm31flash",
-                "mimov26pro",
-                "minimaxm3",
-                "glm53"
-              ],
-              "anomalies": 0,
-              "actions": 970,
-              "buchholz": 45,
-              "rank": 10
-            },
-            {
-              "id": "hy3",
-              "model": "hy3",
-              "strategy": "翠林根基",
-              "primaryMode": "grand",
-              "mp": 3,
-              "win": 1,
-              "loss": 4,
-              "draw": 0,
-              "opps": [
-                "kimi28preview",
+                "kimi31pro",
                 "step5preview",
-                "deepseekv41flash",
-                "deepseekv4pro",
-                "minimaxm3"
+                "hy3",
+                "minimaxm31flash"
               ],
               "anomalies": 0,
-              "actions": 1475,
-              "buchholz": 42,
+              "actions": 1123,
+              "buchholz": 45,
               "rank": 11
             },
             {
-              "id": "kimi28preview",
-              "model": "KIMI 2.8preview",
-              "strategy": "余烬速燃",
-              "primaryMode": "blitz",
-              "mp": 3,
-              "win": 1,
-              "loss": 4,
+              "id": "glm53flash",
+              "model": "GLM5.3flash",
+              "strategy": "赤雷迅斩",
+              "primaryMode": "duo",
+              "mp": 0,
+              "win": 0,
+              "loss": 5,
               "draw": 0,
               "opps": [
-                "hy3",
+                "step5preview",
                 "deepseekv4pro",
-                "minimaxm31flash",
-                "glm53flash",
-                "deepseekv4pro"
+                "glm53",
+                "mimov26pro",
+                "mimov26pro"
               ],
               "anomalies": 0,
-              "actions": 1162,
-              "buchholz": 33,
+              "actions": 1285,
+              "buchholz": 39,
               "rank": 12
             }
           ],
@@ -3311,8 +3311,8 @@
                   "a": "kimi28preview",
                   "b": "hy3",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 308,
+                  "winner": 0,
+                  "actions": 297,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -3341,55 +3341,55 @@
                 {
                   "table": 1,
                   "a": "hy4",
-                  "b": "minimaxm31flash",
+                  "b": "kimi31pro",
                   "first": 1,
                   "winner": 1,
-                  "actions": 170,
+                  "actions": 152,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "kimi31pro",
-                  "b": "minimaxm3",
+                  "a": "kimi28preview",
+                  "b": "minimaxm31flash",
                   "first": 0,
                   "winner": 0,
-                  "actions": 153,
+                  "actions": 227,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
                   "a": "step5preview",
-                  "b": "hy3",
+                  "b": "minimaxm3",
                   "first": 1,
-                  "winner": 0,
-                  "actions": 305,
+                  "winner": 1,
+                  "actions": 280,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
                   "a": "deepseekv41flash",
-                  "b": "glm53",
+                  "b": "hy3",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 173,
+                  "winner": 0,
+                  "actions": 361,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
                   "a": "deepseekv4pro",
-                  "b": "kimi28preview",
+                  "b": "glm53flash",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 229,
+                  "winner": 0,
+                  "actions": 241,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "glm53flash",
+                  "a": "glm53",
                   "b": "mimov26pro",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 278,
+                  "winner": 0,
+                  "actions": 299,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -3399,56 +3399,56 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "step5preview",
+                  "a": "kimi28preview",
                   "b": "kimi31pro",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 235,
+                  "winner": 1,
+                  "actions": 195,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "minimaxm31flash",
-                  "b": "kimi28preview",
+                  "a": "minimaxm3",
+                  "b": "deepseekv4pro",
                   "first": 1,
-                  "winner": 0,
-                  "actions": 171,
+                  "winner": 1,
+                  "actions": 128,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "glm53",
-                  "b": "minimaxm3",
+                  "a": "minimaxm31flash",
+                  "b": "deepseekv41flash",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 205,
+                  "winner": 1,
+                  "actions": 243,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "mimov26pro",
+                  "a": "step5preview",
                   "b": "hy4",
                   "first": 1,
                   "winner": 0,
-                  "actions": 167,
+                  "actions": 262,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
-                  "a": "hy3",
-                  "b": "deepseekv41flash",
+                  "a": "glm53",
+                  "b": "glm53flash",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 478,
+                  "winner": 0,
+                  "actions": 262,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "deepseekv4pro",
-                  "b": "glm53flash",
+                  "a": "mimov26pro",
+                  "b": "hy3",
                   "first": 1,
                   "winner": 1,
-                  "actions": 299,
+                  "actions": 183,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -3458,56 +3458,56 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "step5preview",
-                  "b": "minimaxm31flash",
+                  "a": "kimi31pro",
+                  "b": "deepseekv4pro",
                   "first": 1,
                   "winner": 0,
-                  "actions": 309,
+                  "actions": 226,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "mimov26pro",
-                  "b": "glm53",
+                  "a": "deepseekv41flash",
+                  "b": "step5preview",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 202,
+                  "winner": 1,
+                  "actions": 234,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "kimi31pro",
-                  "b": "deepseekv41flash",
+                  "a": "glm53",
+                  "b": "kimi28preview",
                   "first": 1,
                   "winner": 1,
-                  "actions": 305,
+                  "actions": 183,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "hy4",
-                  "b": "minimaxm3",
+                  "a": "minimaxm3",
+                  "b": "minimaxm31flash",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 158,
+                  "winner": 0,
+                  "actions": 149,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
-                  "a": "kimi28preview",
-                  "b": "glm53flash",
+                  "a": "hy3",
+                  "b": "hy4",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 260,
+                  "winner": 0,
+                  "actions": 324,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "hy3",
-                  "b": "deepseekv4pro",
+                  "a": "mimov26pro",
+                  "b": "glm53flash",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 247,
+                  "winner": 0,
+                  "actions": 128,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -3517,56 +3517,56 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "step5preview",
-                  "b": "mimov26pro",
-                  "first": 0,
-                  "winner": 0,
-                  "actions": 194,
-                  "reason": "生命卡组为空且仍需结算生命伤害"
-                },
-                {
-                  "table": 2,
-                  "a": "minimaxm31flash",
-                  "b": "kimi31pro",
-                  "first": 1,
-                  "winner": 0,
-                  "actions": 174,
-                  "reason": "生命卡组为空且仍需结算生命伤害"
-                },
-                {
-                  "table": 3,
-                  "a": "deepseekv41flash",
-                  "b": "glm53flash",
-                  "first": 0,
-                  "winner": 0,
-                  "actions": 388,
-                  "reason": "生命卡组为空且仍需结算生命伤害"
-                },
-                {
-                  "table": 4,
-                  "a": "glm53",
-                  "b": "hy4",
-                  "first": 1,
-                  "winner": 0,
-                  "actions": 280,
-                  "reason": "生命卡组为空且仍需结算生命伤害"
-                },
-                {
-                  "table": 5,
-                  "a": "minimaxm3",
-                  "b": "hy3",
+                  "a": "kimi31pro",
+                  "b": "step5preview",
                   "first": 0,
                   "winner": 0,
                   "actions": 137,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
-                  "table": 6,
+                  "table": 2,
                   "a": "kimi28preview",
-                  "b": "deepseekv4pro",
+                  "b": "minimaxm3",
                   "first": 1,
                   "winner": 1,
-                  "actions": 194,
+                  "actions": 192,
+                  "reason": "生命卡组为空且仍需结算生命伤害"
+                },
+                {
+                  "table": 3,
+                  "a": "deepseekv4pro",
+                  "b": "deepseekv41flash",
+                  "first": 0,
+                  "winner": 0,
+                  "actions": 188,
+                  "reason": "生命卡组为空且仍需结算生命伤害"
+                },
+                {
+                  "table": 4,
+                  "a": "hy3",
+                  "b": "glm53",
+                  "first": 1,
+                  "winner": 1,
+                  "actions": 341,
+                  "reason": "生命卡组为空且仍需结算生命伤害"
+                },
+                {
+                  "table": 5,
+                  "a": "hy4",
+                  "b": "minimaxm31flash",
+                  "first": 0,
+                  "winner": 1,
+                  "actions": 190,
+                  "reason": "生命卡组为空且仍需结算生命伤害"
+                },
+                {
+                  "table": 6,
+                  "a": "mimov26pro",
+                  "b": "glm53flash",
+                  "first": 1,
+                  "winner": 0,
+                  "actions": 210,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -3582,45 +3582,45 @@
           "primaryMode": "duo",
           "ranks": [
             1,
-            1,
-            7
+            2,
+            1
+          ],
+          "mp": 39,
+          "win": 13,
+          "loss": 2,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 1.3333333333333333,
+          "titles": 2,
+          "top4": 3
+        },
+        {
+          "id": "minimaxm3",
+          "model": "MiniMax M3",
+          "strategy": "余烬共鸣",
+          "primaryMode": "duo",
+          "ranks": [
+            4,
+            5,
+            2
           ],
           "mp": 30,
           "win": 10,
           "loss": 5,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 3,
-          "titles": 2,
-          "top4": 2
-        },
-        {
-          "id": "mimov26pro",
-          "model": "MIMO-v2.6-pro",
-          "strategy": "烬火速攻",
-          "primaryMode": "blitz",
-          "ranks": [
-            7,
-            2,
-            3
-          ],
-          "mp": 27,
-          "win": 9,
-          "loss": 6,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 4,
+          "avgRank": 3.6666666666666665,
           "titles": 0,
           "top4": 2
         },
         {
-          "id": "glm53",
-          "model": "GLM5.3",
-          "strategy": "根脉奔流",
+          "id": "deepseekv4pro",
+          "model": "deepseek v4pro",
+          "strategy": "回响巨像",
           "primaryMode": "standard",
           "ranks": [
-            5,
-            4,
+            6,
+            3,
             4
           ],
           "mp": 27,
@@ -3633,33 +3633,33 @@
           "top4": 2
         },
         {
-          "id": "minimaxm31flash",
-          "model": "MiniMax M3.1flash",
-          "strategy": "余烬叠刃",
-          "primaryMode": "blitz",
+          "id": "glm53",
+          "model": "GLM5.3",
+          "strategy": "根脉奔流",
+          "primaryMode": "standard",
           "ranks": [
-            2,
-            10,
-            2
+            5,
+            4,
+            5
           ],
-          "mp": 30,
-          "win": 10,
-          "loss": 5,
+          "mp": 27,
+          "win": 9,
+          "loss": 6,
           "draw": 0,
           "anomalies": 0,
           "avgRank": 4.666666666666667,
           "titles": 0,
-          "top4": 2
+          "top4": 1
         },
         {
-          "id": "minimaxm3",
-          "model": "MiniMax M3",
-          "strategy": "余烬共鸣",
-          "primaryMode": "duo",
+          "id": "kimi28preview",
+          "model": "KIMI 2.8preview",
+          "strategy": "余烬速燃",
+          "primaryMode": "blitz",
           "ranks": [
-            4,
-            5,
-            6
+            3,
+            9,
+            3
           ],
           "mp": 27,
           "win": 9,
@@ -3668,36 +3668,17 @@
           "anomalies": 0,
           "avgRank": 5,
           "titles": 0,
-          "top4": 1
+          "top4": 2
         },
         {
-          "id": "step5preview",
-          "model": "step5preview",
-          "strategy": "深根圣所",
-          "primaryMode": "grand",
+          "id": "mimov26pro",
+          "model": "MIMO-v2.6-pro",
+          "strategy": "烬火速攻",
+          "primaryMode": "blitz",
           "ranks": [
-            8,
-            8,
-            1
-          ],
-          "mp": 27,
-          "win": 9,
-          "loss": 6,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 5.666666666666667,
-          "titles": 1,
-          "top4": 1
-        },
-        {
-          "id": "deepseekv4pro",
-          "model": "deepseek v4pro",
-          "strategy": "回响巨像",
-          "primaryMode": "standard",
-          "ranks": [
-            6,
-            3,
-            9
+            7,
+            1,
+            10
           ],
           "mp": 24,
           "win": 8,
@@ -3705,6 +3686,25 @@
           "draw": 0,
           "anomalies": 0,
           "avgRank": 6,
+          "titles": 1,
+          "top4": 1
+        },
+        {
+          "id": "minimaxm31flash",
+          "model": "MiniMax M3.1flash",
+          "strategy": "余烬叠刃",
+          "primaryMode": "blitz",
+          "ranks": [
+            2,
+            12,
+            8
+          ],
+          "mp": 21,
+          "win": 7,
+          "loss": 8,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 7.333333333333333,
           "titles": 0,
           "top4": 1
         },
@@ -3716,35 +3716,35 @@
           "ranks": [
             9,
             6,
-            5
+            7
           ],
-          "mp": 24,
-          "win": 8,
-          "loss": 7,
+          "mp": 21,
+          "win": 7,
+          "loss": 8,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 6.666666666666667,
+          "avgRank": 7.333333333333333,
           "titles": 0,
           "top4": 0
         },
         {
-          "id": "kimi28preview",
-          "model": "KIMI 2.8preview",
-          "strategy": "余烬速燃",
-          "primaryMode": "blitz",
+          "id": "step5preview",
+          "model": "step5preview",
+          "strategy": "深根圣所",
+          "primaryMode": "grand",
           "ranks": [
-            3,
-            12,
-            12
+            8,
+            10,
+            6
           ],
-          "mp": 15,
-          "win": 5,
-          "loss": 10,
+          "mp": 21,
+          "win": 7,
+          "loss": 8,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 9,
+          "avgRank": 8,
           "titles": 0,
-          "top4": 1
+          "top4": 0
         },
         {
           "id": "hy4",
@@ -3754,14 +3754,14 @@
           "ranks": [
             12,
             7,
-            10
+            11
           ],
           "mp": 12,
           "win": 4,
           "loss": 11,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 9.666666666666666,
+          "avgRank": 10,
           "titles": 0,
           "top4": 0
         },
@@ -3772,8 +3772,8 @@
           "primaryMode": "grand",
           "ranks": [
             10,
-            9,
-            11
+            11,
+            9
           ],
           "mp": 12,
           "win": 4,
@@ -3791,15 +3791,15 @@
           "primaryMode": "duo",
           "ranks": [
             11,
-            11,
-            8
+            8,
+            12
           ],
-          "mp": 15,
-          "win": 5,
-          "loss": 10,
+          "mp": 9,
+          "win": 3,
+          "loss": 12,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 10,
+          "avgRank": 10.333333333333334,
           "titles": 0,
           "top4": 0
         }
@@ -3872,7 +3872,7 @@
                 "glm53"
               ],
               "anomalies": 0,
-              "actions": 1963,
+              "actions": 1972,
               "buchholz": 51,
               "rank": 3
             },
@@ -3893,7 +3893,7 @@
                 "deepseekv41flash"
               ],
               "anomalies": 0,
-              "actions": 1730,
+              "actions": 1729,
               "buchholz": 48,
               "rank": 4
             },
@@ -3914,7 +3914,7 @@
                 "mimov26pro"
               ],
               "anomalies": 0,
-              "actions": 1613,
+              "actions": 1624,
               "buchholz": 42,
               "rank": 5
             },
@@ -3935,7 +3935,7 @@
                 "hy3"
               ],
               "anomalies": 0,
-              "actions": 1813,
+              "actions": 1822,
               "buchholz": 33,
               "rank": 6
             },
@@ -3977,7 +3977,7 @@
                 "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 2255,
+              "actions": 2254,
               "buchholz": 36,
               "rank": 8
             },
@@ -4061,7 +4061,7 @@
                 "minimaxm31flash"
               ],
               "anomalies": 0,
-              "actions": 1701,
+              "actions": 1712,
               "buchholz": 30,
               "rank": 12
             }
@@ -4094,7 +4094,7 @@
                   "b": "minimaxm3",
                   "first": 0,
                   "winner": 0,
-                  "actions": 434,
+                  "actions": 443,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4121,7 +4121,7 @@
                   "b": "glm53flash",
                   "first": 1,
                   "winner": 1,
-                  "actions": 307,
+                  "actions": 318,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -4162,7 +4162,7 @@
                   "b": "glm53",
                   "first": 0,
                   "winner": 1,
-                  "actions": 403,
+                  "actions": 402,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4369,67 +4369,109 @@
           "masterSeed": 20267264,
           "standings": [
             {
-              "id": "glm53",
-              "model": "GLM5.3",
-              "strategy": "根脉奔流",
-              "primaryMode": "standard",
+              "id": "deepseekv41flash",
+              "model": "deepseek v4.1flash",
+              "strategy": "圣所铁壁·二阶冲击",
+              "primaryMode": "grand",
+              "mp": 15,
+              "win": 5,
+              "loss": 0,
+              "draw": 0,
+              "opps": [
+                "hy4",
+                "mimov26pro",
+                "deepseekv4pro",
+                "glm53",
+                "kimi31pro"
+              ],
+              "anomalies": 0,
+              "actions": 2311,
+              "buchholz": 39,
+              "rank": 1
+            },
+            {
+              "id": "kimi28preview",
+              "model": "KIMI 2.8preview",
+              "strategy": "余烬速燃",
+              "primaryMode": "blitz",
               "mp": 12,
               "win": 4,
               "loss": 1,
               "draw": 0,
               "opps": [
-                "hy3",
-                "step5preview",
-                "deepseekv41flash",
-                "deepseekv4pro",
-                "kimi31pro"
+                "kimi31pro",
+                "minimaxm31flash",
+                "glm53",
+                "mimov26pro",
+                "step5preview"
               ],
               "anomalies": 0,
-              "actions": 1753,
-              "buchholz": 48,
-              "rank": 1
+              "actions": 1781,
+              "buchholz": 36,
+              "rank": 2
+            },
+            {
+              "id": "glm53",
+              "model": "GLM5.3",
+              "strategy": "根脉奔流",
+              "primaryMode": "standard",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "hy3",
+                "deepseekv4pro",
+                "kimi28preview",
+                "deepseekv41flash",
+                "mimov26pro"
+              ],
+              "anomalies": 0,
+              "actions": 1931,
+              "buchholz": 51,
+              "rank": 3
+            },
+            {
+              "id": "mimov26pro",
+              "model": "MIMO-v2.6-pro",
+              "strategy": "烬火速攻",
+              "primaryMode": "blitz",
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
+              "draw": 0,
+              "opps": [
+                "minimaxm3",
+                "deepseekv41flash",
+                "minimaxm31flash",
+                "kimi28preview",
+                "glm53"
+              ],
+              "anomalies": 0,
+              "actions": 1667,
+              "buchholz": 45,
+              "rank": 4
             },
             {
               "id": "kimi31pro",
               "model": "KIMI 3.1pro",
               "strategy": "赤蓝燃穿",
               "primaryMode": "duo",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
               "draw": 0,
               "opps": [
                 "kimi28preview",
-                "hy3",
+                "hy4",
                 "minimaxm3",
                 "step5preview",
-                "glm53"
+                "deepseekv41flash"
               ],
               "anomalies": 0,
-              "actions": 1749,
+              "actions": 1921,
               "buchholz": 42,
-              "rank": 2
-            },
-            {
-              "id": "deepseekv41flash",
-              "model": "deepseek v4.1flash",
-              "strategy": "圣所铁壁·二阶冲击",
-              "primaryMode": "grand",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
-              "draw": 0,
-              "opps": [
-                "hy4",
-                "kimi28preview",
-                "glm53",
-                "mimov26pro",
-                "deepseekv4pro"
-              ],
-              "anomalies": 0,
-              "actions": 2133,
-              "buchholz": 36,
-              "rank": 3
+              "rank": 5
             },
             {
               "id": "deepseekv4pro",
@@ -4442,98 +4484,56 @@
               "draw": 0,
               "opps": [
                 "glm53flash",
-                "mimov26pro",
-                "kimi28preview",
                 "glm53",
-                "deepseekv41flash"
+                "deepseekv41flash",
+                "hy3",
+                "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1725,
+              "actions": 1704,
               "buchholz": 39,
-              "rank": 4
-            },
-            {
-              "id": "step5preview",
-              "model": "step5preview",
-              "strategy": "深根圣所",
-              "primaryMode": "grand",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
-                "minimaxm31flash",
-                "glm53",
-                "glm53flash",
-                "kimi31pro",
-                "mimov26pro"
-              ],
-              "anomalies": 0,
-              "actions": 2058,
-              "buchholz": 36,
-              "rank": 5
+              "rank": 6
             },
             {
               "id": "minimaxm3",
               "model": "MiniMax M3",
               "strategy": "余烬共鸣",
               "primaryMode": "duo",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
               "draw": 0,
               "opps": [
                 "mimov26pro",
                 "glm53flash",
                 "kimi31pro",
                 "minimaxm31flash",
-                "kimi28preview"
+                "deepseekv4pro"
               ],
               "anomalies": 0,
-              "actions": 1435,
-              "buchholz": 30,
-              "rank": 6
-            },
-            {
-              "id": "kimi28preview",
-              "model": "KIMI 2.8preview",
-              "strategy": "余烬速燃",
-              "primaryMode": "blitz",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
-              "draw": 0,
-              "opps": [
-                "kimi31pro",
-                "deepseekv41flash",
-                "deepseekv4pro",
-                "hy3",
-                "minimaxm3"
-              ],
-              "anomalies": 0,
-              "actions": 1996,
-              "buchholz": 48,
+              "actions": 1343,
+              "buchholz": 33,
               "rank": 7
             },
             {
-              "id": "mimov26pro",
-              "model": "MIMO-v2.6-pro",
-              "strategy": "烬火速攻",
-              "primaryMode": "blitz",
+              "id": "step5preview",
+              "model": "step5preview",
+              "strategy": "深根圣所",
+              "primaryMode": "grand",
               "mp": 6,
               "win": 2,
               "loss": 3,
               "draw": 0,
               "opps": [
-                "minimaxm3",
-                "deepseekv4pro",
                 "minimaxm31flash",
-                "deepseekv41flash",
-                "step5preview"
+                "hy3",
+                "glm53flash",
+                "kimi31pro",
+                "kimi28preview"
               ],
               "anomalies": 0,
-              "actions": 1690,
-              "buchholz": 42,
+              "actions": 2067,
+              "buchholz": 33,
               "rank": 8
             },
             {
@@ -4547,15 +4547,57 @@
               "draw": 0,
               "opps": [
                 "glm53",
-                "kimi31pro",
+                "step5preview",
                 "hy4",
-                "kimi28preview",
+                "deepseekv4pro",
                 "glm53flash"
               ],
               "anomalies": 0,
-              "actions": 2046,
-              "buchholz": 36,
+              "actions": 2096,
+              "buchholz": 30,
               "rank": 9
+            },
+            {
+              "id": "hy4",
+              "model": "hy4",
+              "strategy": "赤烬疾袭",
+              "primaryMode": "standard",
+              "mp": 3,
+              "win": 1,
+              "loss": 4,
+              "draw": 0,
+              "opps": [
+                "deepseekv41flash",
+                "kimi31pro",
+                "hy3",
+                "glm53flash",
+                "minimaxm31flash"
+              ],
+              "anomalies": 0,
+              "actions": 1806,
+              "buchholz": 36,
+              "rank": 10
+            },
+            {
+              "id": "minimaxm31flash",
+              "model": "MiniMax M3.1flash",
+              "strategy": "余烬叠刃",
+              "primaryMode": "blitz",
+              "mp": 3,
+              "win": 1,
+              "loss": 4,
+              "draw": 0,
+              "opps": [
+                "step5preview",
+                "kimi28preview",
+                "mimov26pro",
+                "minimaxm3",
+                "hy4"
+              ],
+              "anomalies": 0,
+              "actions": 1378,
+              "buchholz": 36,
+              "rank": 11
             },
             {
               "id": "glm53flash",
@@ -4574,50 +4616,8 @@
                 "hy3"
               ],
               "anomalies": 0,
-              "actions": 2012,
-              "buchholz": 36,
-              "rank": 10
-            },
-            {
-              "id": "minimaxm31flash",
-              "model": "MiniMax M3.1flash",
-              "strategy": "余烬叠刃",
-              "primaryMode": "blitz",
-              "mp": 3,
-              "win": 1,
-              "loss": 4,
-              "draw": 0,
-              "opps": [
-                "step5preview",
-                "hy4",
-                "mimov26pro",
-                "minimaxm3",
-                "hy4"
-              ],
-              "anomalies": 0,
-              "actions": 1337,
+              "actions": 2007,
               "buchholz": 30,
-              "rank": 11
-            },
-            {
-              "id": "hy4",
-              "model": "hy4",
-              "strategy": "赤烬疾袭",
-              "primaryMode": "standard",
-              "mp": 3,
-              "win": 1,
-              "loss": 4,
-              "draw": 0,
-              "opps": [
-                "deepseekv41flash",
-                "minimaxm31flash",
-                "hy3",
-                "glm53flash",
-                "minimaxm31flash"
-              ],
-              "anomalies": 0,
-              "actions": 1696,
-              "buchholz": 27,
               "rank": 12
             }
           ],
@@ -4648,8 +4648,8 @@
                   "a": "minimaxm31flash",
                   "b": "step5preview",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 268,
+                  "winner": 0,
+                  "actions": 239,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4687,37 +4687,37 @@
                 {
                   "table": 1,
                   "a": "glm53",
-                  "b": "step5preview",
+                  "b": "deepseekv4pro",
                   "first": 1,
                   "winner": 0,
-                  "actions": 347,
+                  "actions": 272,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
                   "a": "mimov26pro",
-                  "b": "deepseekv4pro",
+                  "b": "deepseekv41flash",
                   "first": 0,
                   "winner": 1,
-                  "actions": 346,
+                  "actions": 432,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "deepseekv41flash",
-                  "b": "kimi28preview",
+                  "a": "kimi28preview",
+                  "b": "minimaxm31flash",
                   "first": 1,
                   "winner": 0,
-                  "actions": 446,
+                  "actions": 300,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "minimaxm31flash",
+                  "a": "kimi31pro",
                   "b": "hy4",
                   "first": 0,
                   "winner": 0,
-                  "actions": 230,
+                  "actions": 340,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4732,10 +4732,10 @@
                 {
                   "table": 6,
                   "a": "hy3",
-                  "b": "kimi31pro",
+                  "b": "step5preview",
                   "first": 0,
                   "winner": 1,
-                  "actions": 307,
+                  "actions": 396,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -4746,19 +4746,19 @@
                 {
                   "table": 1,
                   "a": "glm53",
-                  "b": "deepseekv41flash",
+                  "b": "kimi28preview",
                   "first": 0,
                   "winner": 0,
-                  "actions": 414,
+                  "actions": 384,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "deepseekv4pro",
-                  "b": "kimi28preview",
+                  "a": "deepseekv41flash",
+                  "b": "deepseekv4pro",
                   "first": 1,
                   "winner": 0,
-                  "actions": 324,
+                  "actions": 487,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4785,7 +4785,7 @@
                   "b": "glm53flash",
                   "first": 0,
                   "winner": 0,
-                  "actions": 644,
+                  "actions": 639,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4804,11 +4804,11 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "deepseekv4pro",
+                  "a": "deepseekv41flash",
                   "b": "glm53",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 327,
+                  "winner": 0,
+                  "actions": 612,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4823,19 +4823,19 @@
                 {
                   "table": 3,
                   "a": "mimov26pro",
-                  "b": "deepseekv41flash",
+                  "b": "kimi28preview",
                   "first": 1,
                   "winner": 1,
-                  "actions": 469,
+                  "actions": 375,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "kimi28preview",
+                  "a": "deepseekv4pro",
                   "b": "hy3",
                   "first": 0,
                   "winner": 0,
-                  "actions": 457,
+                  "actions": 418,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4863,38 +4863,38 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "glm53",
+                  "a": "deepseekv41flash",
                   "b": "kimi31pro",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 311,
+                  "winner": 0,
+                  "actions": 450,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "deepseekv41flash",
-                  "b": "deepseekv4pro",
+                  "a": "glm53",
+                  "b": "mimov26pro",
                   "first": 1,
-                  "winner": 0,
-                  "actions": 474,
+                  "winner": 1,
+                  "actions": 309,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "mimov26pro",
+                  "a": "kimi28preview",
                   "b": "step5preview",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 324,
+                  "winner": 0,
+                  "actions": 318,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "kimi28preview",
+                  "a": "deepseekv4pro",
                   "b": "minimaxm3",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 365,
+                  "winner": 0,
+                  "actions": 273,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -4940,7 +4940,7 @@
                 "glm53"
               ],
               "anomalies": 0,
-              "actions": 1584,
+              "actions": 1565,
               "buchholz": 48,
               "rank": 1
             },
@@ -4961,7 +4961,7 @@
                 "deepseekv4pro"
               ],
               "anomalies": 0,
-              "actions": 1914,
+              "actions": 1910,
               "buchholz": 39,
               "rank": 2
             },
@@ -5003,7 +5003,7 @@
                 "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 2321,
+              "actions": 2298,
               "buchholz": 45,
               "rank": 4
             },
@@ -5066,7 +5066,7 @@
                 "glm53flash"
               ],
               "anomalies": 0,
-              "actions": 1657,
+              "actions": 1643,
               "buchholz": 18,
               "rank": 7
             },
@@ -5129,7 +5129,7 @@
                 "hy3"
               ],
               "anomalies": 0,
-              "actions": 1898,
+              "actions": 1884,
               "buchholz": 42,
               "rank": 10
             },
@@ -5245,7 +5245,7 @@
                   "b": "deepseekv4pro",
                   "first": 1,
                   "winner": 1,
-                  "actions": 505,
+                  "actions": 486,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -5313,7 +5313,7 @@
                   "b": "step5preview",
                   "first": 1,
                   "winner": 1,
-                  "actions": 494,
+                  "actions": 490,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -5458,7 +5458,7 @@
                   "b": "glm53flash",
                   "first": 0,
                   "winner": 0,
-                  "actions": 503,
+                  "actions": 489,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -5477,61 +5477,42 @@
       ],
       "aggregate": [
         {
-          "id": "glm53",
-          "model": "GLM5.3",
-          "strategy": "根脉奔流",
-          "primaryMode": "standard",
-          "ranks": [
-            4,
-            1,
-            2
-          ],
-          "mp": 33,
-          "win": 11,
-          "loss": 4,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 2.3333333333333335,
-          "titles": 1,
-          "top4": 3
-        },
-        {
           "id": "deepseekv41flash",
           "model": "deepseek v4.1flash",
           "strategy": "圣所铁壁·二阶冲击",
           "primaryMode": "grand",
           "ranks": [
             3,
-            3,
+            1,
             5
           ],
-          "mp": 30,
-          "win": 10,
-          "loss": 5,
+          "mp": 33,
+          "win": 11,
+          "loss": 4,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 3.6666666666666665,
-          "titles": 0,
+          "avgRank": 3,
+          "titles": 1,
           "top4": 2
         },
         {
-          "id": "step5preview",
-          "model": "step5preview",
-          "strategy": "深根圣所",
-          "primaryMode": "grand",
+          "id": "glm53",
+          "model": "GLM5.3",
+          "strategy": "根脉奔流",
+          "primaryMode": "standard",
           "ranks": [
-            2,
-            5,
-            4
+            4,
+            3,
+            2
           ],
           "mp": 30,
           "win": 10,
           "loss": 5,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 3.6666666666666665,
+          "avgRank": 3,
           "titles": 0,
-          "top4": 2
+          "top4": 3
         },
         {
           "id": "deepseekv4pro",
@@ -5540,7 +5521,7 @@
           "primaryMode": "standard",
           "ranks": [
             7,
-            4,
+            6,
             1
           ],
           "mp": 27,
@@ -5548,27 +5529,8 @@
           "loss": 6,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 4,
+          "avgRank": 4.666666666666667,
           "titles": 1,
-          "top4": 2
-        },
-        {
-          "id": "minimaxm3",
-          "model": "MiniMax M3",
-          "strategy": "余烬共鸣",
-          "primaryMode": "duo",
-          "ranks": [
-            6,
-            6,
-            3
-          ],
-          "mp": 30,
-          "win": 10,
-          "loss": 5,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 5,
-          "titles": 0,
           "top4": 1
         },
         {
@@ -5578,34 +5540,72 @@
           "primaryMode": "blitz",
           "ranks": [
             1,
-            8,
+            4,
             9
+          ],
+          "mp": 30,
+          "win": 10,
+          "loss": 5,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 4.666666666666667,
+          "titles": 1,
+          "top4": 2
+        },
+        {
+          "id": "step5preview",
+          "model": "step5preview",
+          "strategy": "深根圣所",
+          "primaryMode": "grand",
+          "ranks": [
+            2,
+            8,
+            4
           ],
           "mp": 27,
           "win": 9,
           "loss": 6,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 6,
-          "titles": 1,
+          "avgRank": 4.666666666666667,
+          "titles": 0,
+          "top4": 2
+        },
+        {
+          "id": "minimaxm3",
+          "model": "MiniMax M3",
+          "strategy": "余烬共鸣",
+          "primaryMode": "duo",
+          "ranks": [
+            6,
+            7,
+            3
+          ],
+          "mp": 27,
+          "win": 9,
+          "loss": 6,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 5.333333333333333,
+          "titles": 0,
           "top4": 1
         },
         {
-          "id": "kimi31pro",
-          "model": "KIMI 3.1pro",
-          "strategy": "赤蓝燃穿",
-          "primaryMode": "duo",
+          "id": "kimi28preview",
+          "model": "KIMI 2.8preview",
+          "strategy": "余烬速燃",
+          "primaryMode": "blitz",
           "ranks": [
-            11,
+            10,
             2,
-            8
+            11
           ],
           "mp": 21,
           "win": 7,
           "loss": 8,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 7,
+          "avgRank": 7.666666666666667,
           "titles": 0,
           "top4": 1
         },
@@ -5629,21 +5629,21 @@
           "top4": 0
         },
         {
-          "id": "glm53flash",
-          "model": "GLM5.3flash",
-          "strategy": "赤雷迅斩",
+          "id": "kimi31pro",
+          "model": "KIMI 3.1pro",
+          "strategy": "赤蓝燃穿",
           "primaryMode": "duo",
           "ranks": [
+            11,
             5,
-            10,
-            10
+            8
           ],
-          "mp": 15,
-          "win": 5,
-          "loss": 10,
+          "mp": 18,
+          "win": 6,
+          "loss": 9,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 8.333333333333334,
+          "avgRank": 8,
           "titles": 0,
           "top4": 0
         },
@@ -5667,21 +5667,21 @@
           "top4": 0
         },
         {
-          "id": "kimi28preview",
-          "model": "KIMI 2.8preview",
-          "strategy": "余烬速燃",
-          "primaryMode": "blitz",
+          "id": "glm53flash",
+          "model": "GLM5.3flash",
+          "strategy": "赤雷迅斩",
+          "primaryMode": "duo",
           "ranks": [
-            10,
-            7,
-            11
+            5,
+            12,
+            10
           ],
           "mp": 15,
           "win": 5,
           "loss": 10,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 9.333333333333334,
+          "avgRank": 9,
           "titles": 0,
           "top4": 0
         },
@@ -5692,7 +5692,7 @@
           "primaryMode": "standard",
           "ranks": [
             12,
-            12,
+            10,
             12
           ],
           "mp": 3,
@@ -5700,7 +5700,7 @@
           "loss": 14,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 12,
+          "avgRank": 11.333333333333334,
           "titles": 0,
           "top4": 0
         }
@@ -5715,23 +5715,23 @@
           "masterSeed": 20261113,
           "standings": [
             {
-              "id": "deepseekv4pro",
-              "model": "deepseek v4pro",
-              "strategy": "回响巨像",
-              "primaryMode": "standard",
-              "mp": 12,
-              "win": 4,
-              "loss": 1,
+              "id": "deepseekv41flash",
+              "model": "deepseek v4.1flash",
+              "strategy": "圣所铁壁·二阶冲击",
+              "primaryMode": "grand",
+              "mp": 15,
+              "win": 5,
+              "loss": 0,
               "draw": 0,
               "opps": [
-                "glm53",
-                "deepseekv41flash",
-                "minimaxm31flash",
-                "minimaxm3",
-                "step5preview"
+                "glm53flash",
+                "deepseekv4pro",
+                "kimi31pro",
+                "step5preview",
+                "glm53"
               ],
               "anomalies": 0,
-              "actions": 1447,
+              "actions": 2321,
               "buchholz": 42,
               "rank": 1
             },
@@ -5747,77 +5747,35 @@
               "opps": [
                 "hy4",
                 "minimaxm31flash",
-                "minimaxm3",
                 "deepseekv41flash",
-                "glm53"
+                "deepseekv4pro",
+                "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1476,
-              "buchholz": 33,
+              "actions": 1426,
+              "buchholz": 39,
               "rank": 2
             },
             {
-              "id": "deepseekv41flash",
-              "model": "deepseek v4.1flash",
-              "strategy": "圣所铁壁·二阶冲击",
-              "primaryMode": "grand",
+              "id": "deepseekv4pro",
+              "model": "deepseek v4pro",
+              "strategy": "回响巨像",
+              "primaryMode": "standard",
               "mp": 9,
               "win": 3,
               "loss": 2,
               "draw": 0,
               "opps": [
-                "glm53flash",
-                "deepseekv4pro",
-                "step5preview",
-                "kimi31pro",
-                "minimaxm31flash"
-              ],
-              "anomalies": 0,
-              "actions": 1946,
-              "buchholz": 45,
-              "rank": 3
-            },
-            {
-              "id": "minimaxm3",
-              "model": "MiniMax M3",
-              "strategy": "余烬共鸣",
-              "primaryMode": "duo",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
-                "kimi28preview",
-                "step5preview",
-                "kimi31pro",
-                "deepseekv4pro",
-                "hy3"
-              ],
-              "anomalies": 0,
-              "actions": 1650,
-              "buchholz": 45,
-              "rank": 4
-            },
-            {
-              "id": "step5preview",
-              "model": "step5preview",
-              "strategy": "深根圣所",
-              "primaryMode": "grand",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
-                "mimov26pro",
-                "minimaxm3",
-                "deepseekv41flash",
                 "glm53",
-                "deepseekv4pro"
+                "deepseekv41flash",
+                "hy3",
+                "kimi31pro",
+                "step5preview"
               ],
               "anomalies": 0,
-              "actions": 1617,
-              "buchholz": 45,
-              "rank": 5
+              "actions": 1676,
+              "buchholz": 48,
+              "rank": 3
             },
             {
               "id": "glm53",
@@ -5832,76 +5790,76 @@
                 "deepseekv4pro",
                 "hy3",
                 "mimov26pro",
-                "step5preview",
-                "kimi31pro"
-              ],
-              "anomalies": 0,
-              "actions": 1665,
-              "buchholz": 42,
-              "rank": 6
-            },
-            {
-              "id": "kimi28preview",
-              "model": "KIMI 2.8preview",
-              "strategy": "余烬速燃",
-              "primaryMode": "blitz",
-              "mp": 9,
-              "win": 3,
-              "loss": 2,
-              "draw": 0,
-              "opps": [
                 "minimaxm3",
-                "glm53flash",
-                "hy3",
-                "hy4",
-                "mimov26pro"
+                "deepseekv41flash"
               ],
               "anomalies": 0,
-              "actions": 1978,
-              "buchholz": 24,
-              "rank": 7
+              "actions": 1878,
+              "buchholz": 42,
+              "rank": 4
             },
             {
               "id": "minimaxm31flash",
               "model": "MiniMax M3.1flash",
               "strategy": "余烬叠刃",
               "primaryMode": "blitz",
-              "mp": 6,
-              "win": 2,
-              "loss": 3,
+              "mp": 9,
+              "win": 3,
+              "loss": 2,
               "draw": 0,
               "opps": [
                 "hy3",
                 "kimi31pro",
-                "deepseekv4pro",
-                "glm53flash",
-                "deepseekv41flash"
+                "minimaxm3",
+                "kimi28preview",
+                "glm53flash"
               ],
               "anomalies": 0,
-              "actions": 1463,
-              "buchholz": 42,
-              "rank": 8
+              "actions": 1738,
+              "buchholz": 36,
+              "rank": 5
             },
             {
-              "id": "mimov26pro",
-              "model": "MIMO-v2.6-pro",
-              "strategy": "烬火速攻",
-              "primaryMode": "blitz",
+              "id": "minimaxm3",
+              "model": "MiniMax M3",
+              "strategy": "余烬共鸣",
+              "primaryMode": "duo",
               "mp": 6,
               "win": 2,
               "loss": 3,
               "draw": 0,
               "opps": [
+                "kimi28preview",
                 "step5preview",
-                "hy4",
+                "minimaxm31flash",
                 "glm53",
-                "hy3",
-                "kimi28preview"
+                "kimi31pro"
               ],
               "anomalies": 0,
-              "actions": 1508,
-              "buchholz": 30,
-              "rank": 9
+              "actions": 1505,
+              "buchholz": 42,
+              "rank": 6
+            },
+            {
+              "id": "step5preview",
+              "model": "step5preview",
+              "strategy": "深根圣所",
+              "primaryMode": "grand",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "mimov26pro",
+                "minimaxm3",
+                "kimi28preview",
+                "deepseekv41flash",
+                "deepseekv4pro"
+              ],
+              "anomalies": 0,
+              "actions": 2024,
+              "buchholz": 42,
+              "rank": 7
             },
             {
               "id": "glm53flash",
@@ -5916,33 +5874,75 @@
                 "deepseekv41flash",
                 "kimi28preview",
                 "hy4",
-                "minimaxm31flash",
-                "hy4"
+                "mimov26pro",
+                "minimaxm31flash"
               ],
               "anomalies": 0,
-              "actions": 1918,
-              "buchholz": 24,
-              "rank": 10
+              "actions": 1878,
+              "buchholz": 36,
+              "rank": 8
             },
             {
               "id": "hy3",
               "model": "hy3",
               "strategy": "翠林根基",
               "primaryMode": "grand",
-              "mp": 3,
-              "win": 1,
-              "loss": 4,
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
               "draw": 0,
               "opps": [
                 "minimaxm31flash",
                 "glm53",
-                "kimi28preview",
-                "mimov26pro",
-                "minimaxm3"
+                "deepseekv4pro",
+                "hy4",
+                "kimi28preview"
               ],
               "anomalies": 0,
-              "actions": 1614,
-              "buchholz": 39,
+              "actions": 1737,
+              "buchholz": 33,
+              "rank": 9
+            },
+            {
+              "id": "kimi28preview",
+              "model": "KIMI 2.8preview",
+              "strategy": "余烬速燃",
+              "primaryMode": "blitz",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "minimaxm3",
+                "glm53flash",
+                "step5preview",
+                "minimaxm31flash",
+                "hy3"
+              ],
+              "anomalies": 0,
+              "actions": 2175,
+              "buchholz": 33,
+              "rank": 10
+            },
+            {
+              "id": "mimov26pro",
+              "model": "MIMO-v2.6-pro",
+              "strategy": "烬火速攻",
+              "primaryMode": "blitz",
+              "mp": 6,
+              "win": 2,
+              "loss": 3,
+              "draw": 0,
+              "opps": [
+                "step5preview",
+                "hy4",
+                "glm53",
+                "glm53flash",
+                "hy4"
+              ],
+              "anomalies": 0,
+              "actions": 1549,
+              "buchholz": 21,
               "rank": 11
             },
             {
@@ -5958,12 +5958,12 @@
                 "kimi31pro",
                 "mimov26pro",
                 "glm53flash",
-                "kimi28preview",
-                "glm53flash"
+                "hy3",
+                "mimov26pro"
               ],
               "anomalies": 0,
-              "actions": 1676,
-              "buchholz": 39,
+              "actions": 1409,
+              "buchholz": 36,
               "rank": 12
             }
           ],
@@ -6022,7 +6022,7 @@
                   "b": "step5preview",
                   "first": 1,
                   "winner": 1,
-                  "actions": 332,
+                  "actions": 367,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -6044,8 +6044,8 @@
                   "a": "minimaxm3",
                   "b": "step5preview",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 333,
+                  "winner": 0,
+                  "actions": 279,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -6081,7 +6081,7 @@
                   "b": "glm53",
                   "first": 0,
                   "winner": 1,
-                  "actions": 288,
+                  "actions": 287,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -6091,29 +6091,29 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "deepseekv41flash",
-                  "b": "step5preview",
+                  "a": "kimi31pro",
+                  "b": "deepseekv41flash",
                   "first": 0,
                   "winner": 1,
-                  "actions": 372,
+                  "actions": 406,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
-                  "a": "kimi31pro",
-                  "b": "minimaxm3",
+                  "a": "minimaxm3",
+                  "b": "minimaxm31flash",
                   "first": 1,
                   "winner": 1,
-                  "actions": 314,
+                  "actions": 207,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "minimaxm31flash",
-                  "b": "deepseekv4pro",
+                  "a": "kimi28preview",
+                  "b": "step5preview",
                   "first": 0,
                   "winner": 1,
-                  "actions": 216,
+                  "actions": 510,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -6127,11 +6127,11 @@
                 },
                 {
                   "table": 5,
-                  "a": "kimi28preview",
+                  "a": "deepseekv4pro",
                   "b": "hy3",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 468,
+                  "winner": 0,
+                  "actions": 392,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -6150,56 +6150,56 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "step5preview",
-                  "b": "glm53",
+                  "a": "deepseekv41flash",
+                  "b": "step5preview",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 295,
+                  "winner": 0,
+                  "actions": 507,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
                   "a": "minimaxm3",
-                  "b": "deepseekv4pro",
+                  "b": "glm53",
                   "first": 0,
                   "winner": 1,
-                  "actions": 216,
+                  "actions": 208,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "deepseekv41flash",
-                  "b": "kimi31pro",
+                  "a": "kimi31pro",
+                  "b": "deepseekv4pro",
                   "first": 1,
-                  "winner": 1,
-                  "actions": 374,
+                  "winner": 0,
+                  "actions": 193,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
                   "a": "minimaxm31flash",
-                  "b": "glm53flash",
+                  "b": "kimi28preview",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 293,
+                  "winner": 1,
+                  "actions": 408,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
                   "a": "mimov26pro",
-                  "b": "hy3",
+                  "b": "glm53flash",
                   "first": 1,
-                  "winner": 0,
-                  "actions": 234,
+                  "winner": 1,
+                  "actions": 215,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "kimi28preview",
-                  "b": "hy4",
+                  "a": "hy4",
+                  "b": "hy3",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 385,
+                  "winner": 1,
+                  "actions": 298,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -6209,56 +6209,56 @@
               "results": [
                 {
                   "table": 1,
-                  "a": "step5preview",
-                  "b": "deepseekv4pro",
+                  "a": "deepseekv41flash",
+                  "b": "glm53",
                   "first": 0,
-                  "winner": 1,
-                  "actions": 285,
+                  "winner": 0,
+                  "actions": 592,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 2,
                   "a": "kimi31pro",
-                  "b": "glm53",
+                  "b": "minimaxm3",
                   "first": 1,
                   "winner": 0,
-                  "actions": 291,
+                  "actions": 330,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 3,
-                  "a": "deepseekv41flash",
-                  "b": "minimaxm31flash",
+                  "a": "step5preview",
+                  "b": "deepseekv4pro",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 384,
+                  "winner": 1,
+                  "actions": 361,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 4,
-                  "a": "mimov26pro",
-                  "b": "kimi28preview",
+                  "a": "glm53flash",
+                  "b": "minimaxm31flash",
                   "first": 1,
                   "winner": 1,
-                  "actions": 310,
+                  "actions": 553,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 5,
-                  "a": "minimaxm3",
+                  "a": "kimi28preview",
                   "b": "hy3",
                   "first": 0,
-                  "winner": 0,
-                  "actions": 306,
+                  "winner": 1,
+                  "actions": 442,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
                   "table": 6,
-                  "a": "glm53flash",
+                  "a": "mimov26pro",
                   "b": "hy4",
                   "first": 1,
                   "winner": 0,
-                  "actions": 515,
+                  "actions": 335,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 }
               ]
@@ -6307,7 +6307,7 @@
                 "kimi31pro"
               ],
               "anomalies": 0,
-              "actions": 1550,
+              "actions": 1549,
               "buchholz": 36,
               "rank": 2
             },
@@ -6349,7 +6349,7 @@
                 "hy3"
               ],
               "anomalies": 0,
-              "actions": 1793,
+              "actions": 1792,
               "buchholz": 42,
               "rank": 4
             },
@@ -6391,7 +6391,7 @@
                 "deepseekv4pro"
               ],
               "anomalies": 0,
-              "actions": 1947,
+              "actions": 1946,
               "buchholz": 27,
               "rank": 6
             },
@@ -6412,7 +6412,7 @@
                 "deepseekv41flash"
               ],
               "anomalies": 0,
-              "actions": 1717,
+              "actions": 1716,
               "buchholz": 45,
               "rank": 7
             },
@@ -6618,7 +6618,7 @@
                   "b": "deepseekv41flash",
                   "first": 0,
                   "winner": 1,
-                  "actions": 585,
+                  "actions": 584,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -6718,7 +6718,7 @@
                   "b": "hy3",
                   "first": 0,
                   "winner": 0,
-                  "actions": 335,
+                  "actions": 334,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -6883,7 +6883,7 @@
                 "deepseekv4pro"
               ],
               "anomalies": 0,
-              "actions": 1713,
+              "actions": 1781,
               "buchholz": 48,
               "rank": 3
             },
@@ -6925,7 +6925,7 @@
                 "minimaxm3"
               ],
               "anomalies": 0,
-              "actions": 1758,
+              "actions": 1702,
               "buchholz": 39,
               "rank": 5
             },
@@ -6967,7 +6967,7 @@
                 "hy4"
               ],
               "anomalies": 0,
-              "actions": 1966,
+              "actions": 2039,
               "buchholz": 39,
               "rank": 7
             },
@@ -6988,7 +6988,7 @@
                 "mimov26pro"
               ],
               "anomalies": 0,
-              "actions": 1892,
+              "actions": 1897,
               "buchholz": 33,
               "rank": 8
             },
@@ -7030,7 +7030,7 @@
                 "glm53flash"
               ],
               "anomalies": 0,
-              "actions": 1832,
+              "actions": 1776,
               "buchholz": 30,
               "rank": 10
             },
@@ -7114,7 +7114,7 @@
                   "b": "kimi28preview",
                   "first": 1,
                   "winner": 0,
-                  "actions": 610,
+                  "actions": 615,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -7214,7 +7214,7 @@
                   "b": "hy3",
                   "first": 1,
                   "winner": 0,
-                  "actions": 392,
+                  "actions": 460,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -7241,7 +7241,7 @@
                   "b": "step5preview",
                   "first": 0,
                   "winner": 0,
-                  "actions": 462,
+                  "actions": 406,
                   "reason": "生命卡组为空且仍需结算生命伤害"
                 },
                 {
@@ -7378,14 +7378,33 @@
       ],
       "aggregate": [
         {
-          "id": "minimaxm3",
-          "model": "MiniMax M3",
-          "strategy": "余烬共鸣",
-          "primaryMode": "duo",
+          "id": "glm53",
+          "model": "GLM5.3",
+          "strategy": "根脉奔流",
+          "primaryMode": "standard",
           "ranks": [
             4,
-            5,
-            1
+            2,
+            3
+          ],
+          "mp": 30,
+          "win": 10,
+          "loss": 5,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 3,
+          "titles": 0,
+          "top4": 3
+        },
+        {
+          "id": "deepseekv41flash",
+          "model": "deepseek v4.1flash",
+          "strategy": "圣所铁壁·二阶冲击",
+          "primaryMode": "grand",
+          "ranks": [
+            1,
+            4,
+            5
           ],
           "mp": 33,
           "win": 11,
@@ -7397,23 +7416,23 @@
           "top4": 2
         },
         {
-          "id": "glm53",
-          "model": "GLM5.3",
-          "strategy": "根脉奔流",
-          "primaryMode": "standard",
+          "id": "minimaxm3",
+          "model": "MiniMax M3",
+          "strategy": "余烬共鸣",
+          "primaryMode": "duo",
           "ranks": [
             6,
-            2,
-            3
+            5,
+            1
           ],
           "mp": 30,
           "win": 10,
           "loss": 5,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 3.6666666666666665,
-          "titles": 0,
-          "top4": 2
+          "avgRank": 4,
+          "titles": 1,
+          "top4": 1
         },
         {
           "id": "kimi31pro",
@@ -7440,35 +7459,16 @@
           "strategy": "回响巨像",
           "primaryMode": "standard",
           "ranks": [
-            1,
+            3,
             9,
             2
-          ],
-          "mp": 30,
-          "win": 10,
-          "loss": 5,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 4,
-          "titles": 1,
-          "top4": 2
-        },
-        {
-          "id": "deepseekv41flash",
-          "model": "deepseek v4.1flash",
-          "strategy": "圣所铁壁·二阶冲击",
-          "primaryMode": "grand",
-          "ranks": [
-            3,
-            4,
-            5
           ],
           "mp": 27,
           "win": 9,
           "loss": 6,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 4,
+          "avgRank": 4.666666666666667,
           "titles": 0,
           "top4": 2
         },
@@ -7478,7 +7478,7 @@
           "strategy": "烬火速攻",
           "primaryMode": "blitz",
           "ranks": [
-            9,
+            11,
             3,
             4
           ],
@@ -7487,28 +7487,9 @@
           "loss": 6,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 5.333333333333333,
+          "avgRank": 6,
           "titles": 0,
           "top4": 2
-        },
-        {
-          "id": "step5preview",
-          "model": "step5preview",
-          "strategy": "深根圣所",
-          "primaryMode": "grand",
-          "ranks": [
-            5,
-            6,
-            10
-          ],
-          "mp": 24,
-          "win": 8,
-          "loss": 7,
-          "draw": 0,
-          "anomalies": 0,
-          "avgRank": 7,
-          "titles": 0,
-          "top4": 0
         },
         {
           "id": "minimaxm31flash",
@@ -7516,16 +7497,16 @@
           "strategy": "余烬叠刃",
           "primaryMode": "blitz",
           "ranks": [
-            8,
+            5,
             8,
             6
           ],
-          "mp": 21,
-          "win": 7,
-          "loss": 8,
+          "mp": 24,
+          "win": 8,
+          "loss": 7,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 7.333333333333333,
+          "avgRank": 6.333333333333333,
           "titles": 0,
           "top4": 0
         },
@@ -7535,16 +7516,35 @@
           "strategy": "翠林根基",
           "primaryMode": "grand",
           "ranks": [
-            11,
+            9,
             7,
             7
           ],
-          "mp": 15,
-          "win": 5,
-          "loss": 10,
+          "mp": 18,
+          "win": 6,
+          "loss": 9,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 8.333333333333334,
+          "avgRank": 7.666666666666667,
+          "titles": 0,
+          "top4": 0
+        },
+        {
+          "id": "step5preview",
+          "model": "step5preview",
+          "strategy": "深根圣所",
+          "primaryMode": "grand",
+          "ranks": [
+            7,
+            6,
+            10
+          ],
+          "mp": 21,
+          "win": 7,
+          "loss": 8,
+          "draw": 0,
+          "anomalies": 0,
+          "avgRank": 7.666666666666667,
           "titles": 0,
           "top4": 0
         },
@@ -7554,16 +7554,16 @@
           "strategy": "余烬速燃",
           "primaryMode": "blitz",
           "ranks": [
-            7,
+            10,
             10,
             8
           ],
-          "mp": 18,
-          "win": 6,
-          "loss": 9,
+          "mp": 15,
+          "win": 5,
+          "loss": 10,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 8.333333333333334,
+          "avgRank": 9.333333333333334,
           "titles": 0,
           "top4": 0
         },
@@ -7573,7 +7573,7 @@
           "strategy": "赤雷迅斩",
           "primaryMode": "duo",
           "ranks": [
-            10,
+            8,
             11,
             11
           ],
@@ -7582,7 +7582,7 @@
           "loss": 11,
           "draw": 0,
           "anomalies": 0,
-          "avgRank": 10.666666666666666,
+          "avgRank": 10,
           "titles": 0,
           "top4": 0
         },
