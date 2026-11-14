@@ -1,8 +1,17 @@
 node_modules/
 .playwright-cli/
+.browser-check*/
 *.log
 .DS_Store
 Thumbs.db
 .env
 .venv/
 __pycache__/
+
+# 影像化：成片与素材体量大，且可由 videos/work 下的脚本重建
+videos/*.mp4
+videos/work/*.mp3
+videos/work/*.json
+videos/work/*.png
+videos/work/*.jpg
+videos/work/*.wav

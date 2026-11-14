@@ -9,7 +9,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'verification');
 const profile = path.join(root, '.browser-check');
 fs.mkdirSync(out, { recursive: true });
-fs.rmSync(profile, { recursive: true, force: true });
+// 沙箱的安全删除阈值会拦下几百个文件的递归删除；清不掉不影响验收。
+const cleanProfile = () => {
+  try { fs.rmSync(profile, { recursive: true, force: true }); } catch { /* 忽略 */ }
+};
+cleanProfile();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let server, chrome, ws;
 
@@ -136,5 +140,5 @@ try {
   if (chrome && chrome.exitCode == null) chrome.kill();
   if (server && server.exitCode == null) server.kill();
   await sleep(400);
-  fs.rmSync(profile, { recursive: true, force: true });
+  cleanProfile();
 }

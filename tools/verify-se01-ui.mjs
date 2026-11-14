@@ -113,6 +113,11 @@ try {
 
   await evaluate(`document.querySelector('#deck-spirit').value='根脉育苗者';document.querySelector('#deck-spirit').dispatchEvent(new Event('change',{bubbles:true}))`);
   checks.push('灵体切换');
+  const ratioText = await evaluate(`document.querySelector('#deck-ratio').textContent`);
+  assert.ok(/同色/.test(ratioText), `卡组面板应显示同色比例，实际「${ratioText}」`);
+  const pill = await evaluate(`document.querySelector('#deck-status').textContent`);
+  assert.equal(pill, '不合法', '白卡组配绿灵体应判为不合法');
+  checks.push(`同色 60% 拦截：${ratioText} → ${pill}`);
   const deckShot = await cdp.send('Page.captureScreenshot', { format: 'png' });
   fs.writeFileSync(path.join(out, 'se01-deck.png'), Buffer.from(deckShot.data, 'base64'));
 
@@ -124,7 +129,7 @@ try {
 
   await evaluate(`document.querySelector('#deck-a').value=[...document.querySelector('#deck-a').options].find(o=>o.value==='pre:绿色预组'||o.textContent.includes('白色回复')).value`);
   await evaluate(`document.querySelector('#deck-b').value=[...document.querySelector('#deck-b').options].find(o=>o.textContent.includes('红色快攻')).value`);
-  await evaluate(`document.querySelector('#spirit-a').value='根脉育苗者'`);
+  await evaluate(`document.querySelector('#spirit-a').value='圣所守夜人'`);
   await evaluate(`document.querySelector('#spirit-b').value='余烬执火者'`);
   await evaluate(`document.querySelector('#privacy').checked=false;document.querySelector('#privacy').dispatchEvent(new Event('change',{bubbles:true}))`);
   await evaluate(`document.querySelector('#btn-start').click()`);
@@ -216,5 +221,10 @@ try {
   if (chrome && chrome.exitCode == null) chrome.kill();
   if (server && server.exitCode == null) server.kill();
   await sleep(400);
-  fs.rmSync(profile, { recursive: true, force: true });
+  // 沙箱的安全删除阈值会拦下几百个文件的递归删除；临时配置目录清不掉不算验收失败。
+  try {
+    fs.rmSync(profile, { recursive: true, force: true });
+  } catch {
+    console.log(`提示：临时浏览器配置目录未能自动清理，可手动删除 ${profile}`);
+  }
 }

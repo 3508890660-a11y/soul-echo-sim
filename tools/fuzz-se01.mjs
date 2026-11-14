@@ -1,5 +1,5 @@
 // SE01 全卡池随机对局压力测试：验证 148 名目都能被构筑、使用、结算，且不抛未实现错误。
-import { CARD_DATA, SPIRIT_DATA, BY_NAME } from '../js/engine/cards.js';
+import { CARD_DATA, SPIRIT_DATA, BY_NAME, BY_SPIRIT } from '../js/engine/cards.js';
 import { playMatch, legalMoves, applyMove, createGame, ENGINE_INFO } from '../js/engine/rules.js';
 import { TACTICIAN } from '../js/ai/builtin.js';
 
@@ -15,9 +15,17 @@ function rng(seed) {
 const rand = rng(SEED);
 
 const pool = CARD_DATA.map((c) => c.name);
-function randomDeck() {
+const byColor = {};
+for (const c of CARD_DATA) (byColor[c.color] ||= []).push(c.name);
+
+/** 随机卡组：先定灵体，再让 60% 的卡取自灵体同色，满足构筑硬约束。 */
+function randomDeck(spiritName) {
+  const color = BY_SPIRIT.get(spiritName)?.color;
   const picked = new Set();
-  while (picked.size < 10) picked.add(pool[Math.floor(rand() * pool.length)]);
+  const same = [...(byColor[color] || [])];
+  while (picked.size < 6 && same.length) picked.add(same.splice(Math.floor(rand() * same.length), 1)[0]);
+  let guard = 0;
+  while (picked.size < 10 && guard++ < 400) picked.add(pool[Math.floor(rand() * pool.length)]);
   const deck = {};
   for (const name of picked) deck[name] = 4;
   return deck;
@@ -30,15 +38,16 @@ const used = new Set();
 const seen = { enter: 0, activate: 0, trigger: 0, mixed: 0 };
 
 for (let i = 0; i < ROUNDS; i++) {
-  const deckA = randomDeck(), deckB = randomDeck();
+  const spiritA = randomSpirit(), spiritB = randomSpirit();
+  const deckA = randomDeck(spiritA), deckB = randomDeck(spiritB);
   for (const n of Object.keys(deckA)) used.add(n);
   for (const n of Object.keys(deckB)) used.add(n);
   try {
     const r = playMatch({
       deckA, deckB, scriptA: TACTICIAN, scriptB: TACTICIAN,
-      seed: SEED + i, colorA: BY_NAME.get(Object.keys(deckA)[0]).color,
-      colorB: BY_NAME.get(Object.keys(deckB)[0]).color,
-      spiritA: randomSpirit(), spiritB: randomSpirit(),
+      seed: SEED + i, colorA: BY_SPIRIT.get(spiritA).color,
+      colorB: BY_SPIRIT.get(spiritB).color,
+      spiritA, spiritB,
       record: false,
     });
     const bad = r.log.filter((l) => /未实现卡牌效果|非法动作|脚本异常|状态异常/.test(l));

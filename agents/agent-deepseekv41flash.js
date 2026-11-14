@@ -1,559 +1,473 @@
-// 策略名称：不落圣所
-// 选择理由：SE01 里「守护」可以让横置的单位继续阻挡、「自愈」在每次结束步骤把伤害全部抹掉，
-//   两者叠在同一张卡上就等于「打脸的单位同时是永远杀不掉的墙」。长局 15 点生命靠一次性爆发打不完，
-//   而这种结构每回合都在免费产出 1—2 点冲击伤害、同时把对方的攻击全部吃掉，是资源效率最高的形态。
-// 主责模式：grand
+/**
+ * 策略名称：圣所铁壁·二阶冲击
+ * 选择理由：白色灵像的「守护＋自愈＋灵气」让它既能每回合打点、又能在被横置后继续阻挡；
+ *          再用雷铸天兵把每面墙永久抬到冲击 2，长局里免费治疗与生命补充把对手拖垮。
+ * 主责模式：grand
+ */
 
 export const meta = {
   id: 'deepseekv41flash',
   model: 'deepseek v4.1flash',
   modelId: 'deepseek-v4.1-flash',
-  name: '不落圣所',
-  desc: '守护＋自愈的白墙边挡边打脸，用高效单体解牌逐张拔掉对方唯一能挡路的单位，把 15 点生命一点点磨穿。',
+  name: '圣所铁壁·二阶冲击',
+  desc: '守护自愈的白色墙群同时承担打点与阻挡，雷铸天兵把墙抬成冲击 2，靠免费治疗与生命补充赢下长局。',
   primaryMode: 'grand',
   modes: ['standard', 'blitz', 'grand', 'duo'],
 };
 
+/** 卡组：白 45 ＋ 黄 11 ＝ 56 张，白占 80.4%。 */
 export const deck = {
-  圣光聚合体: 4,
-  圣光打击: 4,
-  回复灵光: 2,
-  晨祷侍从: 2,
-  治愈灵光: 3,
-  誓约之环: 2,
+  // ── 白 · 灵像 ──
   光能守护者: 4,
-  圣所守卫: 4,
-  净化仪式: 4,
-  圣所钟塔: 2,
+  圣光战将: 4,
   圣光祷告者: 4,
-  赎罪骑士: 4,
-  圣光战将: 3,
-  白塔裁决者: 3,
-  雷霆打击: 4,
+  圣所守卫: 4,
+  晨祷侍从: 4,
+  圣光聚合体: 4,
+  赎罪骑士: 2,
+  白塔裁决者: 2,
+  // ── 白 · 灵感 ──
+  圣光打击: 4,
+  净化仪式: 4,
+  回复灵光: 3,
+  治愈灵光: 2,
+  圣疗: 2,
+  // ── 白 · 灵性 ──
+  圣所钟塔: 2,
+  // ── 黄 · 支援 ──
   雷铸天兵: 4,
-  力量共鸣: 2,
-  巨石守卫: 3,
-  混沌冲击: 2,
+  雷霆打击: 4,
+  力量共鸣: 3,
 };
 
-export const spirit = '根脉育苗者';
+export const spirit = '圣所守夜人';
 export const color = '白';
 
-/* ───────────── 静态知识表（只读，不含跨局状态） ───────────── */
+/* ───────────────────────────── 打分基础件（全部为纯函数） ───────────────────────────── */
 
-const DMG_CARDS = {
-  圣光打击: 5000, 雷霆打击: 2000, 混沌打击: 2000, 爆燃: 1000,
-  奥术飞弹: 2000, 连锁雷鸣: 3000, 雷鸣余波: 2000,
-};
-const DESTROY_CARDS = ['净化仪式', '荒原法则', '分解射线', '自杀式袭击', '腐朽王座'];
-const DIRECT_CARDS = { 火球术: 2, 焚尽: 3, 混沌冲击: 1 };
-
-// 这张牌「不该被当成灵质烧掉」的程度（0—70）
-const KEEP = {
-  圣光聚合体: 4, 晨祷侍从: 14, 回复灵光: 12, 治愈灵光: 12, 誓约之环: 16,
-  光能守护者: 42, 圣所守卫: 44, 净化仪式: 46, 圣所钟塔: 30,
-  圣光祷告者: 48, 赎罪骑士: 44, 圣光战将: 68, 白塔裁决者: 66,
-  圣光打击: 58, 雷霆打击: 40, 雷铸天兵: 34, 力量共鸣: 20,
-  共鸣武士: 30, 巨石守卫: 54, 混沌冲击: 8, 混沌打击: 28,
+const KW_SCORE = {
+  守护: 2.2, 自愈: 1.5, 灵气: 1.0, 威慑: 1.2, 敏捷: 0.6, 预制: 0.7,
+  质密: 0.2, 诱饵: 0.3, 先攻: 0.9, 践踏: 0.4, 超冲击: 1.4, 碾压: 0.4, 回响: 0.3,
 };
 
-function kw(c, k) { return !!c && Array.isArray(c.keywords) && c.keywords.indexOf(k) >= 0; }
-function remHp(c) { return !c ? 0 : Math.max(0, (c.hp || 0) - (c.damage || 0)); }
-function byUid(list, uid) {
-  if (!Array.isArray(list)) return null;
-  for (let i = 0; i < list.length; i++) if (list[i] && list[i].uid === uid) return list[i];
-  return null;
-}
-function pickPass(moves) {
-  for (let i = 0; i < moves.length; i++) if (moves[i] && moves[i].type === 'pass') return moves[i];
-  return moves[moves.length - 1];
-}
-function isUnit(c) { return !!c && (c.type === '灵像' || c.token); }
-
-/** 单位在场上的价值（用于「杀谁」与「死谁」的换算）。 */
-function unitValue(c) {
+/** 卡面价值：攻击/生命/冲击 + 关键词权重。 */
+function val(c) {
   if (!c) return 0;
-  let v = 18 + (c.atk || 0) / 260 + (c.imp || 0) * 26 + (c.hp || 0) / 620;
-  if (kw(c, '守护')) v += 12;
-  if (kw(c, '自愈')) v += 16;
-  if (kw(c, '灵气')) v += 6;
-  if (kw(c, '威慑')) v += 6;
-  if (kw(c, '敏捷')) v += 8;
-  if (kw(c, '预制')) v += 8;
-  if (kw(c, '超冲击')) v += 10;
-  if (kw(c, '践踏')) v += 6;
-  if (c.token) v *= 0.45;
-  if (c.type === '灵性') v *= 0.7;
+  let k = 0;
+  for (const w of c.keywords || []) k += KW_SCORE[w] || 0;
+  return (c.atk || 0) / 1000 + (c.hp || 0) / 2000 + (c.imp || 0) * 2.5 + k;
+}
+
+function remainHp(c) { return c ? Math.max(0, (c.hp || 0) - (c.damage || 0)) : 0; }
+
+function byUid(list, uid) {
+  if (!Array.isArray(list)) return undefined;
+  for (const c of list) if (c && c.uid === uid) return c;
+  return undefined;
+}
+
+function untappedEssence(view) {
+  let n = 0;
+  for (const c of view.me.essence || []) if (!c.tapped) n++;
+  return n;
+}
+
+function availMana(view) {
+  let n = untappedEssence(view);
+  const m = view.me.mana || {};
+  for (const k of Object.keys(m)) n += Number(m[k]) || 0;
+  return n;
+}
+
+function myUnits(view) {
+  return (view.me.field || []).filter((c) => c && c.type === '灵像');
+}
+
+function oppUnits(view) {
+  return (view.opp.field || []).filter((c) => c && c.type === '灵像');
+}
+
+/** 一对一战斗结果（考虑先攻）。 */
+function duel(a, b) {
+  const aAtk = a.atk || 0, bAtk = b.atk || 0;
+  const aHp = remainHp(a), bHp = remainHp(b);
+  const aFirst = (a.keywords || []).includes('先攻');
+  const bFirst = (b.keywords || []).includes('先攻');
+  let aDies = false, bDies = false;
+  if (aFirst && !bFirst) { bDies = aAtk >= bHp; if (!bDies) aDies = bAtk >= aHp; }
+  else if (bFirst && !aFirst) { aDies = bAtk >= aHp; if (!aDies) bDies = aAtk >= bHp; }
+  else { bDies = aAtk >= bHp; aDies = bAtk >= aHp; }
+  return { aDies, bDies, aAtk, bAtk, aHp, bHp };
+}
+
+/** 单位能否作为阻挡者（与引擎 legalMoves 的过滤器一致）。 */
+function blockable(b, attacker) {
+  if (!b || b.type !== '灵像') return false;
+  const k = b.keywords || [];
+  const guard = k.includes('守护');
+  if (b.tapped && !guard) return false;
+  if ((attacker.keywords || []).includes('敏捷') && !k.includes('敏捷')) {
+    if (!(b.tapped && guard)) return false;
+  }
+  return true;
+}
+
+/** 对手当前可能的阻挡者。 */
+function possibleBlockers(view, attacker) {
+  return oppUnits(view).filter((b) => blockable(b, attacker));
+}
+
+/** 对手用 b 阻挡我 a 是否划算（他们的视角）。 */
+function theirBlockGain(view, a, b, prevented) {
+  const r = duel(a, b);
+  return prevented + (r.aDies ? val(a) * 0.85 : 0) - (r.bDies ? val(b) : 0);
+}
+
+/* ───────────────────────────── 灵体检视 ───────────────────────────── */
+
+function chooseInspect(view, moves, pass) {
+  const take = moves.find((m) => m.type === 'inspectTake');
+  // 两种选择都把卡放进手牌；揭示只是「付 1 点同色灵能换一次 ST/CT 触发」，
+  // 只有在余费充裕、触发确实有用时才付。
+  const reveal = moves.find((m) => m.type === 'inspectReveal');
+  if (!reveal) return take || pass;
+  const card = view.inspect.card || {};
+  const trig = String(card.trigger || '');
+  const useful = trig.includes('CT') || trig.includes('MT') || trig.includes('ST');
+  if (useful && availMana(view) >= 4) return reveal;
+  return take || pass;
+}
+
+/* ───────────────────────────── 宣告攻击 ───────────────────────────── */
+
+function chooseAttack(view, moves, pass) {
+  const atks = moves.filter((m) => m.type === 'attack');
+  if (!atks.length) return pass;
+  const lifeWeight = (4.5 + Math.max(0, 12 - (view.opp.life || 0)) * 0.55)
+    * (view.mode === 'blitz' ? 1.35 : view.mode === 'grand' ? 1 : 1.1);
+  let best = null, bestScore = 0.8;
+  for (const m of atks) {
+    const a = byUid(view.me.field, m.uid);
+    if (!a) continue;
+    const cands = possibleBlockers(view, a);
+    let score = 0;
+    if (m.target === 'spirit') {
+      score = attackFaceScore(view, a, cands, lifeWeight);
+    } else {
+      const t = byUid(view.opp.field, m.target);
+      if (!t) continue;
+      score = attackUnitScore(view, a, t, cands, lifeWeight);
+    }
+    if ((a.keywords || []).includes('守护')) score += 0.8; // 守护打完还能挡，代价更低
+    if (score > bestScore) { bestScore = score; best = m; }
+  }
+  return best || pass;
+}
+
+function attackFaceScore(view, a, cands, lifeWeight) {
+  const imp = a.imp || 0;
+  if (imp <= 0) return 0;
+  const lethal = imp >= (view.opp.life || 0) ? 80 : 0;
+  let bestGain = -1e9, bestB = null;
+  for (const b of cands) {
+    const g = theirBlockGain(view, a, b, imp * lifeWeight * 0.9);
+    if (g > bestGain) { bestGain = g; bestB = b; }
+  }
+  if (bestB && bestGain > 0) {
+    const r = duel(a, bestB);
+    const chip = Math.min(r.aAtk, r.bHp) / 1000 * 0.8;
+    return chip + (r.bDies ? val(bestB) * 0.85 : 0) - (r.aDies ? val(a) : 0) - 0.6;
+  }
+  return imp * lifeWeight + lethal;
+}
+
+function attackUnitScore(view, a, t, cands, lifeWeight) {
+  const tHp = remainHp(t);
+  const chip = Math.min(a.atk || 0, tHp);
+  const prevented = chip / 1000 * 1.1 + ((a.atk || 0) >= tHp ? val(t) : 0);
+  let bestGain = -1e9, bestB = null;
+  for (const b of cands) {
+    const g = theirBlockGain(view, a, b, prevented * 0.95);
+    if (g > bestGain) { bestGain = g; bestB = b; }
+  }
+  if (bestB && bestGain > 0) {
+    const r = duel(a, bestB);
+    const spill = Math.min(r.aAtk, r.bHp) / 1000 * 0.5;
+    return spill + (r.bDies ? val(bestB) * 0.85 : 0) - (r.aDies ? val(a) : 0) - 0.7;
+  }
+  // 打对方灵性：拆掉持续收益同样值钱
+  const bonus = t.type === '灵性' ? 3 : 0;
+  return prevented + bonus;
+}
+
+/* ───────────────────────────── 支援与阻挡 ───────────────────────────── */
+
+function chooseSupport(view, moves, pass) {
+  const sup = moves.find((m) => m.type === 'supportSpirit');
+  if (!sup) return pass;
+  const a = byUid(view.me.field, view.combat ? view.combat.attackerUid : null);
+  if (!a) return pass;
+  if (view.combat && view.combat.target === 'spirit') return sup;
+  // 打单位时，只有 +1000 能换来击杀才值得
+  const t = byUid(view.opp.field, view.combat ? view.combat.target : null);
+  if (t && (a.atk || 0) + 1000 >= remainHp(t) && (a.atk || 0) < remainHp(t)) return sup;
+  return pass;
+}
+
+function chooseBlocker(view, moves, pass) {
+  const chosen = (view.combat && view.combat.blockers) || [];
+  // 阻挡是切换式动作：已宣告的单位必须从候选里剔除，否则会宣告—取消死循环。
+  const fresh = moves.filter((m) => m.type !== 'block' || !chosen.includes(m.uid));
+  const blocks = fresh.filter((m) => m.type === 'block');
+  if (!blocks.length) return pass;
+  const attacker = byUid(view.opp.field, view.combat ? view.combat.attackerUid : null);
+  if (!attacker) return pass;
+  const target = view.combat ? view.combat.target : null;
+  const lifeWeight = 4.5 + Math.max(0, 12 - (view.me.life || 0)) * 0.9;
+
+  let best = null, bestScore = 0;
+  for (const m of blocks) {
+    const b = byUid(view.me.field, m.uid);
+    if (!b) continue;
+    const r = duel(attacker, b);
+    let score;
+    if (!chosen.length) {
+      let prevented = 0;
+      if (target === 'spirit') prevented = (attacker.imp || 0) * lifeWeight;
+      else {
+        const tt = byUid(view.me.field, target);
+        if (tt) prevented = Math.min(attacker.atk || 0, remainHp(tt)) / 1000 * 1.2 + ((attacker.atk || 0) >= remainHp(tt) ? val(tt) : 0);
+      }
+      score = prevented + (r.aDies ? val(attacker) * 0.9 : 0) - (r.bDies ? val(b) : 0) - 0.4;
+    } else {
+      // 第二个阻挡者只在「能补掉攻击者且自己不死」时才加
+      score = (r.aDies ? 3 : 0) - (r.bDies ? val(b) : 0) - 1.2;
+    }
+    if (score > bestScore) { bestScore = score; best = m; }
+  }
+  if (best) return best;
+  return pass;
+}
+
+function chooseOrder(view, moves, pass) {
+  const orders = moves.filter((m) => m.type === 'orderBlockers');
+  if (!orders.length) return pass;
+  const blockers = (view.combat && view.combat.blockers) || [];
+  const hpOf = (uid) => {
+    const c = byUid(view.me.field, uid);
+    return c ? remainHp(c) : 0;
+  };
+  const want = [...blockers].sort((x, y) => hpOf(y) - hpOf(x));
+  const key = want.join(',');
+  for (const m of orders) if (m.order.join(',') === key) return m;
+  return orders[0];
+}
+
+/* ───────────────────────────── 主要阶段 ───────────────────────────── */
+
+const HAND_VALUE = {
+  光能守护者: 8.5, 圣光战将: 12, 圣光祷告者: 9.5, 圣所守卫: 8.5, 晨祷侍从: 6,
+  圣光聚合体: 3.5, 赎罪骑士: 8, 白塔裁决者: 8,
+  圣光打击: 7, 净化仪式: 8, 回复灵光: 4, 治愈灵光: 4, 圣疗: 4.5, 圣所钟塔: 5,
+  雷铸天兵: 8, 雷霆打击: 6.5, 力量共鸣: 5,
+};
+
+function handValue(c) {
+  if (!c) return 0;
+  let v = HAND_VALUE[c.name];
+  if (v === undefined) v = 4;
+  // 高费卡早期是死牌，做灵质的代价更低
+  if (c.cost && c.cost.total >= 6) v -= 1.5;
   return v;
 }
 
-function boardValue(list) {
-  let s = 0;
-  if (!Array.isArray(list)) return 0;
-  for (let i = 0; i < list.length; i++) s += unitValue(list[i]);
-  return s;
-}
+function chooseMain(view, moves, pass) {
+  const myTurn = view.active === view.me.idx;
+  const isMain = view.phase === 'main1' || view.phase === 'main2';
+  const chained = (view.chain || []).length > 0;
+  if (!myTurn || !isMain || chained) return pass;
 
-/** 单挑交换预测：a 攻击 b。返回 b 是否死、a 是否死。 */
-function exchange(a, b) {
-  const aHp = remHp(a), bHp = remHp(b);
-  let bDies = (a.atk || 0) >= bHp;
-  let aDies = (b.atk || 0) >= aHp;
-  const aFirst = kw(a, '先攻'), bFirst = kw(b, '先攻');
-  if (aFirst && !bFirst && bDies) aDies = false;
-  if (bFirst && !aFirst && aDies) bDies = false;
-  return { defDies: bDies, atkDies: aDies };
-}
+  const avail = availMana(view);
+  const plays = moves.filter((m) => m.type === 'play');
+  const sets = moves.filter((m) => m.type === 'setEssence');
+  const abilities = moves.filter((m) => m.type === 'ability');
+  const specials = moves.filter((m) => m.type === 'spiritSpecial');
+  const draw = moves.find((m) => m.type === 'spiritDraw');
 
-/** 对方能合法阻挡该攻击者的单位。 */
-function eligibleBlockers(view, attacker) {
-  const out = [];
-  const list = view.opp.field || [];
-  const agile = kw(attacker, '敏捷');
-  for (let i = 0; i < list.length; i++) {
-    const c = list[i];
-    if (!c || c.type !== '灵像') continue;
-    const guard = kw(c, '守护');
-    if (c.tapped && !guard) continue;
-    if (agile && !kw(c, '敏捷') && !(c.tapped && guard)) continue;
-    out.push(c);
+  let bestPlay = null, bestScore = 0;
+  for (const m of plays) {
+    const s = scorePlay(view, m, avail);
+    if (s > bestScore) { bestScore = s; bestPlay = m; }
   }
-  return out;
-}
 
-/* ───────────── 主阶段：出牌打分 ───────────── */
+  // 1) 有明确高价值动作先做
+  if (bestPlay && bestScore >= 7.5) return bestPlay;
 
-function scoreUnitPlay(view, card) {
-  const cost = (card.cost && card.cost.total) || 0;
-  let s = 118 + (card.impact || 0) * 38 + (card.attack || 0) / 230 + (card.vitality || 0) / 520;
-  if (kw(card, '守护')) s += 22;
-  if (kw(card, '自愈')) s += 26;
-  if (kw(card, '灵气')) s += 10;
-  if (kw(card, '威慑')) s += 8;
-  if (kw(card, '敏捷')) s += 10;
-  if (kw(card, '预制')) s += 12;
-  if (kw(card, '超冲击')) s += 10;
-  if (kw(card, '质密')) s -= 8;
-  s += Math.max(0, 6 - cost) * 5;
-  // 场上已经有墙时，继续堆墙的价值略降，优先补「能打脸的东西」
-  if (view.me.field.length >= 4) s -= 12;
-  return s;
-}
+  // 2) 灵体检视是白拿一张牌，先拿；牌库见底时改留灵体给治疗
+  if (draw && (view.me.hand || []).length < 6 && (view.me.deck || 0) > 6) return draw;
+  if (specials.length && needHeal(view) && (view.me.hand || []).length >= 5) return specials[0];
 
-function scorePillarPlay(view, card) {
-  let s = 128;
-  if (view.me.field.length >= 2) s += 28;
-  if (view.me.field.length === 0) s -= 30;
-  if (card.name === '圣所钟塔') s += 14;
-  return s;
-}
-
-function scoreDamagePlay(view, m, amount) {
-  const targets = m.targets || [];
-  let best = -99;
-  const myBoard = boardValue(view.me.field);
-  const oppBoard = boardValue(view.opp.field);
-  const pressure = oppBoard > myBoard * 1.15 ? 42 : 0;
-  const atkUid = view.combat ? view.combat.attackerUid : null;
-  for (let i = 0; i < targets.length; i++) {
-    const uid = targets[i];
-    const t = byUid(view.opp.field, uid);
-    if (!t) continue;
-    const rem = remHp(t);
-    let v;
-    if (amount >= rem) {
-      v = 52 + unitValue(t) * 0.78 + pressure;
-      if ((t.imp || 0) >= 2) v += 26;
-      if (uid === atkUid) v += 40;
-      if (isUnit(t) && t.type === '灵性') v += 10;
-    } else {
-      v = 6 + Math.min(amount, rem) / 380;
-      if (uid === atkUid) v += 12;
-    }
-    if (v > best) best = v;
+  // 3) 铺灵质：费用是全局最硬的限制，能铺就铺
+  if (sets.length && rampWanted(view)) {
+    const pick = pickEssenceCard(view);
+    const m = pick ? sets.find((x) => x.uid === pick.uid) : sets[0];
+    if (m) return m;
   }
-  return best;
-}
 
-function scoreDestroyPlay(view, m) {
-  const targets = m.targets || [];
-  let best = -99;
-  const myBoard = boardValue(view.me.field);
-  const oppBoard = boardValue(view.opp.field);
-  const pressure = oppBoard > myBoard * 1.15 ? 40 : 0;
-  for (let i = 0; i < targets.length; i++) {
-    const uid = targets[i];
-    const t = byUid(view.opp.field, uid);
-    if (!t) continue;
-    let v = 62 + unitValue(t) * 0.82 + pressure;
-    if ((t.imp || 0) >= 2) v += 26;
-    if (kw(t, '自愈')) v += 12;
-    if (v > best) best = v;
+  // 4) 其余动作
+  if (bestPlay) return bestPlay;
+  if (draw && (view.me.deck || 0) > 4) return draw;
+  if (specials.length && needHeal(view)) return specials[0];
+
+  // 5) 质密启动（把灵质换成生命），只在快死时才做
+  if (abilities.length) {
+    const life = view.me.life || 0;
+    if (life <= 2) return abilities[0];
   }
-  return best;
+  return pass;
 }
 
-function scoreDirectPlay(view, m, amount) {
-  const life = view.opp.life || 0;
-  if (amount > life) return 9000;
-  let s = 26 + amount * 20;
-  if (life <= amount + 3) s += 18;
-  if (!view.opp.field.length) s += 14;
-  return s;
-}
-
-function scorePumpPlay(view, m) {
-  const targets = m.targets || [];
-  let best = -99;
-  for (let i = 0; i < targets.length; i++) {
-    const t = byUid(view.me.field, targets[i]);
-    if (!t) continue;
-    const surv = remHp(t);
-    let s = 34 + Math.min(surv, 7000) / 220;
-    if (kw(t, '自愈')) s += 38;
-    if (kw(t, '守护')) s += 14;
-    if ((t.imp || 0) >= 1) s += 8;
-    if (s > best) best = s;
-  }
-  return best;
-}
-
-function scoreBuffAllPlay(view) {
-  const n = view.me.field.length;
-  if (n < 2) return 22;
-  return 46 + n * 17;
-}
-
-function scoreHealPlay(view, m, amount) {
-  const targets = m.targets || [];
-  let best = -99;
-  for (let i = 0; i < targets.length; i++) {
-    const t = byUid(view.me.field, targets[i]);
-    if (!t) continue;
-    const dmg = t.damage || 0;
-    if (dmg <= 0) continue;
-    const heal = Math.min(dmg, amount);
-    let s = 18 + heal / 420;
-    if (remHp(t) <= 1500) s += 34;
-    if (kw(t, '守护') || kw(t, '自愈')) s += 10;
-    if (s > best) best = s;
-  }
-  return best;
-}
-
-function scorePlay(view, m, isResp) {
-  const card = byUid(view.me.hand, m.uid);
-  if (!card) return -99;
-  const name = card.name;
-  if (card.type === '灵像') return isResp ? -99 : scoreUnitPlay(view, card);
-  if (card.type === '灵性') return isResp ? -99 : scorePillarPlay(view, card);
-  if (DMG_CARDS[name] != null) return scoreDamagePlay(view, m, DMG_CARDS[name]);
-  if (DESTROY_CARDS.indexOf(name) >= 0) return scoreDestroyPlay(view, m);
-  if (DIRECT_CARDS[name] != null) return scoreDirectPlay(view, m, DIRECT_CARDS[name]);
-  if (name === '雷铸天兵') return scorePumpPlay(view, m);
-  if (name === '力量共鸣' || name === '生命共鸣') return scoreBuffAllPlay(view);
-  if (name === '回复灵光') return scoreHealPlay(view, m, 3000);
-  if (name === '圣疗') return scoreHealPlay(view, m, 5000);
-  if (name === '治愈灵光') return 34;
-  if (name === '智慧之光') return 46;
-  return 8;
-}
-
-/* ───────────── 设灵质 ───────────── */
-
-function pipsOf(card) {
-  const c = (card && card.cost) || {};
-  if (c.colors && !c.colors.__single) return c.colors;
-  return c.colored > 0 ? { [card.color]: c.colored } : {};
-}
-
-function neededColors(view, skipUid) {
-  const need = {};
-  const hand = view.me.hand || [];
-  for (let i = 0; i < hand.length; i++) {
-    const c = hand[i];
-    if (c.uid === skipUid) continue;
-    const p = pipsOf(c);
-    for (const k in p) need[k] = (need[k] || 0) + p[k];
+function needHeal(view) {
+  const units = myUnits(view);
+  let need = false;
+  for (const u of units) {
+    if ((u.damage || 0) >= 2000 && val(u) >= 7) need = true;
   }
   return need;
 }
 
-function scoreSetEssence(view, m) {
-  if ((view.me.handCount || 0) <= 2) return -1;
-  const card = byUid(view.me.hand, m.uid);
-  if (!card) return -1;
+function rampWanted(view) {
   const essence = (view.me.essence || []).length;
-  if (essence >= 10) return -1;
-  let s = 142;
-  if (essence <= 3) s += 58;
-  else if (essence <= 5) s += 32;
-  else if (essence >= 8) s -= 46;
-  const keep = KEEP[card.name] != null ? KEEP[card.name] : 25;
-  s -= keep * 0.55;
-  const need = neededColors(view, m.uid);
-  if (card.color && need[card.color]) s += 18;
-  // 造出一块自己用不上的颜色，比少一块地更伤：白色 3 点色费全靠灵质凑
-  else if (card.color !== '灰') s -= 34;
-  if (card.color === '灰') s -= 22;
-  return s;
-}
-
-function scoreAbility(view, m) {
-  // 本卡组只有圣光聚合体的质密（横置把自身放到生命卡组顶 = 换 1 点生命）
-  const essence = (view.me.essence || []).length;
-  if (essence >= 8 && (view.me.life || 0) <= 8) return 30;
-  return -1;
-}
-
-function scoreSpiritSpecial(view, m) {
-  // 根脉育苗者：横置 → 把「手牌中最便宜的一张」置入灵质区并抽 1 张。
-  // 引擎替我们挑最便宜的那张，所以先算清它到底是弃材还是关键牌。
-  if (m.name !== '根脉育苗者') return -1;
-  const hand = view.me.hand || [];
-  if (hand.length < 3) return -1;
-  const essence = (view.me.essence || []).length;
-  if (essence >= 10) return -1;
-  if ((view.me.deck || 0) <= 5 && hand.length >= 3) return -1; // 见底时别再把牌库往墓里送
-  let cheap = null;
-  for (let i = 0; i < hand.length; i++) {
-    const c = hand[i];
-    if (!cheap || ((c.cost && c.cost.total) || 0) < ((cheap.cost && cheap.cost.total) || 0)) cheap = c;
+  const hand = (view.me.hand || []).length;
+  if (essence >= 7) return false;
+  if (hand <= 2) return false;
+  // 费用是硬限制：前 6 点灵质优先铺满，之后按手牌厚度决定
+  if (essence <= 5) return hand >= 3;
+  const avail = availMana(view);
+  for (const c of view.me.hand || []) {
+    if (c.cost && c.cost.total === avail + 1 && handValue(c) >= 7) return true;
   }
-  if (!cheap) return -1;
-  const keep = KEEP[cheap.name] != null ? KEEP[cheap.name] : 25;
-  if (hand.length >= 3 && keep <= 20) return 174;
-  if (hand.length >= 5 && keep <= 40) return 148;
-  if (hand.length >= 7 && keep <= 55) return 132;
-  return -1;
+  return hand >= 5;
 }
 
-function scoreSpiritDraw(view, m) {
-  const hand = view.me.handCount || 0;
-  if ((view.me.deck || 0) <= 5 && hand >= 3) return -1;
-  if (hand <= 3) return 130;
-  if (hand <= 5) return 82;
-  return 34;
+function pickEssenceCard(view) {
+  const hand = (view.me.hand || []).slice();
+  if (!hand.length) return null;
+  const yellow = (view.me.essence || []).filter((c) => c && c.color === '黄').length;
+  const eCount = (view.me.essence || []).length;
+  // 中局补 1—2 张黄色灵质以解锁黄牌；其余优先铺白色，保证 4—5 点白费能付。
+  let prefer = '白';
+  if (yellow < 1 && eCount >= 4) prefer = '黄';
+  else if (yellow < 2 && eCount >= 6) prefer = '黄';
+  let pool = prefer === '黄'
+    ? hand.filter((c) => c.color === '黄' && handValue(c) <= 6.5)
+    : hand.filter((c) => c.color === '白');
+  if (!pool.length) pool = hand.filter((c) => handValue(c) < 7.5);
+  if (!pool.length) pool = hand;
+  pool.sort((a, b) => handValue(a) - handValue(b));
+  return pool[0];
 }
 
-/* ───────────── 检视（灵体找牌） ───────────── */
-
-function chooseInspect(view, moves) {
-  const info = view.inspect;
-  const card = info && info.card;
-  if (!card) return null;
-  let take = null, reveal = null;
-  for (let i = 0; i < moves.length; i++) {
-    if (moves[i].type === 'inspectTake') take = moves[i];
-    if (moves[i].type === 'inspectReveal') reveal = moves[i];
-  }
-  if (!take) return null;
-  if (reveal && card.trigger && card.trigger !== '—') {
-    // 揭示只多付 1 点白色灵能换来一次触发；有剩费才做
-    let spare = 0;
-    const ess = view.me.essence || [];
-    for (let i = 0; i < ess.length; i++) if (!ess[i].tapped) spare++;
-    const mana = view.me.mana || {};
-    for (const k in mana) spare += mana[k] || 0;
-    if (spare >= 1) return reveal;
-  }
-  return take;
-}
-
-/* ───────────── 战斗 ───────────── */
-
-function scoreBlock(view, m) {
-  const cb = view.combat;
-  if (!cb) return -99;
-  if (cb.blockers && cb.blockers.indexOf(m.uid) >= 0) return -99; // 不取消已有阻挡
-  if (cb.blockers && cb.blockers.length >= 1) return -99;         // 只用一个阻挡者
-  const my = byUid(view.me.field, m.uid);
-  const atk = byUid(view.opp.field, cb.attackerUid);
-  if (!my || !atk) return -99;
-  const ex = exchange(atk, my);
-  const iKill = ex.defDies;
-  const iDie = ex.atkDies;
+function scorePlay(view, m, avail) {
+  const c = byUid(view.me.hand, m.uid);
+  if (!c) return 0;
+  const name = c.name;
+  const t0 = (m.targets || [])[0];
+  const mine = byUid(view.me.field, t0);
+  const foe = byUid(view.opp.field, t0);
+  const units = myUnits(view).length;
+  const cost = c.cost ? c.cost.total : 1;
   let s = 0;
-  if (cb.target === 'spirit') s += (atk.imp || 0) * 45;
-  else s += 16;
-  if (iKill) s += unitValue(atk) * 0.9;
-  if (iDie) s -= unitValue(my) * 1.0;
-  if (kw(my, '自愈')) s += 20;
-  if (kw(my, '守护')) s += 6;
-  if (cb.target === 'spirit' && (atk.imp || 0) >= (view.me.life || 0)) s += 5000;
-  return s;
-}
 
-function chooseOrder(view, moves) {
-  // 引擎按给定顺序把攻击力逐点灌给阻挡者（每个最多灌到致命），
-  // 所以直接逐种顺序模拟一遍，取「杀掉的价值最高」的那一种。
-  const cb = view.combat;
-  const atk = cb ? byUid(view.me.field, cb.attackerUid) : null;
-  const atkPower = atk ? (atk.atk || 0) : 0;
-  let best = null, bestScore = -1e9;
-  for (let i = 0; i < moves.length; i++) {
-    const m = moves[i];
-    if (m.type !== 'orderBlockers' || !Array.isArray(m.order)) continue;
-    let remaining = atkPower;
-    let score = 0;
-    for (let j = 0; j < m.order.length; j++) {
-      const b = byUid(view.opp.field, m.order[j]);
-      if (!b) continue;
-      const hp = remHp(b);
-      const dealt = Math.min(hp, remaining);
-      remaining -= dealt;
-      if (dealt >= hp) score += unitValue(b) + 10;
-      else if (dealt > 0) score += dealt / 200;
+  switch (name) {
+    // ── 黄：把墙永久抬成冲击 2 ──
+    case '雷铸天兵': {
+      if (!mine) return 0;
+      s = 4.5 + ((mine.imp || 0) < 2 ? 5 : 0) + ((mine.keywords || []).includes('守护') ? 1.5 : 0)
+        + (remainHp(mine) >= 4000 ? 1 : 0) + (mine.atk || 0) / 4000;
+      break;
     }
-    if (score > bestScore) { bestScore = score; best = m; }
-  }
-  return best;
-}
-
-function scoreAttack(view, m) {
-  const me = byUid(view.me.field, m.uid);
-  if (!me) return -99;
-  const imp = me.imp || 0;
-  const atk = me.atk || 0;
-  const oppLife = view.opp.life || 0;
-
-  if (m.target === 'spirit') {
-    if (imp > oppLife) return 9000;
-    if (imp <= 0) return -1;
-    let s = 34 + imp * 40;
-    const blockers = eligibleBlockers(view, me);
-    if (!blockers.length) s += 52;
-    else {
-      let worst = 0;
-      for (let i = 0; i < blockers.length; i++) {
-        const ex = exchange(me, blockers[i]);
-        if (ex.atkDies && !ex.defDies) worst = Math.max(worst, unitValue(me));
-        else if (ex.atkDies && ex.defDies) worst = Math.max(worst, unitValue(me) - unitValue(blockers[i]) * 0.8);
+    case '力量共鸣': {
+      s = 2 + 1.15 * units;
+      break;
+    }
+    case '雷霆打击': {
+      if (!foe) return 0;
+      const rem = remainHp(foe);
+      s = 2000 >= rem ? val(foe) * 1.25 : Math.min(2000, rem) / 1000 * 0.75;
+      break;
+    }
+    // ── 白 ──
+    case '圣光打击': {
+      if (!foe) return 0;
+      const rem = remainHp(foe);
+      s = 5000 >= rem ? val(foe) * 1.4 : Math.min(5000, rem) / 1000 * 0.85;
+      break;
+    }
+    case '净化仪式': {
+      const ts = (m.targets || []).map((u) => byUid(view.opp.field, u)).filter(Boolean);
+      if (!ts.length) return 0;
+      for (const t of ts) s += val(t) * 1.25;
+      break;
+    }
+    case '回复灵光': {
+      if (!mine || !(mine.damage > 0)) return 0;
+      s = Math.min(3000, mine.damage) / 1000 * 0.9;
+      break;
+    }
+    case '圣疗': {
+      if (!mine || !(mine.damage > 0)) return 0;
+      s = Math.min(5000, mine.damage) / 1000 * 0.8;
+      break;
+    }
+    case '治愈灵光': {
+      s = 3 + ((view.me.life || 0) <= 8 ? 2.5 : 0);
+      break;
+    }
+    case '圣所钟塔': {
+      s = 2.2 + 0.55 * units + (view.me.life <= 8 ? 1.5 : 0);
+      break;
+    }
+    case '圣光聚合体': {
+      s = val(c) + 0.5;
+      break;
+    }
+    default: {
+      // 其余灵像
+      if (c.type !== '灵像') { s = 1.5; break; }
+      s = val(c) * 0.95;
+      if ((c.keywords || []).includes('守护')) s += 1.2;
+      if (name === '圣光战将' && oppUnits(view).length >= 2) s += 4;   // 序曲拆 2 张
+      if (name === '白塔裁决者') {
+        const tapped = oppUnits(view).filter((u) => u.tapped).length;
+        s += tapped ? 3 : -1.5;
       }
-      s -= worst * 0.75;
-      if (kw(me, '超冲击')) s += 26;
-      if (kw(me, '践踏')) s += 12;
+      if (units >= 4) s -= 2.5;   // 场上已满，别再无脑铺
+      if (cost >= 5) s += 1;
+      break;
     }
-    if (kw(me, '自愈')) s += 16;
-    if (kw(me, '守护')) s += 10;
-    if (!kw(me, '守护') && !kw(me, '自愈') && blockers.length) s -= 14;
-    return s;
   }
 
-  const t = byUid(view.opp.field, m.target);
-  if (!t) return -99;
-  const rem = remHp(t);
-  if (rem <= 0) return -99;
-  const ex = exchange(me, t);
-  let s = 8;
-  if (atk >= rem) {
-    s += 36 + unitValue(t) * 0.85;
-    if (t.type === '灵性') s += 12;
-    if ((t.imp || 0) >= 2) s += 18;
-  } else {
-    s += Math.min(atk, rem) / 320;
-  }
-  if (ex.atkDies) s -= unitValue(me) * 0.85;
-  if (kw(me, '自愈')) s += 12;
-  if (kw(me, '先攻') && atk >= rem) s += 14;
+  // 尽量把当期费用花干净
+  if (s > 0) s += Math.min(cost, 4) * 0.35;
   return s;
 }
 
-function scoreSupport(view) {
-  const cb = view.combat;
-  if (!cb) return -1;
-  const me = byUid(view.me.field, cb.attackerUid);
-  if (!me) return -1;
-  const imp = (me.imp || 0) + 1;
-  if (cb.target === 'spirit') {
-    if (imp > (view.opp.life || 0)) return 900;
-    return 34;
-  }
-  const t = byUid(view.opp.field, cb.target);
-  if (t && (me.atk || 0) + 1000 >= remHp(t) && (me.atk || 0) < remHp(t)) return 40;
-  return -1;
-}
-
-/* ───────────── 入口 ───────────── */
-
-function bestScored(view, moves, scorer, threshold) {
-  let best = null, bs = threshold;
-  for (let i = 0; i < moves.length; i++) {
-    const m = moves[i];
-    if (!m || m.type === 'pass') continue;
-    let s;
-    try { s = scorer(view, m); } catch (e) { s = -99; }
-    if (typeof s === 'number' && s > bs) { bs = s; best = m; }
-  }
-  return best;
-}
+/* ───────────────────────────── 入口 ───────────────────────────── */
 
 export function choose(view, moves) {
   try {
-    if (!Array.isArray(moves) || moves.length === 0) return { type: 'pass' };
-    const pass = pickPass(moves);
-    if (!view || !view.me) return pass;
-
-    if (view.inspect) {
-      const m = chooseInspect(view, moves);
-      return m || pass;
-    }
-
-    const cb = view.combat;
-    if (cb) {
-      if (cb.stage === 'blockers') {
-        return bestScored(view, moves, scoreBlock, 24) || pass;
-      }
-      if (cb.stage === 'order') {
-        return chooseOrder(view, moves) || pass;
-      }
-      if (cb.stage === 'attackers') {
-        if (view.active !== view.me.idx) return pass;
-        return bestScored(view, moves, scoreAttack, 30) || pass;
-      }
-      if (cb.stage === 'support') {
-        if (view.active !== view.me.idx) return pass;
-        const s = scoreSupport(view);
-        if (s > 0) {
-          for (let i = 0; i < moves.length; i++) if (moves[i].type === 'supportSpirit') return moves[i];
-        }
-        return pass;
-      }
-    }
-
-    const myTurn = view.active === view.me.idx;
-    const inMain = myTurn && (view.phase === 'main1' || view.phase === 'main2')
-      && (!view.chain || view.chain.length === 0);
-
-    if (inMain) {
-      let best = null, bs = 0;
-      for (let i = 0; i < moves.length; i++) {
-        const m = moves[i];
-        if (!m || m.type === 'pass' || m.type === 'tapEssence') continue;
-        let s = -99;
-        try {
-          if (m.type === 'play') s = scorePlay(view, m, false);
-          else if (m.type === 'setEssence') s = scoreSetEssence(view, m);
-          else if (m.type === 'ability') s = scoreAbility(view, m);
-          else if (m.type === 'spiritSpecial') s = scoreSpiritSpecial(view, m);
-          else if (m.type === 'spiritDraw') s = scoreSpiritDraw(view, m);
-        } catch (e) { s = -99; }
-        if (typeof s === 'number' && s > bs) { bs = s; best = m; }
-      }
-      return best || pass;
-    }
-
-    // 响应（对方回合，或连锁中）：只用灵感卡，门槛抬高
-    let best = null, bs = 32;
-    for (let i = 0; i < moves.length; i++) {
-      const m = moves[i];
-      if (!m || m.type !== 'play') continue;
-      let s = -99;
-      try { s = scorePlay(view, m, true); } catch (e) { s = -99; }
-      if (typeof s === 'number' && s > bs) { bs = s; best = m; }
-    }
-    return best || pass;
-  } catch (e) {
-    return pickPass(moves);
+    if (!Array.isArray(moves) || !moves.length) return { type: 'pass' };
+    const pass = moves.find((m) => m.type === 'pass') || moves[moves.length - 1];
+    if (!view) return pass;
+    if (view.inspect) return chooseInspect(view, moves, pass);
+    const stage = view.combat ? view.combat.stage : null;
+    if (stage === 'blockers') return chooseBlocker(view, moves, pass);
+    if (stage === 'order') return chooseOrder(view, moves, pass);
+    if (stage === 'attackers') return chooseAttack(view, moves, pass);
+    if (stage === 'support') return chooseSupport(view, moves, pass);
+    return chooseMain(view, moves, pass);
+  } catch (err) {
+    return moves.find((m) => m.type === 'pass') || moves[moves.length - 1];
   }
 }

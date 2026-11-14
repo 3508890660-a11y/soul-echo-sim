@@ -1,6 +1,6 @@
 import { createGame, legalMoves, applyMove, progressAutomatic, makeView, validateDeck } from '../js/engine/rules.js';
 import { SPIRIT_DATA, BY_NAME, BY_ID, CARD_DATA } from '../js/engine/cards.js';
-import { PRECONS } from '../js/engine/precons.js';
+import { PRECONS, PRECON_COLORS } from '../js/engine/precons.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -18,8 +18,12 @@ const defOf = (uid) => { const c = S.g.cards[uid]; return c ? BY_ID.get(c.id) : 
 function savedDecks() {
   try { return JSON.parse(localStorage.getItem(STORE) || '') || []; } catch { return []; }
 }
+function spiritForColor(color) {
+  return (SPIRIT_DATA.find((s) => s.color === color) || SPIRIT_DATA[0]).name;
+}
 function deckOptions() {
-  const out = Object.entries(PRECONS).map(([name, cards]) => ({ key: `pre:${name}`, label: `预组 · ${name}`, cards, spirit: SPIRIT_DATA[0].name }));
+  // 预组按自身主色配一个同色灵体：同色 60% 生效后，白灵体配红预组会直接不合法。
+  const out = Object.entries(PRECONS).map(([name, cards]) => ({ key: `pre:${name}`, label: `预组 · ${name}`, cards, spirit: spiritForColor(PRECON_COLORS[name]) }));
   for (const d of savedDecks()) out.push({ key: `save:${d.id}`, label: `我的 · ${d.name}`, cards: d.cards, spirit: d.spirit });
   return out;
 }
@@ -44,8 +48,16 @@ function fillSetup() {
   const spirits = SPIRIT_DATA.map((s) => `<option value="${esc(s.name)}">${esc(s.color)}·${esc(s.name)}</option>`).join('');
   $('#spirit-a').innerHTML = spirits;
   $('#spirit-b').innerHTML = spirits;
-  $('#spirit-a').value = SPIRIT_DATA[0].name;
-  $('#spirit-b').value = SPIRIT_DATA[2]?.name || SPIRIT_DATA[0].name;
+  syncSpirit('#deck-a', '#spirit-a');
+  syncSpirit('#deck-b', '#spirit-b');
+  $('#deck-a').onchange = () => syncSpirit('#deck-a', '#spirit-a');
+  $('#deck-b').onchange = () => syncSpirit('#deck-b', '#spirit-b');
+}
+
+/** 选中的卡组自带推荐灵体时，把灵体下拉同步过去，避免默认组合就不合法。 */
+function syncSpirit(deckSel, spiritSel) {
+  const opt = deckOptions().find((o) => o.key === $(deckSel).value);
+  if (opt?.spirit) $(spiritSel).value = opt.spirit;
 }
 
 function pickDeck(key) {
@@ -58,7 +70,10 @@ function start() {
   const a = pickDeck($('#deck-a').value);
   const b = pickDeck($('#deck-b').value);
   if (!a || !b) { status('请选择双方卡组。'); return; }
-  const va = validateDeck(a.cards), vb = validateDeck(b.cards);
+  const spiritA = $('#spirit-a').value;
+  const spiritB = $('#spirit-b').value;
+  const va = validateDeck(a.cards, undefined, { spirit: spiritA });
+  const vb = validateDeck(b.cards, undefined, { spirit: spiritB });
   if (!va.ok || !vb.ok) { status(`卡组不合法：${[...va.errors, ...vb.errors].slice(0, 2).join('；')}`); return; }
   const seed = Number.parseInt($('#seed').value, 10);
   if (!Number.isFinite(seed)) { status('种子须为整数。'); return; }
@@ -66,7 +81,7 @@ function start() {
   S.privacy = $('#privacy').checked;
   S.g = createGame({
     deckA: a.cards, deckB: b.cards,
-    spiritA: $('#spirit-a').value, spiritB: $('#spirit-b').value,
+    spiritA, spiritB,
     colorA: dominantColor(a.cards), colorB: dominantColor(b.cards),
     nameA: '玩家 A', nameB: '玩家 B',
     seed, first: firstRaw === 'random' ? undefined : Number(firstRaw), randomFirst: firstRaw === 'random',

@@ -94,7 +94,10 @@ const out = { generatedAt: new Date().toISOString(), rounds, seasonsPerMode: sea
 for (const mode of modes) {
   const spec = MODES[mode];
   if (!spec) continue;
-  const pool = agents.filter((a) => validateDeck(a.deck, mode).ok);
+  const checks = new Map(agents.map((a) => [a.id, validateDeck(a.deck, mode, { spirit: a.spirit })]));
+  const pool = agents.filter((a) => checks.get(a.id).ok);
+  const excluded = agents.filter((a) => !checks.get(a.id).ok);
+  if (excluded.length) console.warn(`${spec.name} 排除不合法卡组：${excluded.map((a) => `${a.id}（${checks.get(a.id).errors[0]}）`).join('；')}`);
   if (pool.length < 4) { console.warn(`${spec.name} 可参赛脚本不足，跳过`); continue; }
 
   const seasonResults = [];

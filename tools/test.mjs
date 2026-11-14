@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import {
-  createGame, legalMoves, applyMove, playMatch, _testing as T,
+  createGame, legalMoves, applyMove, playMatch, validateDeck, _testing as T,
   unitHp, dealLifeDamage, ENGINE_INFO,
 } from '../js/engine/rules.js';
+import { PRECONS } from '../js/engine/precons.js';
 import { TACTICIAN } from '../js/ai/builtin.js';
 import { CARD_DATA } from '../js/engine/cards.js';
 
@@ -48,6 +49,32 @@ test('构筑：140 名目主卡池、40—60 张与同名 4 张限制', () => {
   assert.equal(CARD_DATA.length, 140);
   assert.equal(ENGINE_INFO.implemented + ENGINE_INFO.approx.length, 140);
   assert.throws(() => createGame({ deckA: Array(39).fill('新人冒险者'), deckB: Array(40).fill('新人冒险者') }), /40—60|同名/);
+});
+
+test('构筑：与灵体同色的卡牌须至少 60%，灰灵体才把灰卡计为同色', () => {
+  const red6 = ['火焰鸟', '地狱犬', '烈焰斗士', '烈焰之力', '烈焰聚合体', '火球术'];
+  const gray4 = ['新人冒险者', '冒险准备', '黑市商人', '混沌打击'];
+  const deck24 = [...red6.flatMap((n) => Array(4).fill(n)), ...gray4.flatMap((n) => Array(4).fill(n))];
+  assert.equal(deck24.length, 40);
+  // 24/40 恰好 60%，是合法下界
+  const edge = validateDeck(deck24, 'standard', { spirit: '余烬执火者' });
+  assert.ok(edge.ok, edge.errors.join('；'));
+  assert.equal(edge.sameColor, 24);
+  assert.equal(edge.sameColorNeed, 24);
+  // 少一张红多一张灰 → 23/40 = 57.5%，不合法
+  const deck23 = [...deck24.slice(1), '混沌冲击'];
+  const bad = validateDeck(deck23, 'standard', { spirit: '余烬执火者' });
+  assert.equal(bad.ok, false);
+  assert.equal(bad.sameColor, 23);
+  assert.match(bad.errors.join('；'), /同色（红）/);
+  // 同一套牌换成灰灵体：灰卡全部计入同色
+  const graySpirit = validateDeck(deck23, 'standard', { spirit: '荒原旅人' });
+  assert.equal(graySpirit.sameColor, 17);
+  assert.equal(graySpirit.ok, false);
+  // 未提供灵体时不校验，保持旧调用兼容
+  assert.ok(validateDeck(deck23).ok);
+  // 引擎在开局前拦截：灰卡组配红灵体
+  assert.throws(() => createGame({ deckA: deck23, deckB: PRECONS['红色快攻'], spiritA: '余烬执火者' }), /同色（红）/);
 });
 
 test('先手第一回合不通常抽牌，双方第一回合禁止灵体抽牌', () => {

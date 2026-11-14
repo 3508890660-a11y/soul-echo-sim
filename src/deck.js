@@ -1,5 +1,5 @@
 import { CARD_DATA, SPIRIT_DATA, BY_NAME, COLORS, TYPES, RARITIES } from '../js/engine/cards.js';
-import { PRECONS } from '../js/engine/precons.js';
+import { PRECONS, PRECON_COLORS } from '../js/engine/precons.js';
 import { validateDeck } from '../js/engine/rules.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -106,8 +106,8 @@ function flash(text) {
   flash._t = setTimeout(() => el.classList.remove('on'), 1600);
 }
 
-function deckIssues() {
-  return [...new Set(validateDeck(state.deck.cards).errors)];
+function deckCheck() {
+  return validateDeck(state.deck.cards, undefined, { spirit: state.deck.spirit });
 }
 
 function renderDeck() {
@@ -115,10 +115,22 @@ function renderDeck() {
   $('#deck-name').value = state.deck.name;
   $('#deck-spirit').value = state.deck.spirit;
   $('#deck-total').textContent = n;
-  const issues = deckIssues();
+  const check = deckCheck();
+  const issues = [...new Set(check.errors)];
   const pill = $('#deck-status');
   pill.textContent = !n ? '空' : issues.length ? '不合法' : '可对战';
   pill.className = `status-pill ${!n ? '' : issues.length ? 'bad' : 'ok'}`;
+  const ratio = $('#deck-ratio');
+  if (ratio) {
+    const pct = n ? Math.round((check.sameColor / n) * 100) : 0;
+    ratio.textContent = check.spiritColor && n ? `同色 ${check.sameColor}/${n} · ${pct}%` : '';
+    ratio.title = !n
+      ? '加入卡牌后计算同色比例'
+      : check.spiritColor
+        ? `与灵体同色（${check.spiritColor}）的卡牌须至少 ${check.sameColorNeed} 张`
+        : '通用灵体没有颜色，不校验同色比例';
+    ratio.className = `deck-ratio${check.spiritColor && n && check.sameColor < check.sameColorNeed ? ' bad' : ''}`;
+  }
   $('#deck-issues').innerHTML = issues.length
     ? issues.slice(0, 4).map((i) => `<span>${esc(i)}</span>`).join('')
     : '<span class="ok-text">构筑合法，可在双人对战中使用。</span>';
@@ -273,7 +285,10 @@ $('#saved-list').addEventListener('click', (e) => {
 $('#precon-list').addEventListener('click', (e) => {
   const b = e.target.closest('[data-precon]'); if (!b) return;
   const name = b.dataset.precon;
-  state.deck = { id: null, name, spirit: SPIRIT_DATA[0].name, cards: { ...PRECONS[name] } };
+  // 预组按自身主色配一个同色灵体，否则导入后必然触发「同色 60%」不合法。
+  const color = PRECON_COLORS[name];
+  const spirit = SPIRIT_DATA.find((s) => s.color === color)?.name || SPIRIT_DATA[0].name;
+  state.deck = { id: null, name, spirit, cards: { ...PRECONS[name] } };
   renderAll();
 });
 $$('dialog').forEach((d) => {

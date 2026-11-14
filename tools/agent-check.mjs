@@ -14,7 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { MODE_IDS, MODES, validateDeck, deckColors, playMatch } from '../js/engine/rules.js';
+import { MODE_IDS, MODES, DECK_RULES, validateDeck, deckColors, playMatch } from '../js/engine/rules.js';
 import { BY_NAME, BY_ID, SPIRIT_DATA } from '../js/engine/cards.js';
 import {
   createGame, legalMoves, makeView, applyMove, _testing,
@@ -117,10 +117,17 @@ if (unknown.length) bad('卡名存在', `未知卡名：${unknown.slice(0, 5).jo
 else ok('卡名存在');
 
 for (const mode of MODE_IDS) {
-  const v = validateDeck(list, mode);
+  const v = validateDeck(list, mode, { spirit: mod.spirit });
   if (v.ok) ok(`卡组合法 · ${MODES[mode].name}`, `${list.length} 张`);
   else bad(`卡组合法 · ${MODES[mode].name}`, v.errors.slice(0, 3).join('；'));
 }
+const ratioCheck = validateDeck(list, undefined, { spirit: mod.spirit });
+if (ratioCheck.spiritColor && list.length) {
+  const pct = Math.round((ratioCheck.sameColor / list.length) * 100);
+  const line = `${ratioCheck.sameColor}/${list.length} = ${pct}%（须 ≥${Math.round(DECK_RULES.spiritColorRatio * 100)}%，即 ≥${ratioCheck.sameColorNeed} 张）`;
+  if (ratioCheck.sameColor >= ratioCheck.sameColorNeed) ok(`与灵体同色（${ratioCheck.spiritColor}）`, line);
+  else bad(`与灵体同色（${ratioCheck.spiritColor}）`, line);
+} else ok('与灵体同色', '通用灵体无颜色，本条不适用');
 
 const tally = deckColors(list);
 ok('颜色覆盖', Object.entries(tally).sort((a, b) => b[1] - a[1]).map(([c, n]) => `${c}${n}`).join(' '));

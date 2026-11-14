@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T04:45:21.751Z",
+  "generatedAt": "2026-11-14T05:30:12.690Z",
   "scope": "脚本 AI 引擎不变量测试，不是真人平衡结论",
   "passed": 12,
   "failed": 0,
@@ -33,8 +33,8 @@
       "seed": 9110,
       "winner": 1,
       "reason": "生命卡组为空且仍需结算生命伤害",
-      "turns": 16,
-      "actions": 385,
+      "turns": 18,
+      "actions": 429,
       "errors": []
     },
     {
@@ -42,10 +42,10 @@
       "B": "白色回复",
       "first": 1,
       "seed": 9111,
-      "winner": 0,
+      "winner": 1,
       "reason": "生命卡组为空且仍需结算生命伤害",
-      "turns": 16,
-      "actions": 338,
+      "turns": 17,
+      "actions": 396,
       "errors": []
     },
     {
@@ -55,8 +55,8 @@
       "seed": 9120,
       "winner": 0,
       "reason": "生命卡组为空且仍需结算生命伤害",
-      "turns": 19,
-      "actions": 497,
+      "turns": 21,
+      "actions": 590,
       "errors": []
     },
     {
@@ -67,7 +67,7 @@
       "winner": 0,
       "reason": "无牌可抽",
       "turns": 35,
-      "actions": 987,
+      "actions": 930,
       "errors": []
     },
     {
@@ -77,8 +77,8 @@
       "seed": 9130,
       "winner": 0,
       "reason": "无牌可抽",
-      "turns": 25,
-      "actions": 751,
+      "turns": 21,
+      "actions": 677,
       "errors": []
     },
     {
@@ -88,8 +88,8 @@
       "seed": 9131,
       "winner": 0,
       "reason": "无牌可抽",
-      "turns": 22,
-      "actions": 648,
+      "turns": 20,
+      "actions": 578,
       "errors": []
     },
     {
@@ -111,7 +111,7 @@
       "winner": 1,
       "reason": "生命卡组为空且仍需结算生命伤害",
       "turns": 24,
-      "actions": 550,
+      "actions": 523,
       "errors": []
     },
     {
@@ -119,10 +119,10 @@
       "B": "灰色基准",
       "first": 0,
       "seed": 9150,
-      "winner": 1,
+      "winner": 0,
       "reason": "无牌可抽",
-      "turns": 23,
-      "actions": 580,
+      "turns": 22,
+      "actions": 563,
       "errors": []
     },
     {
@@ -130,10 +130,10 @@
       "B": "灰色基准",
       "first": 1,
       "seed": 9151,
-      "winner": 1,
+      "winner": 0,
       "reason": "生命卡组为空且仍需结算生命伤害",
-      "turns": 19,
-      "actions": 515,
+      "turns": 18,
+      "actions": 502,
       "errors": []
     }
   ]

@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 990" width="1000" height="990" role="img" aria-label="基本卡图框架结构图">
+  <rect width="1000" height="990" fill="#0d1618"/>
+  <g transform="translate(190,24) scale(0.9)">
+  <defs>
+    <linearGradient id="cf1-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#152123"/><stop offset=".55" stop-color="#101a1c"/><stop offset="1" stop-color="#0a1213"/>
+    </linearGradient>
+    <linearGradient id="cf1-edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dcc17f" stop-opacity=".95"/><stop offset=".5" stop-color="#dcc17f" stop-opacity=".45"/><stop offset="1" stop-color="#dcc17f" stop-opacity=".85"/>
+    </linearGradient>
+    <linearGradient id="cf1-art" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dcc17f" stop-opacity=".14"/><stop offset="1" stop-color="#dcc17f" stop-opacity=".04"/>
+    </linearGradient>
+    <clipPath id="cf1-clip"><rect x="40" y="148" width="550" height="356" rx="12"/></clipPath>
+  </defs>
+  <rect x="8" y="8" width="614" height="864" rx="32" fill="url(#cf1-bg)" stroke="url(#cf1-edge)" stroke-width="4"/>
+  <rect x="20" y="20" width="590" height="840" rx="24" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".3"/>
+  <rect x="116" y="32" width="398" height="60" rx="8" fill="#0a1315" opacity=".8"/>
+  <rect x="116" y="32" width="398" height="60" rx="8" fill="none" stroke="#dcc17f" stroke-width="1.2" opacity=".7"/>
+  <text x="315" y="63" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif SC','Songti SC','SimSun',serif" font-size="33" font-weight="700" letter-spacing="3" fill="#f2ede3">卡名</text>
+  <text x="315" y="110" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" letter-spacing="3" fill="#8fa2a4">灵像　灰1</text>
+  <g><g>
+    <circle cx="66" cy="70" r="33" fill="#0b1416" stroke="#dcc17f" stroke-width="2.5"/>
+    <circle cx="66" cy="70" r="27" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".45"/>
+    <text x="66" y="70" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif SC','Songti SC','SimSun',serif" font-size="31" font-weight="700" fill="#dcc17f">4</text>
+  </g><g>
+    <circle cx="112" cy="108" r="21" fill="#151f21" stroke="#94a1a4" stroke-width="1.8"/>
+    <text x="112" y="108" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif SC','Songti SC','SimSun',serif" font-size="19" font-weight="700" fill="#c3cccd">1</text>
+  </g></g>
+  <g>
+    <circle cx="566" cy="70" r="27" fill="#0b1416" stroke="#e8594d" stroke-width="2"/>
+    <text x="566" y="70" text-anchor="middle" dominant-baseline="central" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="17" font-weight="700" letter-spacing=".5" fill="#e8594d">CT</text>
+  </g>
+  <g opacity=".9">
+    <rect x="40" y="148" width="550" height="356" rx="12" fill="url(#cf1-art)"/>
+    <g transform="translate(246.8,257.8) scale(3.1)" opacity=".3">
+      <path d="M22 3 38 12v20L22 41 6 32V12Z" fill="none" stroke="#dcc17f" stroke-width="1.1"/>
+      <path d="M13 23c4-11 14-11 18 0-4 11-14 11-18 0Z" fill="none" stroke="#dcc17f" stroke-width="1.1"/>
+      <circle cx="22" cy="23" r="3.2" fill="#dcc17f"/>
+    </g>
+    <text x="315" y="488" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="6" fill="#dcc17f" opacity=".45">卡图</text>
+  </g>
+  <g><g><rect x="40" y="516" width="62" height="30" rx="15" fill="#dcc17f" opacity=".16"/>
+      <rect x="40" y="516" width="62" height="30" rx="15" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".55"/>
+      <text x="71" y="531" text-anchor="middle" dominant-baseline="central" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="17" font-weight="600" fill="#dcc17f" letter-spacing="1">守护</text></g><g><rect x="110" y="516" width="62" height="30" rx="15" fill="#dcc17f" opacity=".16"/>
+      <rect x="110" y="516" width="62" height="30" rx="15" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".55"/>
+      <text x="141" y="531" text-anchor="middle" dominant-baseline="central" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="17" font-weight="600" fill="#dcc17f" letter-spacing="1">自愈</text></g></g>
+  <g>
+    <rect x="40" y="560" width="550" height="184" rx="10" fill="#070f11" opacity=".62"/>
+    <rect x="40" y="560" width="550" height="184" rx="10" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".22"/>
+    <text x="62" y="598" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="21" fill="#e9e4da"><tspan x="62" dy="0">效果文本在此换行显示，按卡面宽度自动折行。</tspan></text>
+  </g>
+  <g><g>
+    <rect x="40" y="752" width="128" height="72" rx="10" fill="#070f11" opacity=".58"/>
+    <rect x="40" y="752" width="128" height="72" rx="10" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".28"/>
+    <text x="104" y="782" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif SC','Songti SC','SimSun',serif" font-size="38" font-weight="700" fill="#e9e4da">5000</text>
+    <text x="104" y="810" text-anchor="middle" dominant-baseline="central" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="2" fill="#8fa2a4">攻击力</text>
+  </g><g>
+    <rect x="176" y="752" width="128" height="72" rx="10" fill="#070f11" opacity=".58"/>
+    <rect x="176" y="752" width="128" height="72" rx="10" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".28"/>
+    <text x="240" y="782" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif SC','Songti SC','SimSun',serif" font-size="38" font-weight="700" fill="#e9e4da">2</text>
+    <text x="240" y="810" text-anchor="middle" dominant-baseline="central" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="2" fill="#8fa2a4">冲击力</text>
+  </g><g>
+    <rect x="318" y="752" width="272" height="72" rx="10" fill="#070f11" opacity=".58"/>
+    <rect x="318" y="752" width="272" height="72" rx="10" fill="none" stroke="#dcc17f" stroke-width="1" opacity=".28"/>
+    <text x="454" y="782" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif SC','Songti SC','SimSun',serif" font-size="38" font-weight="700" fill="#e9e4da">6000</text>
+    <text x="454" y="810" text-anchor="middle" dominant-baseline="central" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="2" fill="#8fa2a4">生命力</text>
+  </g></g>
+  <g>
+    <text x="40" y="850" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="1.5" fill="#7f9294">SE01-W-000</text>
+    <text x="590" y="850" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="2" fill="#dcc17f" opacity=".9">绝响</text>
+    <path d="M502 838 507 847 502 856 497 847Z" fill="#dcc17f" opacity=".85"/><path d="M518 838 523 847 518 856 513 847Z" fill="#dcc17f" opacity=".85"/><path d="M534 838 539 847 534 856 529 847Z" fill="#dcc17f" opacity=".85"/><path d="M550 838 555 847 550 856 545 847Z" fill="#dcc17f" opacity=".85"/>
+  </g>
+</g>
+  <g>
+      <line x1="172" y1="54" x2="249.4" y2="87" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="249.4" cy="87" r="3.2" fill="#d09945"/>
+      <circle cx="172" cy="54" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="164" y="51" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">同色灵能</text>
+      <text x="164" y="69" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">与卡牌同色的灵能</text>
+    </g><g>
+      <line x1="172" y1="128" x2="290.8" y2="121.2" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="290.8" cy="121.2" r="3.2" fill="#d09945"/>
+      <circle cx="172" cy="128" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="164" y="125" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">灰色灵能</text>
+      <text x="164" y="143" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">任意颜色均可支付</text>
+    </g><g>
+      <line x1="172" y1="300" x2="229.6" y2="321" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="229.6" cy="321" r="3.2" fill="#d09945"/>
+      <circle cx="172" cy="300" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="164" y="297" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">卡图</text>
+      <text x="164" y="315" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">版面主体</text>
+    </g><g>
+      <line x1="172" y1="520" x2="229.6" y2="506.40000000000003" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="229.6" cy="506.40000000000003" r="3.2" fill="#d09945"/>
+      <circle cx="172" cy="520" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="164" y="517" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">词条</text>
+      <text x="164" y="535" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">固定能力短标签</text>
+    </g><g>
+      <line x1="172" y1="764" x2="244" y2="733.2" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="244" cy="733.2" r="3.2" fill="#d09945"/>
+      <circle cx="172" cy="764" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="164" y="761" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">攻击力／冲击力</text>
+      <text x="164" y="779" text-anchor="end" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">战斗／打生命</text>
+    </g><g>
+      <line x1="775" y1="54" x2="652.6" y2="79.80000000000001" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="652.6" cy="79.80000000000001" r="3.2" fill="#d09945"/>
+      <circle cx="775" cy="54" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="783" y="51" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">卡名</text>
+      
+    </g><g>
+      <line x1="775" y1="118" x2="652.6" y2="123" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="652.6" cy="123" r="3.2" fill="#d09945"/>
+      <circle cx="775" cy="118" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="783" y="115" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">卡牌类型</text>
+      <text x="783" y="133" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">灵像／灵感／灵性／灵体</text>
+    </g><g>
+      <line x1="775" y1="190" x2="699.4000000000001" y2="87" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="699.4000000000001" cy="87" r="3.2" fill="#d09945"/>
+      <circle cx="775" cy="190" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="783" y="187" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">触发标记</text>
+      <text x="783" y="205" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">LT／ST／MT／CT</text>
+    </g><g>
+      <line x1="775" y1="640" x2="717.4" y2="609" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="717.4" cy="609" r="3.2" fill="#d09945"/>
+      <circle cx="775" cy="640" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="783" y="637" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">效果文本</text>
+      <text x="783" y="655" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">按卡面宽度自动折行</text>
+    </g><g>
+      <line x1="775" y1="782" x2="717.4" y2="733.2" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="717.4" cy="733.2" r="3.2" fill="#d09945"/>
+      <circle cx="775" cy="782" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="783" y="779" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">生命力</text>
+      <text x="783" y="797" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">灵像与灵性才有</text>
+    </g><g>
+      <line x1="775" y1="862" x2="717.4" y2="789" stroke="#d09945" stroke-width="1" opacity=".55"/>
+      <circle cx="717.4" cy="789" r="3.2" fill="#d09945"/>
+      <circle cx="775" cy="862" r="2.4" fill="#d09945" opacity=".8"/>
+      <text x="783" y="859" text-anchor="start" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="15" font-weight="600" fill="#e9e4da">编号／稀有度</text>
+      
+    </g>
+  <text x="500" y="916" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="13" letter-spacing="3" fill="#8fa2a4">卡框颜色＝卡牌颜色　·　尺寸 63×88mm　·　viewBox 630×880</text>
+  <g transform="translate(210,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#dcc17f" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">白</text>
+    </g><g transform="translate(286,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#677380" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">黑</text>
+    </g><g transform="translate(362,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#e8594d" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">红</text>
+    </g><g transform="translate(438,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#519fdd" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">蓝</text>
+    </g><g transform="translate(514,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#5dad70" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">绿</text>
+    </g><g transform="translate(590,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#cfb656" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">黄</text>
+    </g><g transform="translate(666,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#af73c9" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">紫</text>
+    </g><g transform="translate(742,946)">
+      <rect x="-11" y="-11" width="22" height="22" rx="5" fill="none" stroke="#94a1a4" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif" font-size="12" fill="#8fa2a4">灰</text>
+    </g>
+  </svg>

@@ -14,10 +14,11 @@ npm run dev
 | 页面 | 路径 | 用途 |
 |---|---|---|
 | 观战台 | `/index.html` | 脚本 AI 对 AI，生成完整对局后逐帧回放、查看连锁与卡牌 |
-| 组卡 | `/deck.html` | 140 名目卡池筛选、加减卡、40—60 张校验、存读档与导入导出 |
+| 组卡 | `/deck.html` | 140 名目卡池筛选、加减卡、40—60 张与同色 60% 校验、存读档与导入导出 |
 | 双人对战 | `/duel.html` | 本地热座，双方轮流操作同一台设备，可开隐私遮罩 |
+| 卡面 | `/card-frame.html` | 基本卡图框架：结构标注、八色、四种类型与边界样本，可下载单张 SVG |
 
-三个页面共享同一套引擎与卡池数据，改动一处三处同时生效。
+四个页面共享同一套引擎与卡池数据，改动一处四处同时生效。
 
 卡表快照在 `docs/`，clone 后可直接 `npm run build:cards` 重建卡数据；若仓库外的权威卡表存在，构建脚本优先读它，避免与设计稿不同步。
 
@@ -33,7 +34,7 @@ npm run dev
 ## 验证
 
 ```bash
-npm test          # 20 项规则裁定与复现性回归
+npm test          # 21 项规则裁定与复现性回归
 npm run smoke     # 六预组、12 局不变量冒烟
 npm run fuzz      # 随机卡组混合对局，报告覆盖卡名与异常
 npm run rr        # 15 组对阵、交替先手，共 30 局
@@ -49,11 +50,13 @@ npm run verify:se01 # 组卡器与双人对战浏览器验收
 
 12 个模型各写一份对战脚本、各自组卡，共用同一套接口约定与卡池。清单、组卡思路、对战思路与循环赛战绩见 **`agents/README.md`**。
 
+2026-11-14 起构筑规则为「与灵体同色 ≥60%」，12 份脚本与两套赛制已在该规则下全量重跑；旧规则那一届归档在 `_oldrule_2026-11-13/`。
+
 ```bash
 npm run brief              # 从卡数据重新生成 agents/brief/03-卡池.md
-npm run agent:check hy4    # 单份自检：语法、五导出、meta、四模式卡组、八局镜像对局
+npm run agent:check hy4    # 单份自检：语法、五导出、meta、四模式卡组、同色 60%、八局镜像对局
 npm run agent:ladder       # 四模式循环赛，各 264 局，输出 agent-progress/ladder.md
-npm run agent:swiss        # 四模式瑞士轮，各 5 届 × 5 轮，输出 agent-progress/swiss.md
+npm run agent:swiss        # 四模式瑞士轮，各 3 届 × 5 轮，输出 agent-progress/swiss.md
 ```
 
 - 脚本 = `agents/agent-<id>.js`，导出 `meta` / `deck` / `spirit` / `color` / `choose`。
@@ -74,6 +77,9 @@ js/ai/builtin.js         只选择合法动作的确定性脚本 AI
 src/main.js              观战台
 src/deck.js              组卡器
 src/duel.js              双人对战
+src/card-frame.js        SVG 卡面生成器（卡框、双费圈、词条、效果文本、面板）
+card-frame.html          卡面框架预览页
+assets/                  卡框静态导出（card-frame.svg、card-frame-blank.svg、示例卡）
 server.mjs               本机静态服务器
 tools/build-se01.mjs     从 SE01_卡表.md 生成 cards.se01.js
 tools/fuzz-se01.mjs      随机卡组压力测试
@@ -112,7 +118,7 @@ applyMove(g, moves[0]);
 ## 已实现规则边界
 
 - **四种对局模式**：`standard`（生命 10／起手 4／40—60 张）、`blitz`（生命 6／起手 4）、`grand`（生命 15／起手 5／50—60 张）、`duo`（生命 12／起手 4，且须恰好 2 种非灰颜色各覆盖 ≥10 张）。模式只改初始生命、起手与构筑上下限，回合结构不变。
-- 40—60 张构筑、同名最多 4、一次脚本调度。
+- 40—60 张构筑、同名最多 4、**主卡组中与灵体同色的卡牌 ≥60%**（混色卡按主色计，灰卡只在灰灵体时计入）、一次脚本调度。此条为硬约束：**没有绕过开关**，旧构筑规则已于 2026-11-14 废除。
 - 先手第一回合不通常抽牌；双方各自第一回合禁止灵体通用抽牌。
 - 每回合一张通常灵质；灰色灵能仅支付灰费，其他颜色可支付灰费。
 - **混色费用**：按色分别要求灵能，灰费可任意颜色支付。

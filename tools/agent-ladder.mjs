@@ -48,7 +48,8 @@ for (const mode of modes) {
   if (!modeSpec) { console.warn(`未知模式 ${mode}，跳过`); continue; }
 
   // 模式内先做一次构筑合法性体检，不合法的直接标红，不静默剔除
-  const illegal = agents.filter((a) => !validateDeck(a.deck, mode).ok);
+  const checks = new Map(agents.map((a) => [a.id, validateDeck(a.deck, mode, { spirit: a.spirit })]));
+  const illegal = agents.filter((a) => !checks.get(a.id).ok);
   const board = Object.fromEntries(agents.map((a) => [a.id, {
     id: a.id, model: a.meta.model || a.id, primaryMode: a.meta.primaryMode || '—',
     strategy: a.meta.name || '', win: 0, loss: 0, draw: 0, plays: 0, actions: 0, anomalies: 0, ms: 0,
@@ -106,7 +107,7 @@ for (const mode of modes) {
   for (const r of rows) {
     console.log(`  ${r.id.padEnd(18)} ${String(r.win).padStart(3)}胜 ${String(r.loss).padStart(3)}负 ${String(r.draw).padStart(3)}和  ${(r.winrate * 100).toFixed(1).padStart(5)}%  ${String(r.avgActions).padStart(4)} 动作/局  异常 ${r.anomalies}`);
   }
-  if (illegal.length) console.log(`  ! 卡组不合法：${illegal.map((a) => a.id).join('、')}`);
+  if (illegal.length) console.log(`  ! 卡组不合法：${illegal.map((a) => `${a.id}（${checks.get(a.id).errors[0]}）`).join('；')}`);
 }
 
 // 跨模式总表：把每个脚本在四模式里按主责 1.0、其他 0.5 加权

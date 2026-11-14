@@ -50,6 +50,15 @@ def main() -> None:
     assert len(cards) == 53, f"预期 53 种卡，实际 {len(cards)}"
     assert len(decks) == 6 and all(sum(d.values()) == 40 for d in decks.values())
 
+    # 预组主色：按张数最多的颜色计，供「主卡组与灵体同色 ≥60%」的构筑校验使用。
+    color_of = {c["name"]: c["color"] for c in cards}
+    precon_colors: dict[str, str] = {}
+    for deck_name, deck in decks.items():
+        tally: dict[str, int] = {}
+        for card_name, count in deck.items():
+            tally[color_of[card_name]] = tally.get(color_of[card_name], 0) + count
+        precon_colors[deck_name] = max(tally.items(), key=lambda kv: kv[1])[0]
+
     rows = []
     for index, c in enumerate(cards, 1):
         numeric = lambda value: value if isinstance(value, int) else None
@@ -60,16 +69,15 @@ def main() -> None:
             "keywords": c["keywords"].split("、") if c["keywords"] else [],
             "text": c["effect"], "trigger": c["trigger"], "note": c["note"],
         })
-    card_js = "// 由 tools/sync_cards.py 生成；请勿手抄修改。\nexport const CARD_DATA = " + json.dumps(rows, ensure_ascii=False, indent=2) + ";\n\n"
-    card_js += "export const BY_NAME = new Map(CARD_DATA.map((c) => [c.name, c]));\n"
-    card_js += "export const BY_ID = new Map(CARD_DATA.map((c) => [c.id, c]));\n"
+    # cards.js 是手写索引层（复用 cards.se01.js、保留旧 id 别名、BY_SPIRIT 与颜色/类型常量），
+    # 不由本脚本生成；旧版会整份覆盖它，导致 148 名目索引与别名丢失。
     precon_js = "// 由 tools/sync_cards.py 生成；每套 40 张。\nexport const PRECONS = " + json.dumps(decks, ensure_ascii=False, indent=2) + ";\n\n"
+    precon_js += "export const PRECON_COLORS = " + json.dumps(precon_colors, ensure_ascii=False, indent=2) + ";\n\n"
     precon_js += "export const SPIRITS = " + json.dumps(spirits, ensure_ascii=False, indent=2) + ";\n\n"
     precon_js += "export const DECK_GOALS = " + json.dumps(goals, ensure_ascii=False, indent=2) + ";\n"
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "cards.js").write_text(card_js, encoding="utf-8")
-    (OUT / "precons.js").write_text(precon_js, encoding="utf-8")
-    print(f"同步 {len(rows)} 种卡、{len(decks)} 套预组 → {OUT}")
+    (OUT / "precons.js").write_text(precon_js, encoding="utf-8", newline="\n")
+    print(f"同步 {len(rows)} 种旧卡、{len(decks)} 套预组 → {OUT}（cards.js 为手写索引层，不覆盖）")
 
 
 if __name__ == "__main__":

@@ -1,725 +1,646 @@
 /**
- * 策略名称：熔线回响（Burn Line Echo）
- * 选择理由：速攻对局生命只有 6，迟疑一回合就等于送对手一张救场牌。
- *           这套用 1 费「火焰鸟」与 3 费「烈焰斗士」两张敏捷单位持续压脸，
- *           用 2 费混色「燃魂」（红1黑1，2 点生命直伤）负责收割，
- *           再用「血怒」与灵体「余烬执火者」把单个攻击者的冲击堆到 3—4 点，
- *           目标是在第 5—6 回合把对手生命卡组打空。
+ * 《灵魂回响》SE01 · minimaxm31flash
+ * 策略名称：余烬叠刃
+ *
+ * 选择理由（基于对引擎规则的实测）：
+ *   1) 灵质区张数 = 每回合的灵能预算上限。每回合只能把 1 张手牌设为灵质，
+ *      灵质永久累积、每回合重置横置 —— 灵质就是「永久费用引擎」，越早铺越赚。
+ *      所以主要阶段的第一优先级永远是「设灵质」，而不是空过。
+ *   2) 灰费可以由任何颜色的灵能支付，有色费必须由对应颜色的灵质支付。
+ *      因此灵质应优先选红卡（红灵质既能付红费也能付灰费）。
+ *   3) blitz 只有 6 张生命卡，需要 7 点生命伤害才能获胜；直伤（灵体伤害）
+ *      比「打脸被阻挡」更可靠，但真正把伤害翻倍的是冲击（impact）。
+ *   4) 余烬执火者（红灵体）横置 → 己方 1 张灵像 +1000 攻击、+1 冲击直到回合结束。
+ *      这是零费用的「每回合 +1 冲击」，与血怒（红2，+1 冲击）叠加后，
+ *      地狱犬（2000/1/2500，预制、自愈）就能每回合打出 3 点生命伤害。
+ *
  * 主责模式：blitz
+ *
+ * 零依赖 ES Module：导出 meta / deck / spirit / color / choose。
+ * choose 只在 moves 里原样挑选并返回，绝不新建或改写动作对象。
  */
 
+/* ── 卡牌手册 ─────────────────────────────────────────────────────────────── */
+/** 灵体伤害（对灵体直接造成生命伤害）。 */
+const BURN = { 火球术: 2, 焚尽: 3, 混沌冲击: 1, 燃魂: 2 };
+/** 冲击放大器：命中即 +1 冲击（血怒不会杀死目标，烈焰之力会）。 */
+const BUFF = { 血怒: 1, 烈焰之力: 1 };
+/** 需要「己方灵像」作为目标的能力。 */
+const OWN_TARGET = { 血怒: 1, 烈焰之力: 1 };
+/** 抽牌类。 */
+const DRAW = { 冒险准备: 1, 灵质榨取: 1, 灵质重聚: 1 };
+/** 战斗用的主要单位。 */
+const FIGHTER = { 地狱犬: 1, 烈焰斗士: 1, 灰烬小僧: 1, 火焰鸟: 1, 新人冒险者: 1, 熔岩投手: 1 };
+/** 灵体（余烬执火者）：横置 → 己方 1 张灵像 +1000 攻击、+1 冲击直到回合结束。 */
+const SPIRIT_BUFF = '余烬执火者';
+
+/* ── 基础工具 ────────────────────────────────────────────────────────────── */
+const passOf = (moves) => moves.find((m) => m.type === 'pass') || moves[moves.length - 1];
+
+function ownField(view) { return view.me.field || []; }
+function oppField(view) { return view.opp.field || []; }
+
+function unitByUid(view, uid) {
+  if (!uid) return null;
+  const all = ownField(view).concat(oppField(view));
+  for (const c of all) if (c.uid === uid) return c;
+  return null;
+}
+function handCard(view, uid) {
+  const hand = view.me.hand || [];
+  for (const c of hand) if (c.uid === uid) return c;
+  return null;
+}
+function remainingHp(c) { return Math.max(0, (c.hp || 0) - (c.damage || 0)); }
+function hasKw(c, kw) { return !!c && Array.isArray(c.keywords) && c.keywords.includes(kw); }
+function isSpiritTarget(t) { return t === 'spirit'; }
+
+/** 我方单位本回合能否攻击（未横置；本回合入场且非「预制」的不能攻击）。 */
+function canSwing(c, view) {
+  if (!c || c.tapped) return false;
+  if (hasKw(c, '预制')) return true;
+  // 引擎只在本回合入场时禁止攻击；view 不含 enteredTurn，用「本回合刚出场」的近似：
+  // 预制之外的新单位在引擎里 enteredTurn === g.turn 时不可攻击。
+  return true;
+}
+
+/** 对手能否阻挡这具攻击者（尊重「敏捷」与「守护」）。 */
+function canBlockAttacking(blocker, attacker) {
+  if (!blocker || blocker.type !== '灵像') return false;
+  if (blocker.tapped && !hasKw(blocker, '守护')) return false;
+  if (attacker && hasKw(attacker, '敏捷') && !hasKw(blocker, '敏捷') && !hasKw(blocker, '守护')) return false;
+  return true;
+}
+
+/* ── 伤害与斩杀 ──────────────────────────────────────────────────────────── */
+/** 打出这张灵感能立刻造成的生命伤害。 */
+function burnDamage(view, move) {
+  const c = handCard(view, move.uid);
+  if (!c) return 0;
+  const name = c.name;
+  if (name === '火球术') return BURN.火球术;
+  if (name === '焚尽') return ownField(view).length === 0 ? 4 : BURN.焚尽;
+  if (name === '混沌冲击') return BURN.混沌冲击;
+  if (name === '燃魂') {
+    const t = move.targets && move.targets[0] ? unitByUid(view, move.targets[0]) : null;
+    return BURN.燃魂 + (t && t.name === '灰烬小僧' ? 1 : 0);
+  }
+  return 0;
+}
+
+/** 打死对手还差多少点生命伤害（生命卡组翻空后仍需再结算 1 点才判负）。 */
+function damageNeeded(view) { return Math.max(1, (view.opp.life || 0) + 1); }
+
+/* ── 卡牌估值（用于「设灵质 vs 打出」的取舍） ─────────────────────────────── */
+/**
+ * 这张牌打出去的价值（blitz 视角：即时伤害 > 冲击放大 > 铺场 > 抽牌 > 解场）。
+ * 高价值牌不宜被拿去当灵质。
+ */
+function playValue(view, c) {
+  if (!c) return 0;
+  const name = c.name;
+  switch (name) {
+    case '火球术': return 14;
+    case '焚尽': return 16;
+    case '混沌冲击': return 6;
+    case '燃魂': return 9;
+    case '地狱犬': return 13;   // 2000 攻 + 2500 血 + 预制 + 自愈
+    case '烈焰斗士': return 12; // 3500 攻 + 敏捷先攻
+    case '灰烬小僧': return 10; // 终曲补 1 点
+    case '血怒': return 11;     // +1 冲击，可叠加
+    case '烈焰之力': return 8;   // +1 冲击但目标回合末死亡
+    case '火焰鸟': return 7;
+    case '冒险准备': return 9;
+    case '灵质榨取': return 12;  // 葬送模式净 +1 手牌
+    case '混沌打击': return 8;
+    case '爆燃': return 7;
+    case '烈焰战将': return 11;
+    case '熔岩投手': return 8;
+    case '熔炉之核': return 6;
+    case '火种祭坛': return 7;
+    case '烈焰聚合体': return 3;
+    case '黑暗聚合体': return 4;
+    case '新人冒险者': return 4;
+    case '自杀式袭击': return 6;
+    case '余烬回燃': return 8;
+    case '焚城巨兵': return 8;
+    case '血焰狂徒': return 8;
+    case '炽焰学者': return 9;
+    case '预案引燃': return 8;
+    case '火种祭坛': return 7;
+    default: return 5;
+  }
+}
+
+/** 这张牌当灵质（永久费用引擎）的价值：颜色越通用、费用越高越适合。 */
+function essenceValue(view, c) {
+  if (!c) return 0;
+  let v = 0;
+  if (c.color === '红') v += 4.5;        // 红灵质可付红费也可付灰费
+  else if (c.color === '黑') v += 2.5;   // 黑灵质只能付黑费
+  else v += 0.5;                          // 灰灵质几乎无用
+  const t = c.cost.total;
+  if (t >= 5) v += 6.5; else if (t >= 4) v += 5; else if (t >= 3) v += 3.5; else if (t >= 2) v += 1.5;
+  return v;
+}
+
+/* ── 灵体检视 ────────────────────────────────────────────────────────────── */
+function chooseInspect(view, moves) {
+  const take = moves.find((m) => m.type === 'inspectTake');
+  const reveal = moves.find((m) => m.type === 'inspectReveal');
+  const card = view.inspect && view.inspect.card;
+  // 不支付直接入手是零成本的；只有卡面自带 ST 触发且付得起同色灵能时才值得揭示。
+  if (reveal && card && card.trigger && card.trigger !== '—' && (view.me.mana[view.me.color] || 0) >= 1) return reveal;
+  return take || reveal || passOf(moves);
+}
+
+/* ── 战斗：宣告攻击者 ────────────────────────────────────────────────────── */
+function chooseAttackers(view, moves) {
+  const attacks = moves.filter((m) => m.type === 'attack');
+  if (!attacks.length) return passOf(moves);
+  const need = damageNeeded(view);
+  const myBest = bestAttacker(view);
+  let best = null;
+  let bestScore = 0;
+  for (const m of attacks) {
+    const a = unitByUid(view, m.uid);
+    if (!a) continue;
+    let s = -100;
+    if (isSpiritTarget(m.target)) {
+      const imp = a.imp || 0;
+      if (imp <= 0) continue;                       // 冲击 0 打脸毫无意义
+      s = imp * 6;
+      if (imp >= need) s += 500;                    // 直接斩杀
+      const blockers = oppField(view).filter((b) => canBlockAttacking(b, a));
+      if (!blockers.length) s += 8;                 // 无阻挡，伤害必到
+      else s -= 3;
+      if (hasKw(a, '超冲击')) s += 5;               // 击穿阻挡者后冲击仍生效
+      if (hasKw(a, '先攻')) s += 2;
+      if (hasKw(a, '敏捷')) s += 1;
+      if (myBest && myBest.uid === a.uid) s += 2;    // 集中火力打脸
+    } else {
+      const t = unitByUid(view, m.target);
+      if (!t) continue;
+      const kill = (a.atk || 0) >= remainingHp(t);
+      const die = (t.atk || 0) >= remainingHp(a);
+      s = kill ? 6 : -1;
+      if (hasKw(t, '守护')) s += 2.5;
+      if ((t.atk || 0) >= 3000) s += 3;             // 拆掉大威胁
+      if (die) s -= 4;
+      if (hasKw(a, '先攻')) s += 1;
+    }
+    if (s > bestScore) { bestScore = s; best = m; }
+  }
+  return best && bestScore > 0 ? best : passOf(moves);
+}
+
+/** 我方冲击最高的可攻击单位（buff 的目标）。 */
+function bestAttacker(view) {
+  let best = null;
+  for (const c of ownField(view)) {
+    if (!canSwing(c, view)) continue;
+    if (!best || (c.imp || 0) > (best.imp || 0)) best = c;
+  }
+  return best;
+}
+
+/* ── 战斗：支援 ──────────────────────────────────────────────────────────── */
+function chooseSupport(view, moves) {
+  const s = moves.find((m) => m.type === 'supportSpirit');
+  if (s) return s;                                     // 暴击指示物换 +1000 攻击 / +1 冲击
+  return passOf(moves);
+}
+
+/* ── 战斗：阻挡（toggle 式动作，必须排除已宣告的阻挡者） ─────────────────── */
+function chooseBlockers(view, moves) {
+  const cb = view.combat || {};
+  const declared = Array.isArray(cb.blockers) ? cb.blockers : [];
+  const fresh = moves.filter((m) => m.type === 'block' && !declared.includes(m.uid));
+  if (!fresh.length) return passOf(moves);
+  const attacker = unitByUid(view, cb.attackerUid);
+  const toSpirit = isSpiritTarget(cb.target);
+  const targetUnit = toSpirit ? null : unitByUid(view, cb.target);
+  let best = null;
+  let bestScore = 0;
+  for (const m of fresh) {
+    const b = unitByUid(view, m.uid);
+    if (!b) continue;
+    let s = 0;
+    const kills = attacker ? (b.atk || 0) >= remainingHp(attacker) : false;
+    const dies = attacker ? (attacker.atk || 0) >= remainingHp(b) : false;
+    if (toSpirit) {
+      s += 5 + (attacker ? (attacker.imp || 0) * 3 : 0);   // 挡下打脸最值钱
+    } else {
+      s += 4;                                              // 保住被打的单位
+      if (targetUnit && FIGHTER[targetUnit.name]) s += 2;
+    }
+    if (kills) s += 4;
+    if (dies) s -= 3.5;
+    if (hasKw(b, '守护')) s += 2;                          // 不横置也能挡
+    if (declared.length) s -= 2;                           // 已挡过一次，收益递减
+    if (s > bestScore) { bestScore = s; best = m; }
+  }
+  return best && bestScore > 0 ? best : passOf(moves);
+}
+
+/* ── 战斗：确定阻挡顺序（血少的排前面，替大单位挡下致命伤害） ────────────── */
+function chooseOrder(view, moves) {
+  const orders = moves.filter((m) => m.type === 'orderBlockers');
+  if (!orders.length) return passOf(moves);
+  const cb = view.combat || {};
+  const ids = Array.isArray(cb.blockers) ? cb.blockers : [];
+  const hp = (uid) => { const c = unitByUid(view, uid); return c ? remainingHp(c) : 0; };
+  const want = ids.slice().sort((a, b) => hp(a) - hp(b));
+  for (const m of orders) {
+    if (!m.order || m.order.length !== want.length) continue;
+    let same = true;
+    for (let i = 0; i < want.length; i++) if (m.order[i] !== want[i]) { same = false; break; }
+    if (same) return m;
+  }
+  return orders[0];
+}
+
+/* ── 主动阶段评分 ────────────────────────────────────────────────────────── */
+/** 这张灵感打出后立刻能造成的生命伤害（用于斩杀判断）。 */
+function immediateDamage(view, m) {
+  const c = handCard(view, m.uid);
+  if (!c) return 0;
+  if (BURN[c.name]) return burnDamage(view, m);
+  if (c.name === '火种祭坛') {
+    const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+    return t ? 1 + (t.name === '灰烬小僧' ? 1 : 0) : 0;
+  }
+  return 0;
+}
+
+/** 某个目标组合下的价值（血怒 / 烈焰之力 / 自杀式袭击 / 爆燃 / 混沌打击）。 */
+function scoreTargets(view, m, ctx) {
+  const c = handCard(view, m.uid);
+  if (!c) return -1;
+  const name = c.name;
+  const targets = m.targets || [];
+
+  if (name === '血怒' || name === '烈焰之力') {
+    const t = targets[0] ? unitByUid(view, targets[0]) : null;
+    if (!t) return -1;
+    let s = 1;
+    if (canSwing(t, view)) s += 11;                 // 目标能攻击 → +1 冲击 = +1 生命伤害
+    if (t.imp > 0) s += 2;
+    if (name === '烈焰之力') {
+      s -= 2;                                       // 目标回合末被破坏
+      if (t.name === '灰烬小僧') s += 3;             // 终曲再补 1 点
+      if (!canSwing(t, view)) s += 2;                // 反正要死，就当爆发用
+    }
+    return s;
+  }
+
+  if (name === '自杀式袭击') {
+    const theirUnit = targets[1] ? unitByUid(view, targets[1]) : null;
+    const myUnit = targets[0] ? unitByUid(view, targets[0]) : null;
+    if (!theirUnit) return -1;
+    let v = (theirUnit.atk || 0) >= 2500 ? 9 : 4;
+    if (hasKw(theirUnit, '守护')) v += 3;
+    if (myUnit && myUnit.name === '灰烬小僧') v += 5;
+    else if (myUnit) v -= 4;
+    return v;
+  }
+
+  if (name === '爆燃' || name === '混沌打击') {
+    let best = -1;
+    for (const uid of targets) {
+      const t = unitByUid(view, uid);
+      if (!t) continue;
+      const mine = ownField(view).some((x) => x.uid === uid);
+      const dmg = name === '爆燃' ? ((t.damage || 0) > 0 ? 3000 : 1000) : 2000;
+      let v;
+      if (mine) {
+        v = t.name === '灰烬小僧' && dmg >= remainingHp(t) ? 6 : -3;
+      } else {
+        v = dmg >= remainingHp(t) ? 7 : 1;
+        if (hasKw(t, '守护')) v += 3;
+        if ((t.atk || 0) >= 3000) v += 3;
+      }
+      if (v > best) best = v;
+    }
+    return best;
+  }
+  return 0;
+}
+
+function scoreAction(view, m, ctx) {
+  const c = handCard(view, m.uid);
+  switch (m.type) {
+    case 'play': {
+      if (!c) return -1;
+      const name = c.name;
+      const dmg = immediateDamage(view, m);
+      if (dmg > 0) {
+        let s = dmg * 5;
+        if (dmg >= ctx.need) s += 500;
+        else if (dmg >= ctx.need - 1) s += 25;
+        if (ctx.race) s += 8;
+        return s;
+      }
+      if (BUFF[name] || name === '自杀式袭击' || name === '爆燃' || name === '混沌打击') {
+        const v = scoreTargets(view, m, ctx);
+        if (v < 0) return -1;
+        if (name === '混沌打击' && ctx.blocked) v += 3;
+        return v;
+      }
+      if (DRAW[name]) {
+        let s = 6;
+        if ((view.me.handCount || 0) <= 4) s += 4;
+        if (name === '灵质榨取' && m.mode === 'bury') s += (view.me.handCount || 0) >= 4 ? 3 : -3;
+        if (name === '灵质重聚') s += 3;
+        return s;
+      }
+      if (name === '火种祭坛') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) return -1;
+        let s = 4;
+        if (t.name === '灰烬小僧') s += 4;
+        return s;
+      }
+      if (name === '余烬回燃') {
+        const reds = (view.me.grave || []).filter((g) => g.type === '灵感' && g.color === '红').length;
+        return reds >= 2 ? 10 : 1;
+      }
+      if (name === '烈焰聚合体' || name === '黑暗聚合体' || name === '混沌聚合体') {
+        // 质密单位：放到场上不划算，除非能立刻发动。
+        return 1;
+      }
+      if (FIGHTER[name] || c.type === '灵像') {
+        let s = 3 + (c.attack || 0) / 1600 + (c.imp || 0) * 3;
+        if (hasKw(c, '预制')) s += 4;
+        if (hasKw(c, '敏捷')) s += 1;
+        if (name === '灰烬小僧') s += 2;
+        if (ownField(view).length <= oppField(view).length) s += 1;
+        return s;
+      }
+      return 2;
+    }
+    case 'setEssence': {
+      if (!c) return -1;
+      const n = (view.me.essence || []).length;
+      let s = essenceValue(view, c) - playValue(view, c);
+      if (n >= 6) s -= 4;                              // 灵质已经够多，浪费手牌不划算
+      if (n === 0) s += 4;                              // 一张灵质都没有 → 完全没有费用能力
+      return s;
+    }
+    case 'ability': {
+      const name = m.name;
+      if (name === '黑暗聚合体') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) return -1;
+        let s = 2;
+        const threat = oppField(view).some((b) => (b.atk || 0) >= remainingHp(t));
+        if (threat && FIGHTER[t.name]) s += 8;
+        return s;
+      }
+      if (name === '烈焰聚合体') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) return -1;
+        let s = 3;
+        if (canSwing(t, view)) s += 5;                  // 一次性 +2000 攻击
+        return s;
+      }
+      if (name === '火种祭坛') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) return -1;
+        let s = 4;
+        if (t.name === '灰烬小僧') s += 4;
+        return s;
+      }
+      if (name === '熔岩投手') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) return -1;
+        return (t.atk || 0) >= 2500 ? 7 : 2;
+      }
+      return 1;
+    }
+    case 'spiritSpecial': {
+      if (m.name !== SPIRIT_BUFF) return 0;
+      const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+      if (!t) return -1;
+      let s = 2;
+      if (canSwing(t, view)) s += 13;                   // +1 冲击 = +1 点生命伤害
+      if (t.imp > 0) s += 2;
+      if (ctx.race) s += 4;
+      return s;
+    }
+    case 'spiritDraw':
+      // 灵体横置与专属能力共用；专属能力（+1 冲击）更值钱，除非手牌枯竭。
+      return (view.me.handCount || 0) <= 2 ? 9 : 3;
+    case 'tapEssence':
+      return -3;                                        // 费用支付会自动横置，手动横置纯浪费
+    default:
+      return 0;
+  }
+}
+
+/* ── 主动阶段 ────────────────────────────────────────────────────────────── */
+/** 挑一张最该埋进灵质区的手牌：优先红（红灵质能付红费与灰费），
+ *  避开这回合就能出的牌，避开打出去价值高的牌。 */
+function essencePick(view, moves) {
+  let best = null;
+  let bestScore = -Infinity;
+  for (const m of moves) {
+    if (m.type !== 'setEssence') continue;
+    const c = handCard(view, m.uid);
+    if (!c) continue;
+    const playable = moves.some((x) => x.type === 'play' && x.uid === m.uid);
+    let s = c.color === '红' ? 3.2 : c.color === '黑' ? 1.0 : 0.4;
+    if (hasKw(c, '质密')) s += 1.5;                    // 质密：埋在灵质区还能横置换爆发
+    if (playable) s -= 4.5;                            // 现在就能出 → 留着
+    s -= playValue(view, c) * 0.45;
+    if ((c.cost ? c.cost.total : 0) >= 4) s -= 0.6;    // 高费牌留着当后期威胁
+    if (s > bestScore) { bestScore = s; best = m; }
+  }
+  return best;
+}
+
+function chooseMain(view, moves) {
+  const need = damageNeeded(view);
+  // 本回合理论上限的伤害（直伤 + 可攻击单位的冲击）
+  let burn = 0;
+  for (const m of moves) if (m.type === 'play') burn += immediateDamage(view, m);
+  const swingUnit = bestAttacker(view);
+  const race = burn + (swingUnit ? (swingUnit.imp || 0) : 0) >= need;
+  const blocked = oppField(view).some((b) => canBlockAttacking(b, swingUnit || {}));
+  const ctx = { need, race, pendingAttack: null, blocked };
+
+  const essenceCount = (view.me.essence || []).length;
+  // 灵质区就是费用上限：每回合只能 +1，但设下去永久生效、且当回合就能横置付费用。
+  // 所以只要没到饱和值（5 点足够铺开整套牌），且这回合不能直接斩杀，就先设灵质。
+  const canRamp = moves.some((m) => m.type === 'setEssence') && essenceCount < 5;
+  const setMove = canRamp ? essencePick(view, moves) : null;
+  if (setMove && !race) return setMove;
+
+  let bestPlay = null;
+  let bestPlayScore = 0;
+  for (const m of moves) {
+    if (m.type === 'pass' || m.type === 'setEssence') continue;
+    const s = scoreAction(view, m, ctx);
+    if (s > bestPlayScore) { bestPlayScore = s; bestPlay = m; }
+  }
+  if (bestPlay !== null) return bestPlay;
+  if (setMove) return setMove;
+  return passOf(moves);
+}
+
+/* ── 响应步骤（连锁非空 / 对手回合 / 战斗响应窗口） ─────────────────────── */
+function chooseRespond(view, moves) {
+  const chain = view.chain || [];
+  const top = chain.length ? chain[chain.length - 1] : null;
+  const mine = top && top.controller === view.me.idx;
+  const cb = view.combat || {};
+  const theirAttack = cb.stage === 'blockers' || (cb.stage === 'response' && cb.attacker !== view.me.idx && view.active !== view.me.idx)
+    ? unitByUid(view, cb.attackerUid) : null;
+  const need = damageNeeded(view);
+
+  // 我的卡刚进连锁 → 让它结算。
+  if (mine && chain.length) return passOf(moves);
+
+  let best = null;
+  let bestScore = 0;
+  for (const m of moves) {
+    if (m.type === 'pass') continue;
+    let s = -1;
+    if (m.type === 'play') {
+      const c = handCard(view, m.uid);
+      if (!c) continue;
+      const name = c.name;
+      if (BURN[name]) {
+        const dmg = burnDamage(view, m);
+        s = dmg * 5;
+        if (dmg >= need) s += 500;
+        else if (dmg >= need - 1) s += 20;
+      } else if (BUFF[name]) {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t || !FIGHTER[t.name]) continue;
+        s = canSwing(t, view) ? 8 : 1;
+      } else if (name === '自杀式袭击') {
+        const theirUnit = m.targets && m.targets[1] ? unitByUid(view, m.targets[1]) : null;
+        const myUnit = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!theirUnit) continue;
+        s = 3;
+        if (theirAttack && theirUnit.uid === theirAttack.uid) s += 12;
+        if ((theirUnit.atk || 0) >= 3000) s += 6;
+        if (myUnit && myUnit.name === '灰烬小僧') s += 4;
+        else if (myUnit) s -= 4;
+      } else if (name === '爆燃' || name === '混沌打击') {
+        let v = -1;
+        for (const uid of m.targets || []) {
+          const t = unitByUid(view, uid);
+          if (!t) continue;
+          const mine2 = ownField(view).some((x) => x.uid === uid);
+          const dmg = name === '爆燃' ? ((t.damage || 0) > 0 ? 3000 : 1000) : 2000;
+          let tv = mine2 ? (t.name === '灰烬小僧' && dmg >= remainingHp(t) ? 5 : -3)
+            : (dmg >= remainingHp(t) ? 6 : 0);
+          if (!mine2 && theirAttack && t.uid === theirAttack.uid) tv += 8;
+          if (!mine2 && hasKw(t, '守护')) tv += 2;
+          if (tv > v) v = tv;
+        }
+        s = v;
+      } else if (DRAW[name]) {
+        s = 2;
+      } else {
+        continue;
+      }
+    } else if (m.type === 'ability') {
+      if (m.name === '火种祭坛') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) continue;
+        s = 4;
+        if (t.name === '灰烬小僧') s += 3;
+        if (dmgWouldWin(view, 1)) s += 20;
+      } else if (m.name === '黑暗聚合体') {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) continue;
+        s = 1;
+        if (theirAttack && FIGHTER[t.name]) s += 5;
+      } else {
+        s = 0;
+      }
+    } else if (m.type === 'spiritSpecial') {
+      if (m.name !== SPIRIT_BUFF) { s = 0; }
+      else {
+        const t = m.targets && m.targets[0] ? unitByUid(view, m.targets[0]) : null;
+        if (!t) { s = -1; }
+        else {
+          s = 1;
+          if (canSwing(t, view)) s += 10;
+        }
+      }
+    } else if (m.type === 'spiritDraw') {
+      s = 7;
+    } else {
+      s = -1;
+    }
+    if (s > bestScore) { bestScore = s; best = m; }
+  }
+  return best && bestScore > 0 ? best : passOf(moves);
+}
+
+/** 加上 n 点额外直伤能否直接打穿对手。 */
+function dmgWouldWin(view, n) {
+  return n >= damageNeeded(view);
+}
+
+/* ── 对外接口 ────────────────────────────────────────────────────────────── */
 export const meta = {
   id: 'minimaxm31flash',
   model: 'MiniMax M3.1flash',
   modelId: 'minimax-m3.1-flash',
-  name: '熔线回响',
-  desc: '速攻局用低费敏捷单位压脸、2 费「燃魂」直伤抢节奏，第 5—6 回合打空对手生命卡组。',
+  name: '余烬叠刃',
+  desc: '灵质区就是永久费用引擎：每回合先设 1 张红灵质铺费用，再用血怒与余烬执火者把地狱犬的冲击叠到 3 点，每回合打脸 3 点生命伤害，第 4—5 回合打穿 blitz 的 6 点生命线。',
   primaryMode: 'blitz',
   modes: ['standard', 'blitz', 'grand', 'duo'],
 };
 
-/* 主卡组 55 张：红 31（含混色「燃魂」4）、黑 12（含混色「燃魂」4）、灰 15（不计入 duo 配色）。
-   恰好两种非灰颜色且各覆盖 ≥10 张，duo 模式同样合法。 */
 export const deck = {
-  // ── 红系：低费身体、冲击强化、直伤终结 ──
-  '地狱犬': 4,
-  '火焰鸟': 4,
-  '烈焰斗士': 4,
-  '血怒': 4,
-  '烈焰之力': 2,
-  '爆燃': 1,
-  '焚尽': 2,
-  '火球术': 2,
-  '烈焰聚合体': 3,
-  '烈焰战将': 1,
-  '燃魂': 4,
-  // ── 黑系：牺牲、回收、暴击引擎（只留 8 张，混色「燃魂」另计 4 张）──
-  '自杀式袭击': 2,
-  '灵质榨取': 2,
-  '灵魂交易': 2,
-  '骸骨祭坛': 2,
-  // ── 灰系：万能零件、灵质燃料与补牌 ──
-  '新人冒险者': 3,
-  '流浪佣兵': 2,
-  '荒原狼': 1,
-  '混沌打击': 2,
-  '混沌冲击': 4,
-  '混沌聚合体': 1,
-  '巨石守卫': 1,
-  '黑市商人': 2,
+  地狱犬: 4,
+  烈焰斗士: 4,
+  灰烬小僧: 4,
+  火焰鸟: 4,
+  烈焰聚合体: 4,
+  烈焰之力: 2,
+  血怒: 3,
+  火球术: 3,
+  焚尽: 2,
+  爆燃: 2,
+  余烬回燃: 2,
+  烈焰战将: 1,
+  火种祭坛: 1,
+  燃魂: 3,
+  灵质榨取: 2,
+  黑暗聚合体: 2,
+  自杀式袭击: 2,
+  灵魂交易: 1,
+  混沌打击: 2,
+  冒险准备: 1,
+  新人冒险者: 1,
 };
 
 export const spirit = '余烬执火者';
 export const color = '红';
 
-/* ───────────────────────── 静态资料 ───────────────────────── */
-
-const DECK_TOTAL = { ...deck };
-
-/* 单卡价值（用于「牺牲谁」「牺牲哪张牌」的取舍） */
-const CARD_VALUE = {
-  '地狱犬': 22, '火焰鸟': 17, '烈焰斗士': 26, '烈焰聚合体': 4, '荒原狼': 18,
-  '流浪佣兵': 12, '新人冒险者': 8, '巨石守卫': 24, '食魂者': 16, '骸骨祭坛': 18,
-  '烈焰战将': 30, '燃魂': 30, '焚尽': 28, '火球术': 24, '血怒': 24,
-  '烈焰之力': 16, '爆燃': 10, '混沌冲击': 18, '混沌打击': 12, '自杀式袭击': 16,
-  '灵质榨取': 18, '灵魂交易': 16, '黑市商人': 18, '混沌聚合体': 6,
-};
-/* 战意价值极低的牌：最适合当灵质燃料 */
-const JUNK = new Set(['烈焰聚合体', '新人冒险者', '流浪佣兵', '混沌打击', '混沌聚合体', '爆燃']);
-/* 关键牌：几乎不拿去当灵质 */
-const KEY = new Set([
-  '燃魂', '焚尽', '火球术', '血怒', '骸骨祭坛', '灵魂交易',
-  '灵质榨取', '地狱犬', '烈焰斗士', '烈焰战将', '烈焰之力', '火焰鸟',
-]);
-
-/* ───────────────────────── 基础工具 ───────────────────────── */
-
-const hasKw = (u, k) => !!(u && u.keywords && u.keywords.indexOf(k) >= 0);
-const unitsOf = (list) => (list || []).filter((u) => u && u.type === '灵像');
-const fallback = (moves) => moves.find((m) => m.type === 'pass') || moves[moves.length - 1];
-
-function findHand(view, uid) {
-  const hand = view.me.hand || [];
-  for (const h of hand) if (h.uid === uid) return h;
-  return null;
-}
-
-function findField(list, uid) {
-  const f = list || [];
-  for (const u of f) if (u.uid === uid) return u;
-  return null;
-}
-
-/** 场上单位的综合价值：面板 + 冲击 + 关键字 */
-function unitValue(u) {
-  if (!u) return 0;
-  let v = (u.atk || 0) / 500 + (u.hp || 0) / 500 + (u.imp || 0) * 6;
-  if (hasKw(u, '敏捷')) v += 6;
-  if (hasKw(u, '守护')) v += 5;
-  if (hasKw(u, '预制')) v += 4;
-  if (hasKw(u, '先攻')) v += 4;
-  if (hasKw(u, '超冲击')) v += 5;
-  if (hasKw(u, '践踏')) v += 2;
-  if (hasKw(u, '灵气')) v += 4;
-  if (u.tapped) v *= 0.55;
-  return v;
-}
-
-/** 敌方单位对我方的威胁值 */
-function threatValue(u) {
-  if (!u) return 0;
-  let t = (u.atk || 0) / 300 + (u.imp || 0) * 5;
-  if (hasKw(u, '敏捷')) t += 5;
-  if (hasKw(u, '先攻')) t += 4;
-  if (hasKw(u, '践踏')) t += 3;
-  if (hasKw(u, '超冲击')) t += 3;
-  if (u.type === '灵性') t += 4;
-  return t;
-}
-
-/** 灵能池：已产未花 + 未横置灵质（每张灵质每回合产 1 点同色灵能）
- *  引擎里 p.mana 可能被扣成负数（用灵质付費时），负数部分要归零。 */
-function manaPool(view) {
-  const pool = {};
-  const m = view.me.mana || {};
-  for (const k of Object.keys(m)) pool[k] = m[k] > 0 ? m[k] : 0;
-  for (const e of view.me.essence || []) {
-    if (!e.tapped) pool[e.color] = (pool[e.color] || 0) + 1;
-  }
-  return pool;
-}
-
-function poolTotal(pool) {
-  let t = 0;
-  for (const k of Object.keys(pool)) if (pool[k] > 0) t += pool[k];
-  return t;
-}
-
-/** 卡的费用拆成「有色费 + 灰费」 */
-function costParts(card) {
-  const c = card.cost || {};
-  if (c.colors && !c.colors.__single) return { colors: { ...c.colors }, grey: c.grey || 0 };
-  const n = c.colored || 0;
-  return { colors: n > 0 ? { [card.color]: n } : {}, grey: c.grey || 0 };
-}
-
-/** 与引擎 manaPlan 同口径的可负担判断：有色费必须同色，灰费可由任意颜色支付 */
-function canAfford(card, pool) {
-  const { colors, grey } = costParts(card);
-  const left = { ...pool };
-  for (const c of Object.keys(colors)) {
-    left[c] = (left[c] || 0) - colors[c];
-    if (left[c] < 0) return false;
-  }
-  let total = 0;
-  for (const k of Object.keys(left)) if (left[k] > 0) total += left[k];
-  return total >= grey;
-}
-
-function colorCount(list, color) {
-  let n = 0;
-  for (const u of list || []) if (u.color === color) n += 1;
-  return n;
-}
-
-/** 这一击能不能直接赢：生命卡组翻空后还需再吃 1 点 */
-function lethalBonus(dmg, oppLife) {
-  if (dmg >= oppLife + 1) return 600;
-  if (dmg >= oppLife) return 150;
-  return 0;
-}
-
-/** 我还能看到多少张同名牌在牌库里（用于判断牺牲一张是否心疼） */
-function copiesLeft(view, name) {
-  let seen = 0;
-  for (const zone of ['hand', 'essence', 'field', 'grave', 'armor']) {
-    for (const c of view.me[zone] || []) if (c.name === name) seen += 1;
-  }
-  return (DECK_TOTAL[name] || 0) - seen;
-}
-
-/* ───────────────────────── 目标挑选 ───────────────────────── */
-
-/** 燃魂/自杀式袭击这类「牺牲自己单位」的效果：挑价值最低的那个 */
-function pickVictim(view, targets) {
-  const field = view.me.field || [];
-  let best = null;
-  let bestV = Infinity;
-  for (const uid of targets || []) {
-    const u = findField(field, uid);
-    if (!u || u.type !== '灵像') continue;
-    const v = unitValue(u);
-    if (v < bestV) { bestV = v; best = u; }
-  }
-  return best;
-}
-
-/** 伤害类灵感：优先打对方的单位 */
-function pickDamageTarget(view, targets) {
-  const foe = view.opp.field || [];
-  const mine = view.me.field || [];
-  let best = null;
-  let bestScore = -Infinity;
-  for (const uid of targets || []) {
-    const isFoe = !!findField(foe, uid);
-    const u = isFoe ? findField(foe, uid) : findField(mine, uid);
-    if (!u) continue;
-    const s = isFoe ? threatValue(u) : -60;
-    if (s > bestScore) { bestScore = s; best = u; }
-  }
-  return best;
-}
-
-/**
- * 冲击强化（血怒/烈焰之力/灵体余烬执火者）的目标：
- * 优先「预制」单位（一定可攻击），其次选不是最后进场的那张。
- * view 里没有 enteredTurn，只能靠战场顺序近似判断召唤失调。
- */
-function pickBuffTarget(view, targets) {
-  const field = view.me.field || [];
-  const lastUid = field.length ? field[field.length - 1].uid : null;
-  const cands = [];
-  for (const uid of targets || []) {
-    const u = findField(field, uid);
-    if (u && u.type === '灵像' && (u.imp || 0) >= 1) cands.push(u);
-  }
-  if (!cands.length) return null;
-  const pre = cands.filter((u) => hasKw(u, '预制'));
-  const notLast = cands.filter((u) => u.uid !== lastUid);
-  const pool = pre.length ? pre : (notLast.length ? notLast : cands);
-  pool.sort((a, b) => ((b.imp || 0) * 10 + (b.atk || 0) / 500) - ((a.imp || 0) * 10 + (a.atk || 0) / 500));
-  const u = pool[0];
-  // 场上只有这一张、又是非预制、又在前两回合：多半是本回合刚进场，buff 会白费
-  const sick = u.uid === lastUid && !hasKw(u, '预制') && cands.length === 1 && view.turn <= 2;
-  return { u, canAttack: !sick };
-}
-
-/* ───────────────────────── 出牌评分 ───────────────────────── */
-
-function scorePlay(view, m) {
-  const me = view.me;
-  const opp = view.opp;
-  const card = findHand(view, m.uid);
-  if (!card) return -100;
-  const name = card.name;
-  const targets = m.targets || [];
-  const mode = m.mode || 'main';
-  const oppLife = opp.life || 0;
-  const myUnits = unitsOf(me.field);
-  const foeUnits = unitsOf(opp.field);
-  const lateGame = view.phase === 'main2';
-  let s = 0;
-
-  switch (name) {
-    /* ── 直伤系 ── */
-    case '燃魂': {
-      s = 94 + lethalBonus(2, oppLife);
-      const victim = pickVictim(view, targets);
-      if (victim) {
-        s -= unitValue(victim) * 0.7;
-        if (victim.name === '烈焰战将') s += 26;   // 终曲再给 1 点
-      }
-      break;
-    }
-    case '混沌冲击':
-      s = 54 + lethalBonus(1, oppLife);
-      break;
-    case '火球术':
-      s = 90 + lethalBonus(2, oppLife);
-      break;
-    case '焚尽': {
-      const empty = (me.field || []).length === 0;
-      const dmg = empty ? 4 : 3;
-      s = 118 + (empty ? 40 : 0) + lethalBonus(dmg, oppLife);
-      break;
-    }
-    /* ── 冲击强化系 ── */
-    case '血怒': {
-      if (lateGame) { s = 0; break; }
-      const t = pickBuffTarget(view, targets);
-      if (!t) { s = 0; break; }
-      s = t.canAttack ? 48 : 10;
-      break;
-    }
-    case '烈焰之力': {
-      if (lateGame) { s = 0; break; }
-      const t = pickBuffTarget(view, targets);
-      if (!t) { s = 0; break; }
-      s = (t.canAttack ? 30 : 8) - unitValue(t.u) * 0.45;
-      break;
-    }
-    /* ── 伤害/解场系 ── */
-    case '爆燃': {
-      const t = pickDamageTarget(view, targets);
-      if (!t || !findField(opp.field, t.uid)) { s = 3; break; }
-      const total = (t.damage || 0) > 0 ? 3000 : 1000;
-      const lethal = (t.hp - (t.damage || 0)) <= total;
-      s = lethal ? 30 + threatValue(t) * 0.5 : 6;
-      break;
-    }
-    case '混沌打击': {
-      const t = pickDamageTarget(view, targets);
-      if (!t || !findField(opp.field, t.uid)) { s = 3; break; }
-      const lethal = (t.hp - (t.damage || 0)) <= 2000;
-      s = lethal ? 34 + threatValue(t) * 0.6 : 9;
-      break;
-    }
-    case '自杀式袭击': {
-      const victim = pickVictim(view, targets);
-      const foe = findField(opp.field, targets[1]);
-      s = 24;
-      if (victim) s -= unitValue(victim) * 0.6;
-      if (foe) s += threatValue(foe) * 0.6 + (foe.type === '灵性' ? 16 : 0);
-      else s -= 16;
-      break;
-    }
-    /* ── 引擎/资源系 ── */
-    case '灵质榨取': {
-      const handSize = (me.hand || []).length;
-      s = mode === 'bury' ? 24 : 9;
-      if (handSize <= 3) s += 16;
-      if (handSize >= 6) s -= 8;
-      break;
-    }
-    case '灵魂交易': {
-      const g = findField(me.grave, targets[0]);
-      s = 8 + (g ? (CARD_VALUE[g.name] || 10) * 0.9 : 0);
-      break;
-    }
-    case '骸骨祭坛': {
-      const already = (me.field || []).filter((u) => u.name === '骸骨祭坛').length;
-      s = already === 0 ? 26 : (already === 1 ? 16 : 5);
-      break;
-    }
-    case '食魂者':
-      s = 22;
-      break;
-    case '黑市商人':
-      s = 22;
-      break;
-    /* ── 身体系：速攻里身体就是持续的伤害来源 ── */
-    case '荒原狼': s = 28; break;
-    case '流浪佣兵': s = 24; break;
-    case '新人冒险者': s = 30; break;
-    case '地狱犬': s = 46; break;             // 预制：进场即可攻击
-    case '烈焰斗士': s = 44; break;          // 预制 + 敏捷 + 先攻
-    case '火焰鸟': s = 40; break;            // 敏捷 + 威慑
-    case '烈焰聚合体': s = 6; break;         // 500/500 的身体没有意义
-    case '巨石守卫': s = 34; break;          // 冲击 2
-    case '烈焰战将': s = 42; break;          // 冲击 2 + 超冲击 + 终曲
-    default:
-      s = 12;
-  }
-
-  /* 身体的边际价值随场面调整：对面单位多就多补身体，别无脑铺场 */
-  if (myUnits.length && (name === '荒原狼' || name === '流浪佣兵' || name === '新人冒险者'
-    || name === '地狱犬' || name === '烈焰斗士' || name === '火焰鸟' || name === '巨石守卫'
-    || name === '食魂者' || name === '烈焰战将')) {
-    s += Math.min(10, foeUnits.length - myUnits.length);
-  }
-  return s;
-}
-
-/* ───────────────────────── 设灵质评分 ───────────────────────── */
-
-/** 一张牌的长期价值（用于比较「牺牲它换灵能」划不划算） */
-function roughPlayValue(name) {
-  switch (name) {
-    case '燃魂': return 60;
-    case '焚尽': return 55;
-    case '火球术': return 45;
-    case '烈焰斗士': return 44;
-    case '地狱犬': return 40;
-    case '烈焰战将': return 40;
-    case '血怒': return 38;
-    case '火焰鸟': return 34;
-    case '混沌冲击': return 34;
-    case '灵魂交易': return 30;
-    case '骸骨祭坛': return 30;
-    case '灵质榨取': return 26;
-    case '巨石守卫': return 26;
-    case '荒原狼': return 26;
-    case '黑市商人': return 24;
-    case '烈焰之力': return 24;
-    case '食魂者': return 22;
-    case '流浪佣兵': return 20;
-    case '混沌打击': return 18;
-    case '爆燃': return 14;
-    case '新人冒险者': return 14;
-    case '烈焰聚合体': return 3;
-    case '混沌聚合体': return 3;
-    default: return 12;
-  }
-}
-
-/* 手上出现这些黑牌时，值得专门留一张黑色灵质（「燃魂」要红1黑1） */
-const BLACK_USEFUL = new Set(['燃魂', '自杀式袭击', '灵魂交易', '灵质榨取']);
-
-function scoreSetEssence(view, m) {
-  const me = view.me;
-  const card = findHand(view, m.uid);
-  if (!card) return -100;
-  const hand = me.hand || [];
-  const pool = manaPool(view);
-  const blackEss = colorCount(me.essence, '黑');
-
-  /* 把这张牌变成灵质之后，本回合我能多打出什么？
-     注意这部分只按折扣计入——这些牌本来迟早也会打出去，
-     真正无法挽回的损失是「被牺牲掉的那张牌本身」。 */
-  const pool2 = { ...pool };
-  pool2[card.color] = (pool2[card.color] || 0) + 1;
-  const wanted = [];
-  for (const h of hand) {
-    if (h.uid === card.uid) continue;
-    if (!canAfford(h, pool2)) continue;
-    wanted.push(roughPlayValue(h.name));
-  }
-  wanted.sort((a, b) => b - a);
-  const gain = Math.min(30, (wanted[0] || 0) + (wanted[1] || 0) * 0.4);
-
-  const cost = roughPlayValue(card.name);
-  let s = 12 + gain * 0.25 - cost;
-
-  /* 优先拿废牌当燃料，别动主力 */
-  if (JUNK.has(card.name)) s += 10;
-  if (KEY.has(card.name)) s -= 20;
-
-  /* 颜色：灵质区的颜色决定了这一回合能打出什么牌。
-     规则是「补最缺的那种灵能」——按手上想打的牌的需求 + 红50/黑25/灰25 的配比缺口打分。 */
-  const ess = me.essence || [];
-  const total = ess.length + 1;
-  const demand = { '红': 0, '黑': 0, '灰': 0 };
-  let totalDemand = 0;
-  for (const h of hand) {
-    if (h.uid === card.uid) continue;
-    const v = roughPlayValue(h.name);
-    demand[h.color] = (demand[h.color] || 0) + v;
-    totalDemand += v;
-  }
-  const share = {
-    '红': colorCount(ess, '红') / total,
-    '黑': colorCount(ess, '黑') / total,
-    '灰': colorCount(ess, '灰') / total,
-  };
-  const TARGET_SHARE = { '红': 0.5, '黑': 0.25, '灰': 0.25 };
-  const deficit = Math.max(0, TARGET_SHARE[card.color] - share[card.color]);
-  const want = totalDemand ? demand[card.color] / totalDemand : 0;
-  s += deficit * 70 + want * 26 - 12;
-
-  if (cost >= 40) s -= 8;           // 主力牌不做燃料
-  if (hand.length <= 2) s -= 8;     // 手牌见底时先留着
-  return s;
-}
-
-/* ───────────────────────── 其他动作评分 ───────────────────────── */
-
-function scoreAbility(view, m) {
-  const me = view.me;
-  const u = findField(me.essence, m.uid) || findField(me.field, m.uid);
-  const name = u ? u.name : '';
-  if (name === '混沌聚合体') return 6;   // +1 灰色灵能
-  if (name === '烈焰聚合体') {
-    /* 引擎里「烈焰聚合体」的目标是场上任意单位：指向对手的单位，
-       就能在回合结束时把它销毁——这是一次白嫖的解场。 */
-    const foe = pickAbilityFoe(view, m.targets || []);
-    if (!foe) return 2;
-    return 34 + threatValue(foe) * 0.5;
-  }
-  return 3;
-}
-
-/** 烈焰聚合体启动：挑对手场上最该消失的单位 */
-function pickAbilityFoe(view, targets) {
-  const foe = view.opp.field || [];
-  let best = null;
-  let bestScore = -Infinity;
-  for (const uid of targets || []) {
-    const u = findField(foe, uid);
-    if (!u) continue;
-    const s = threatValue(u) + (u.type === '灵性' ? 10 : 0);
-    if (s > bestScore) { bestScore = s; best = u; }
-  }
-  return best;
-}
-
-function scoreSpiritSpecial(view, m) {
-  if (view.phase === 'main2') return 0;   // 战斗已过，buff 会白费
-  const t = pickBuffTarget(view, m.targets || []);
-  if (!t || !t.canAttack) return 0;
-  return 60;
-}
-
-function scoreSpiritDraw(view, m) {
-  const handSize = (view.me.hand || []).length;
-  let s = 16;
-  if (handSize <= 3) s += 12;
-  if (handSize >= 6) s -= 6;
-  return s;
-}
-
-/* ───────────────────────── 战斗阶段决策 ───────────────────────── */
-
-function decideAttack(view, moves, pass) {
-  const attackMoves = moves.filter((m) => m.type === 'attack');
-  if (!attackMoves.length) return pass;
-  const me = view.me;
-  const opp = view.opp;
-  const field = me.field || [];
-  const foeUnits = unitsOf(opp.field);
-  const canBlockAgile = foeUnits.some((u) => hasKw(u, '敏捷') || (u.tapped && hasKw(u, '守护')));
-  let maxBlockHp = 0;
-  for (const u of foeUnits) {
-    const left = (u.hp || 0) - (u.damage || 0);
-    if (left > maxBlockHp) maxBlockHp = left;
-  }
-
-  const seen = {};
-  const uids = [];
-  for (const m of attackMoves) {
-    if (!seen[m.uid]) { seen[m.uid] = true; uids.push(m.uid); }
-  }
-
-  const cands = [];
-  for (const uid of uids) {
-    const u = findField(field, uid);
-    if (!u) continue;
-    cands.push({
-      uid,
-      u,
-      imp: u.imp || 0,
-      atk: u.atk || 0,
-      /* 敏捷攻击者只有对方有敏捷或横置守护时才挡得住 */
-      unblockable: hasKw(u, '敏捷') && !canBlockAgile,
-      /* 能打死对方任意一块阻挡者：逼对方用掉一块肉 */
-      killer: maxBlockHp > 0 && (u.atk || 0) >= maxBlockHp,
-    });
-  }
-  if (!cands.length) return pass;
-
-  const free = cands.filter((c) => c.unblockable);
-  const killers = cands.filter((c) => c.killer);
-  const overwhelming = cands.length > foeUnits.length;
-
-  let pick = null;
-  if (free.length) {
-    /* 挡不住的攻击者：直接打脸，冲击最大的先上 */
-    free.sort((a, b) => b.imp - a.imp || b.atk - a.atk);
-    pick = free[0];
-  } else if (overwhelming) {
-    /* 我方攻击者多于对方阻挡者：用最弱的去换掉对方的阻挡，最强的留到能连上 */
-    const weakFirst = cands.slice().sort((a, b) => a.imp - b.imp || a.atk - b.atk);
-    pick = weakFirst[0];
-  } else if (killers.length) {
-    killers.sort((a, b) => b.imp - a.imp || b.atk - a.atk);
-    pick = killers[0];
-  } else {
-    /* 必被挡、且换不掉对方任何单位：这一回合先不打，把身材留到下一回合 */
-    return pass;
-  }
-
-  const options = attackMoves.filter((m) => m.uid === pick.uid);
-  const face = options.find((m) => m.target === 'spirit');
-  return face || options[0] || pass;
-}
-
-function decideBlock(view, moves, pass) {
-  const blocks = moves.filter((m) => m.type === 'block');
-  if (!blocks.length) return pass;
-  const cb = view.combat || {};
-  const already = cb.blockers || [];
-  const atk = findField(view.opp.field, cb.attackerUid);
-  if (!atk) return already.length ? pass : (blocks[0] || pass);
-
-  const me = view.me;
-  const cands = [];
-  for (const m of blocks) {
-    if (already.indexOf(m.uid) >= 0) continue;      // 已宣告过的再选一次是取消阻挡
-    const u = findField(me.field, m.uid);
-    if (u) cands.push({ m, u });
-  }
-  if (!cands.length) return pass;
-
-  let best = null;
-  let bestScore = 0;
-  for (const c of cands) {
-    let s = (atk.imp || 0) * 16;                       // 挡下来就免掉的伤害
-    if ((c.u.atk || 0) >= (atk.hp || 0)) s += 55;       // 反杀
-    if ((c.u.hp || 0) > (atk.atk || 0)) s += 12;        // 我活下来
-    else s -= unitValue(c.u) * 0.55;                   // 我会死，亏身材
-    if (s > bestScore) { bestScore = s; best = c.m; }
-  }
-  if (!best) return pass;
-
-  /* 已经挡了一个，且两个阻挡者的攻击力能反杀对方大攻击者时，再补一个 */
-  if (already.length === 1) {
-    const first = findField(me.field, already[0]);
-    const need = (atk.hp || 0) - ((first ? first.atk : 0) + (best.u.atk || 0));
-    const worth = (atk.atk || 0) >= 3000 && need <= 0
-      && (first ? unitValue(first) : 0) < 26;
-    if (worth) return best;
-    return pass;
-  }
-  if (already.length >= 2) return pass;
-  return best;
-}
-
-function decideOrder(view, moves, pass) {
-  const cb = view.combat || {};
-  const ids = (cb.blockers || []).slice();
-  const field = view.me.field || [];
-  const hpOf = (uid) => {
-    const u = findField(field, uid);
-    return u ? (u.hp || 0) : 0;
-  };
-  const sorted = ids.slice().sort((a, b) => hpOf(a) - hpOf(b));
-  for (const m of moves) {
-    if (!m.order || m.order.length !== sorted.length) continue;
-    let ok = true;
-    for (let i = 0; i < sorted.length; i += 1) if (m.order[i] !== sorted[i]) { ok = false; break; }
-    if (ok) return m;
-  }
-  return moves[0] || pass;
-}
-
-/* ───────────────────────── 响应（连锁中）───────────────────────── */
-
-const RESPOND_DAMAGE = { '燃魂': 2, '混沌冲击': 1, '火球术': 2, '焚尽': 3 };
-
-function scoreRespondPlay(view, m) {
-  const card = findHand(view, m.uid);
-  if (!card) return -100;
-  const dmg = RESPOND_DAMAGE[card.name] || 0;
-  if (!dmg) return 4;
-  let s = 8 + dmg * 8;
-  const oppLife = view.opp.life || 0;
-  if (dmg >= oppLife + 1) s += 300;
-  if (card.name === '燃魂') {
-    const victim = pickVictim(view, m.targets || []);
-    const count = unitsOf(view.me.field).length;
-    if (!victim || count < 4) return -10;   // 场面太薄时不拿自己的单位换伤害
-    s -= unitValue(victim) * 0.5;
-  }
-  if (card.name === '焚尽' && (view.me.field || []).length !== 0) s -= 18;
-  return s;
-}
-
-/* ───────────────────────── 主流程 ───────────────────────── */
-
-function decideMain(view, moves, pass) {
-  let best = null;
-  let bestScore = 0;
-  for (const m of moves) {
-    if (m.type === 'pass') continue;
-    let s = -100;
-    if (m.type === 'play') s = scorePlay(view, m);
-    else if (m.type === 'setEssence') s = scoreSetEssence(view, m);
-    else if (m.type === 'ability') s = scoreAbility(view, m);
-    else if (m.type === 'spiritSpecial') s = scoreSpiritSpecial(view, m);
-    else if (m.type === 'spiritDraw') s = scoreSpiritDraw(view, m);
-    else if (m.type === 'tapEssence') s = -100;   // 费用支付会自动横置，手动横置纯浪费
-    if (s > bestScore) { bestScore = s; best = m; }
-  }
-  return best || pass;
-}
-
-function decideRespond(view, moves, pass) {
-  let best = null;
-  let bestScore = 0;
-  for (const m of moves) {
-    if (m.type !== 'play') continue;
-    const s = scoreRespondPlay(view, m);
-    if (s > bestScore) { bestScore = s; best = m; }
-  }
-  return best || pass;
-}
-
-function decide(view, moves) {
-  const pass = fallback(moves);
-
-  /* 灵体检视窗口 */
-  if (view.inspect) {
-    if (view.inspect.card) {
-      const take = moves.find((m) => m.type === 'inspectTake');
-      if (take) return take;
-    }
-    return pass;
-  }
-
-  const cb = view.combat;
-  if (cb) {
-    if (cb.stage === 'blockers') return decideBlock(view, moves, pass);
-    if (cb.stage === 'order') return decideOrder(view, moves, pass);
-    if (cb.stage === 'support') {
-      const sup = moves.find((m) => m.type === 'supportSpirit');
-      if (sup) return sup;
-      return pass;
-    }
-    if (cb.stage === 'attackers') return decideAttack(view, moves, pass);
-    return pass;
-  }
-
-  if (view.phase === 'start' || view.phase === 'setup' || view.phase === 'end') return pass;
-
-  const chain = view.chain || [];
-  if (chain.length) {
-    const top = chain[chain.length - 1];
-    if (top && top.controller === view.me.idx) return pass;  // 我自己的牌在链上：先让过
-    return decideRespond(view, moves, pass);
-  }
-
-  if (view.active === view.me.idx && (view.phase === 'main1' || view.phase === 'main2')) {
-    return decideMain(view, moves, pass);
-  }
-  return decideRespond(view, moves, pass);
-}
-
 export function choose(view, moves) {
-  if (!moves || !moves.length) return { type: 'pass' };
   try {
-    const move = decide(view, moves);
-    if (move && moves.indexOf(move) >= 0) return move;
-    return fallback(moves);
+    if (!moves || !moves.length) return { type: 'pass' };
+    if (view.inspect) return chooseInspect(view, moves);
+    const cb = view.combat;
+    const stage = cb ? cb.stage : null;
+    if (stage === 'attackers') return chooseAttackers(view, moves);
+    if (stage === 'support') return chooseSupport(view, moves);
+    if (stage === 'blockers') return chooseBlockers(view, moves);
+    if (stage === 'order') return chooseOrder(view, moves);
+    const myTurn = view.active === view.me.idx;
+    const myPriority = view.priority === view.me.idx;
+    const noChain = !view.chain || view.chain.length === 0;
+    if (myTurn && myPriority && noChain && (view.phase === 'main1' || view.phase === 'main2')) return chooseMain(view, moves);
+    return chooseRespond(view, moves);
   } catch (err) {
-    return fallback(moves);
+    return passOf(moves);
   }
 }

@@ -1,397 +1,345 @@
-// 策略名称：烬骨连锁
-// 选择理由：红黑低费单位、祭献移除与直伤能互相转化，缩短对手组织防线的时间。
+// 策略名称：赤蓝燃穿
+// 选择理由：红色直伤与冲击压力缩短对局，蓝色过牌与反制提高稳定性。
 // 主责模式：duo
 
 export const meta = {
   id: 'kimi31pro',
   model: 'KIMI 3.1pro',
   modelId: 'kimi-k3.1-pro',
-  name: '烬骨连锁',
-  desc: '以低费灵像维持祭品供应，用祭献、终曲与直伤连续削空生命卡组。',
+  name: '赤蓝燃穿',
+  desc: '用低费灵像持续施压，以红色直伤终结，蓝色过牌和反制维持节奏。',
   primaryMode: 'duo',
   modes: ['standard', 'blitz', 'grand', 'duo'],
 };
 
 export const deck = {
   火焰鸟: 4,
-  灰烬小僧: 4,
   地狱犬: 4,
-  烈焰斗士: 4,
-  爆燃: 4,
+  烈焰斗士: 3,
   火球术: 4,
-  焚尽: 2,
+  爆燃: 4,
+  血怒: 2,
+  灰烬小僧: 3,
+  熔岩投手: 2,
   烈焰战将: 2,
-  自杀式袭击: 4,
-  灵质榨取: 4,
-  蹒跚的僵尸: 4,
-  掘墓人: 2,
-  灵魂交易: 2,
-  燃魂: 4,
-  血焰狂徒: 2,
+  焚尽: 2,
+  炽焰学者: 2,
+  预案引燃: 2,
+  智慧之光: 4,
+  奥术飞弹: 4,
+  分解射线: 2,
+  法术反制: 2,
+  彩虹喷射: 2,
+  浮空书库: 2,
 };
 
 export const spirit = '余烬执火者';
 export const color = '红';
 
-const num = (value) => Number.isFinite(value) ? value : 0;
-const atk = (card) => num(card?.atk ?? card?.attack);
-const imp = (card) => num(card?.imp ?? card?.impact);
-const hpLeft = (card) => Math.max(0, num(card?.hp ?? card?.vitality) - num(card?.damage));
-const cost = (card) => num(card?.cost?.total);
-const has = (card, word) => Array.isArray(card?.keywords) && card.keywords.includes(word);
-const findCard = (cards, uid) => (cards || []).find((card) => card.uid === uid);
-const isMain = (view) => view.active === view.me.idx
-  && (view.phase === 'main1' || view.phase === 'main2') && !view.chain.length;
+const atkOf = (card) => Number(card && (card.atk ?? card.attack)) || 0;
+const impOf = (card) => Number(card && (card.imp ?? card.impact)) || 0;
+const hpOf = (card) => Number(card && (card.hp ?? card.vitality)) || 0;
+const costOf = (card) => Number(card && card.cost && card.cost.total) || 0;
 
-function pickBest(moves, score) {
-  let best = null;
+function inZone(zone, uid) {
+  return (zone || []).find((card) => card && card.uid === uid) || null;
+}
+
+function fieldCard(view, uid) {
+  if (!uid || typeof uid !== 'string') return null;
+  return inZone(view.me.field, uid) || inZone(view.opp.field, uid);
+}
+
+function handCard(view, move) {
+  return inZone(view.me.hand, move.uid);
+}
+
+function targetCards(view, move) {
+  return (move.targets || [])
+    .map((target) => fieldCard(view, typeof target === 'string' ? target : target && target.uid))
+    .filter(Boolean);
+}
+
+function ownTarget(view, move) {
+  return targetCards(view, move).find((card) => inZone(view.me.field, card.uid)) || null;
+}
+
+function enemyTargets(view, move) {
+  return targetCards(view, move).filter((card) => inZone(view.opp.field, card.uid));
+}
+
+function unitValue(card) {
+  if (!card) return 0;
+  return costOf(card) * 120 + atkOf(card) / 10 + impOf(card) * 80 + hpOf(card) / 20;
+}
+
+function bestMove(moves, score) {
+  let selected = null;
   let bestScore = -Infinity;
   for (const move of moves) {
     const value = score(move);
-    if (Number.isFinite(value) && value > bestScore) {
-      best = move;
+    if (value > bestScore) {
+      selected = move;
       bestScore = value;
     }
   }
-  return best;
+  return selected;
 }
 
-function ownValue(card) {
-  if (!card) return 0;
-  let value = 8 + cost(card) * 4 + atk(card) / 650 + imp(card) * 9 + hpLeft(card) / 1300;
-  if (has(card, '预制')) value += 4;
-  if (has(card, '敏捷')) value += 4;
-  if (has(card, '先攻')) value += 5;
-  if (has(card, '守护')) value += 4;
-  if (card.tapped) value -= 5;
-  if (card.doomed) value -= 12;
-  return value;
-}
-
-function enemyValue(card) {
-  if (!card) return 0;
-  let value = 10 + cost(card) * 4 + atk(card) / 550 + imp(card) * 11 + hpLeft(card) / 1200;
-  if (card.type === '灵性') value = 12 + cost(card) * 5 + hpLeft(card) / 1200;
-  if (has(card, '预制')) value += 5;
-  if (has(card, '敏捷')) value += 5;
-  if (has(card, '先攻')) value += 7;
-  if (has(card, '超冲击')) value += 7;
-  if (has(card, '践踏')) value += 4;
-  return value;
-}
-
-function deathDamage(card) {
-  return card && (card.name === '灰烬小僧' || card.name === '烈焰战将') ? 1 : 0;
-}
-
-function fodderScore(card, view) {
-  if (!card) return -100;
-  let score = 48 - ownValue(card) * 1.7;
-  if (card.token) score += 60;
-  if (card.name === '灰烬小僧') score += 82;
-  if (card.name === '烈焰战将') score += 24;
-  if (card.name === '蹒跚的僵尸') {
-    score += view.opp.field.length ? 34 : -28;
-    if (view.me.life <= 4) score -= 45;
+function cardColors(card) {
+  if (!card) return [];
+  if (card.name === '炽焰学者' || card.name === '预案引燃') return ['红', '蓝'];
+  if (card.cost && card.cost.colors) {
+    const colors = Object.keys(card.cost.colors).filter((key) => card.cost.colors[key]);
+    if (colors.length) return colors;
   }
-  if (card.tapped) score += 12;
-  score += Math.min(15, num(card.damage) / 250);
-  if (card.doomed) score += 35;
-  return score;
-}
-
-function requirements(card) {
-  const colored = card?.cost?.colors;
-  if (colored && Object.keys(colored).length) return Object.entries(colored);
-  return num(card?.cost?.colored) > 0 ? [[card.color, num(card.cost.colored)]] : [];
+  return card.color ? [card.color] : [];
 }
 
 function essenceScore(view, move) {
-  const me = view.me;
-  const candidate = findCard(me.hand, move.uid);
-  if (!candidate) return -100;
-  const count = me.essence.length;
-  const needsSix = me.hand.some((card) => cost(card) >= 6);
-  const target = needsSix ? 6 : 5;
-  let score = count < target ? 128 - count * 7 : 4;
-  if (count >= target && count < 7) {
-    const missing = me.hand.some((card) => requirements(card).some(([name, amount]) => {
-      const sources = me.essence.filter((item) => item.color === name).length;
-      return sources < amount;
-    }));
-    if (missing) score = 34;
-  }
-  if (me.handCount <= 2 && count >= 4) score -= 35;
+  const card = handCard(view, move);
+  if (!card) return -1000;
+  const count = view.me.essence.length;
+  const needsRamp = view.me.hand.some((item) => costOf(item) > count);
+  if (count >= 8 && !needsRamp) return -100;
+  if (count >= 10 || (view.me.handCount <= 1 && count >= 6)) return -50;
 
-  const sources = { 红: 0, 黑: 0 };
-  for (const item of me.essence) {
-    if (item.color === '红' || item.color === '黑') sources[item.color]++;
-  }
-  const need = { 红: 0, 黑: 0 };
-  for (const card of me.hand) {
-    if (card.uid === candidate.uid) continue;
-    for (const [name, amount] of requirements(card)) {
-      if (name !== '红' && name !== '黑') continue;
-      const deficit = Math.max(0, amount - sources[name]);
-      need[name] += deficit * (1.4 - Math.min(0.6, cost(card) / 10));
-    }
-  }
-  if (candidate.color === '红' || candidate.color === '黑') {
-    score += need[candidate.color] * 13;
-    if (!need[candidate.color]) score -= 12;
-    if (sources[candidate.color] >= 4 && need[candidate.color] === 0) score -= 9;
-  }
+  let score = count < 8 ? 900 : 260;
+  score += costOf(card) * 9;
+  if (costOf(card) > count + 1) score += 30;
+  if (card.name === '火球术' || card.name === '焚尽') score -= 75;
+  if (card.name === '法术反制') score -= 25;
 
-  const copies = me.hand.filter((card) => card.name === candidate.name).length;
-  if (copies > 1) score += 18;
-  if (candidate.name === '焚尽' || candidate.name === '烈焰战将') score -= 13;
-  if (candidate.name === '火球术' || candidate.name === '燃魂') score -= 8;
-  if (candidate.name === '灵魂交易' && !me.grave.length) score += 14;
-  if (candidate.name === '爆燃' && !view.opp.field.some((card) => card.type === '灵像')) score += 12;
-  if (cost(candidate) >= 6 && count < 4) score += 12;
+  const red = view.me.essence.filter((item) => cardColors(item).includes('红')).length;
+  const blue = view.me.essence.filter((item) => cardColors(item).includes('蓝')).length;
+  const colors = cardColors(card);
+  const blueDemand = view.me.hand.filter((item) => cardColors(item).includes('蓝')).length;
+  if (colors.includes('红') && red < 3) score += 130 - red * 25;
+  if (colors.includes('蓝') && blue < 2 && blueDemand >= 2) score += 115 - blue * 25;
+  if (colors.includes('蓝') && red >= 3 && blue === 0 && blueDemand > 0) score += 80;
   return score;
 }
 
-function damageScore(view, target, amount) {
-  if (!target) return -100;
-  const lethal = amount >= hpLeft(target);
-  if (view.me.field.some((card) => card.uid === target.uid)) {
-    if (deathDamage(target) && lethal) return view.opp.life < 1 ? 1000 : 12;
-    return -120;
+function directDamage(card, view) {
+  if (!card) return 0;
+  if (card.name === '火球术') return 2;
+  if (card.name === '焚尽') {
+    return view.me.field.some((item) => item.type === '灵像') ? 3 : 4;
   }
-  let score = enemyValue(target) + amount / 120;
-  if (lethal) score += 52;
-  if (has(target, '碾压') && !lethal) score -= 80;
-  if (view.combat && target.uid === view.combat.attackerUid) score += lethal ? 70 : 18;
-  return score;
+  if (card.name === '炽焰学者') return 1;
+  return 0;
 }
 
-function directScore(view, amount) {
-  let score = 48 + amount * 25;
-  if (amount > view.opp.life) score += 1000;
-  else if (view.opp.life <= 4) score += 25;
+function drawPenalty(view) {
+  let score = 0;
+  if (view.me.handCount >= 7) score -= 550;
+  if (view.me.deck <= 2) score -= 1200;
+  else if (view.me.deck <= 6) score -= 400;
   return score;
 }
 
 function playScore(view, move) {
-  const me = view.me;
-  const card = findCard(me.hand, move.uid);
-  if (!card) return -100;
-  const main = isMain(view);
-  const name = card.name;
-
-  if (name === '爆燃') {
-    const targetUid = move.targets[0];
-    const target = findCard([...me.field, ...view.opp.field], targetUid);
-    const amount = num(target?.damage) > 0 ? 3000 : 1000;
-    const score = 17 + damageScore(view, target, amount);
-    return main ? score : score - (amount >= hpLeft(target) ? 0 : 35);
-  }
-  if (name === '火球术') return main ? directScore(view, 2) : (2 > view.opp.life ? 1000 : -12);
-  if (name === '焚尽') {
-    const amount = me.field.some((item) => item.type === '灵像') ? 3 : 4;
-    return main ? directScore(view, amount) + 5 : (amount > view.opp.life ? 1000 : -12);
-  }
-  if (name === '燃魂') {
-    const fodder = findCard(me.field, move.targets[0]);
-    const amount = 2 + deathDamage(fodder);
-    let score = directScore(view, amount) + fodderScore(fodder, view) * 0.65;
-    if (fodder?.name === '蹒跚的僵尸' && view.opp.field.length) score += 35;
-    if (!main && amount <= view.opp.life) score -= 90;
-    return score;
-  }
-  if (name === '自杀式袭击') {
-    const fodder = findCard(me.field, move.targets[0]);
-    const target = findCard(view.opp.field, move.targets[1]);
-    let score = 22 + enemyValue(target) * 1.15 + fodderScore(fodder, view) * 0.75;
-    score += deathDamage(fodder) * 22;
-    if (view.combat && target?.uid === view.combat.attackerUid) score += 55;
-    if (!main && target?.uid !== view.combat?.attackerUid) score -= 30;
-    return score;
-  }
-  if (name === '灵质榨取') {
-    if (me.deck <= 2 && me.life <= 3) return -100;
-    let score = move.mode === 'bury' ? 47 : 32;
-    if (move.mode === 'bury' && me.handCount < 4) score -= 22;
-    if (me.handCount <= 2) score += 18;
-    if (me.handCount >= 7) score -= 16;
-    if (me.deck < 8) score -= 15;
-    return main ? score : score - 5;
-  }
-  if (name === '灵魂交易') {
-    if (!move.targets.length) return -100;
-    const target = findCard(me.grave, move.targets[0]);
-    if (!target) return -100;
-    let score = 27 + cost(target) * 5 + imp(target) * 5;
-    if (target.name === '燃魂' || target.name === '火球术' || target.name === '灰烬小僧') score += 20;
-    if (me.handCount <= 3) score += 20;
-    return main ? score : score - 12;
-  }
+  const card = handCard(view, move);
+  if (!card) return -1000;
+  const cost = costOf(card);
+  let score = 0;
 
   if (card.type === '灵像') {
-    let score = 48 + cost(card) * 4 + atk(card) / 1000 + imp(card) * 9 + num(card.vitality) / 1600;
-    if (name === '灰烬小僧') score += 15;
-    if (name === '地狱犬' || name === '烈焰斗士') score += 14;
-    if (name === '烈焰战将') score += 24;
-    if (name === '血焰狂徒') score += 10;
-    if (name === '蹒跚的僵尸') score += view.opp.field.length ? 8 : -8;
-    if (view.phase === 'main1') score += has(card, '预制') ? 18 : -13;
-    if (view.phase === 'main2') score += 12;
+    score = 570 + cost * 35 + atkOf(card) / 100 + impOf(card) * 35;
+    if ((card.keywords || []).includes('预制')) score += 70;
+    if (!view.me.field.some((item) => item.type === '灵像')) score += 40;
     return score;
   }
-  return 25;
-}
 
-function mainScore(view, move) {
-  if (move.type === 'play') return playScore(view, move);
-  if (move.type === 'setEssence') return essenceScore(view, move);
-  if (move.type === 'pass') return 0;
-  if (move.type === 'tapEssence') return -30;
-  if (move.type === 'spiritDraw') {
-    if (!isMain(view)) return -40;
-    let score = view.me.handCount <= 5 ? 57 : 39;
-    if (view.me.deck < 6) score -= 18;
+  if (card.type === '灵性') {
+    const spells = view.me.hand.filter((item) => item.type === '灵感').length;
+    return 610 + spells * 25 + (view.phase === 'main1' ? 40 : 0);
+  }
+
+  const burn = directDamage(card, view);
+  if (burn) {
+    score = card.name === '焚尽' ? 830 : 720;
+    if (view.mode === 'blitz') score += 150;
+    if (view.opp.life <= 4) score += 350;
+    if (burn > view.opp.life) score += 100000;
     return score;
   }
-  if (move.type === 'spiritSpecial') {
-    if (view.phase !== 'main1' || !isMain(view)) return -35;
-    const target = findCard(view.me.field, move.targets[0]);
-    if (!target || target.tapped) return -20;
-    return 72 + imp(target) * 12 + atk(target) / 800 + (has(target, '预制') ? 8 : 0);
+
+  if (card.name === '智慧之光') {
+    return 430 + Math.max(0, 6 - view.me.handCount) * 35 + drawPenalty(view);
   }
-  if (move.type === 'ability') {
-    const source = findCard([...view.me.field, ...view.me.essence], move.uid);
-    if (source?.name === '血焰狂徒') {
-      const fodder = findCard(view.me.field, move.targets[0]);
-      return 43 + fodderScore(fodder, view) * 0.8 + (view.phase === 'main1' ? 16 : 0);
-    }
-    return 20;
+  if (card.name === '法术反制') {
+    const enemyChain = view.chain.some((item) => item.controller !== view.me.idx && !item.countered);
+    return enemyChain ? 4200 + view.chain.length * 15 : -500;
   }
-  return -10;
+  if (card.name === '血怒') {
+    const target = ownTarget(view, move);
+    if (!target || view.phase !== 'main1') return -250;
+    score = 500 + atkOf(target) / 80 + (target.tapped ? -250 : 80);
+    if (!target.tapped && impOf(target) + 1 > view.opp.life) score += 1500;
+    return score;
+  }
+
+  const enemies = enemyTargets(view, move);
+  if (!enemies.length) return -400;
+  const target = enemies[0];
+  const threat = enemies.reduce((sum, item) => sum + unitValue(item), 0) / 5;
+
+  if (card.name === '爆燃') {
+    const damage = target.damage > 0 ? 3000 : 1000;
+    return 590 + threat + (damage >= hpOf(target) ? 1100 : 0) + (target.damage > 0 ? 100 : 0);
+  }
+  if (card.name === '奥术飞弹') {
+    return 620 + threat + (hpOf(target) <= 2000 ? 1050 : 0) + drawPenalty(view);
+  }
+  if (card.name === '预案引燃') {
+    return 650 + threat + (hpOf(target) <= 2000 ? 1050 : 0) + drawPenalty(view);
+  }
+  if (card.name === '分解射线') {
+    score = 720 + threat;
+    if (move.mode === 'destroy2') score += 180;
+    if (move.mode === 'both') score += 320;
+    if (move.mode === 'condense') score -= 80;
+    return score;
+  }
+  if (card.name === '彩虹喷射') {
+    return 450 + costOf(target) * 110 + drawPenalty(view);
+  }
+  return 300 + cost * 20;
 }
 
-function legalBlocker(blocker, attacker) {
-  if (!blocker || blocker.type !== '灵像') return false;
-  if (blocker.tapped && !has(blocker, '守护')) return false;
-  if (has(attacker, '敏捷') && !has(blocker, '敏捷') && !(blocker.tapped && has(blocker, '守护'))) return false;
-  return true;
+function abilityScore(view, move) {
+  const card = inZone(view.me.field, move.uid) || inZone(view.me.essence, move.uid);
+  if (!card) return -500;
+  if (card.name === '炽焰学者') {
+    return view.opp.life < 1 ? 100000 : 760;
+  }
+  if (card.name === '熔岩投手') {
+    const target = enemyTargets(view, move)[0];
+    if (target && hpOf(target) <= 1000) return 1050 + unitValue(target) / 5;
+    return view.phase === 'main2' ? 300 : -100;
+  }
+  return 280;
 }
 
 function attackScore(view, move) {
-  if (move.type === 'pass') return 25;
-  const attacker = findCard(view.me.field, move.uid);
-  if (!attacker) return -100;
-  const attack = atk(attacker);
-  const impact = imp(attacker);
+  const attacker = inZone(view.me.field, move.uid);
+  if (!attacker) return -500;
+  const attack = atkOf(attacker);
+  const impact = impOf(attacker);
   if (move.target === 'spirit') {
-    const blockers = view.opp.field.filter((card) => legalBlocker(card, attacker));
-    const possibleImpact = impact + (view.me.spirit.crit > 0 ? 1 : 0);
-    let score = 51 + impact * 23;
-    if (possibleImpact > view.opp.life) score += 1000;
-    if (view.opp.life <= 4) score += 25;
-    if (!blockers.length) score += 52;
-    else {
-      const badTrade = blockers.every((blocker) => atk(blocker) >= hpLeft(attacker)
-        && !(has(attacker, '先攻') && attack >= hpLeft(blocker)));
-      if (badTrade) score -= deathDamage(attacker) ? 12 : 43;
-      if (attacker.doomed) score += 35;
-    }
+    let score = 520 + impact * 190 + attack / 100;
+    if (impact > view.opp.life) score += 100000;
+    if ((attacker.keywords || []).includes('敏捷')) score += 70;
     return score;
   }
-  const target = findCard(view.opp.field, move.target);
-  if (!target) return -100;
-  const kills = attack >= hpLeft(target);
-  const safe = target.type !== '灵像' || (has(attacker, '先攻') && kills) || atk(target) < hpLeft(attacker);
-  let score = 29 + enemyValue(target) * 0.75;
-  if (kills) score += 43;
-  else score -= 22;
-  if (!safe) score -= ownValue(attacker) * 1.15;
-  if (deathDamage(attacker) && !safe) score += 22;
-  if (target.type === '灵性') score += 18;
+  const target = fieldCard(view, move.target);
+  if (!target) return -300;
+  const kills = attack >= hpOf(target);
+  const survives = hpOf(attacker) > atkOf(target);
+  let score = kills ? 430 + unitValue(target) / 5 : 20;
+  if (survives) score += 100;
+  if ((attacker.keywords || []).includes('先攻') && kills) score += 100;
+  if ((attacker.keywords || []).includes('践踏') && kills) score += 80;
   return score;
 }
 
-function blockScore(view, move) {
-  const combat = view.combat;
-  const attacker = findCard(view.opp.field, combat.attackerUid);
+function supportScore(view, move) {
+  if (move.type !== 'supportSpirit') return 0;
+  const attacker = inZone(view.me.field, view.combat.attackerUid);
   if (!attacker) return 100;
-  const chosen = combat.blockers || [];
-  const currentCards = chosen.map((uid) => findCard(view.me.field, uid)).filter(Boolean);
-  const currentAttack = currentCards.reduce((sum, card) => sum + atk(card), 0);
-  const currentKills = currentAttack >= hpLeft(attacker) && currentCards.length > 0;
-  const incoming = imp(attacker);
-  const target = combat.target === 'spirit' ? null : findCard(view.me.field, combat.target);
-  const targetDies = target && atk(attacker) >= hpLeft(target);
-
-  if (move.type === 'pass') {
-    if (currentKills) return 145;
-    let score = 18 - incoming * 13;
-    if (combat.target === 'spirit' && incoming > view.me.life) score -= 1000;
-    if (targetDies) score -= ownValue(target) * 2;
-    return score;
+  if (view.combat.target === 'spirit') {
+    return impOf(attacker) + 1 > view.opp.life ? 100000 : 1100;
   }
-  if (move.type !== 'block') return -100;
-  const blocker = findCard(view.me.field, move.uid);
-  if (!blocker) return -100;
-  const combined = currentAttack + atk(blocker);
-  const kills = combined >= hpLeft(attacker);
-  const firstKill = has(blocker, '先攻') && atk(blocker) >= hpLeft(attacker);
-  const dies = atk(attacker) >= hpLeft(blocker) && !firstKill;
-  let score = 25 + incoming * 19;
-  if (kills) score += 48 + enemyValue(attacker) * 0.35;
-  if (dies) score -= ownValue(blocker) * 1.25;
-  if (dies && blocker.name === '灰烬小僧') score += 36;
-  if (dies && blocker.name === '烈焰战将') score += 28;
-  if (dies && blocker.name === '蹒跚的僵尸') score += 12;
-  if (firstKill) score += 30;
-  if (targetDies) score += ownValue(target) * 1.2;
-  if (combat.target === 'spirit' && incoming > view.me.life) score += 1000;
-  if (chosen.length) score -= 18;
+  const target = fieldCard(view, view.combat.target);
+  return target && atkOf(attacker) + 1000 >= hpOf(target) ? 900 : 250;
+}
+
+function blockerScore(view, move) {
+  if (move.type === 'pass') return 0;
+  if (move.type !== 'block' || view.combat.target !== 'spirit') return -1000;
+  const blocker = inZone(view.me.field, move.uid);
+  const attacker = inZone(view.opp.field, view.combat.attackerUid);
+  if (!blocker || !attacker) return -1000;
+
+  const impact = impOf(attacker);
+  const lethal = impact > view.me.life;
+  const emergency = impact >= view.me.life;
+  const kills = atkOf(blocker) >= hpOf(attacker);
+  const survives = hpOf(blocker) > atkOf(attacker);
+  let score = lethal ? 1400 : emergency ? 900 : 0;
+
+  if (kills) score += survives ? 480 : 280;
+  else if (survives) score += 110;
+  else if (!emergency) score -= 300;
+  score += (unitValue(attacker) - unitValue(blocker)) / 12;
+  if (view.me.life <= 3) score += 160;
   return score;
+}
+
+function chooseBlockers(view, moves) {
+  const chosen = view.combat.blockers || [];
+  const attacker = inZone(view.opp.field, view.combat.attackerUid);
+  const chosenAttack = chosen.reduce((sum, uid) => sum + atkOf(inZone(view.me.field, uid)), 0);
+  if (attacker && chosen.length && chosenAttack >= hpOf(attacker)) {
+    return moves.find((move) => move.type === 'pass') || null;
+  }
+  const fresh = moves.filter((move) => move.type !== 'block' || !chosen.includes(move.uid));
+  return bestMove(fresh, (move) => blockerScore(view, move));
 }
 
 function orderScore(view, move) {
-  const attacker = findCard(view.me.field, view.combat.attackerUid);
-  let remaining = atk(attacker);
-  let score = 0;
-  for (const uid of move.order) {
-    const blocker = findCard(view.opp.field, uid);
-    if (!blocker) continue;
-    const assigned = Math.min(remaining, hpLeft(blocker));
-    remaining -= assigned;
-    if (assigned >= hpLeft(blocker)) score += 30 + enemyValue(blocker) * 0.2;
-    score += assigned / 1000;
+  const order = move.order || [];
+  return order.reduce((score, uid, index) => {
+    return score - unitValue(inZone(view.me.field, uid)) * (order.length - index);
+  }, 0);
+}
+
+function normalScore(view, move) {
+  switch (move.type) {
+    case 'setEssence': return essenceScore(view, move);
+    case 'play': return playScore(view, move);
+    case 'ability': return abilityScore(view, move);
+    case 'spiritSpecial': {
+      const target = ownTarget(view, move);
+      if (!target) return 100;
+      return 860 + atkOf(target) / 100 + impOf(target) * 40 + (target.tapped ? -300 : 100);
+    }
+    case 'spiritDraw': return 350 + drawPenalty(view);
+    case 'tapEssence': return -1000;
+    case 'pass': return 0;
+    default: return 0;
   }
-  return score;
 }
 
 export function choose(view, moves) {
   try {
     if (view.inspect) {
+      const take = moves.find((move) => move.type === 'inspectTake');
       const reveal = moves.find((move) => move.type === 'inspectReveal');
       const card = view.inspect.card;
-      if (reveal && card && String(card.trigger || '').includes('CT')
-        && (view.me.essence.length >= 3 || view.opp.life <= 3)) return reveal;
-      return moves.find((move) => move.type === 'inspectTake') || moves[0];
+      if (reveal && card && view.me.handCount < 7 && view.me.deck > 2) {
+        if (directDamage(card, view) || costOf(card) <= view.me.essence.length + 1) return reveal;
+      }
+      return take || reveal || moves.find((move) => move.type === 'pass');
     }
-    const stage = view.combat?.stage;
-    if (stage === 'attackers') return pickBest(moves, (move) => attackScore(view, move));
-    if (stage === 'support') return moves.find((move) => move.type === 'supportSpirit')
-      || moves.find((move) => move.type === 'pass');
-    if (stage === 'blockers') {
-      const chosen = view.combat.blockers || [];
-      const fresh = moves.filter((move) => move.type !== 'block' || !chosen.includes(move.uid));
-      return pickBest(fresh, (move) => blockScore(view, move))
-        || moves.find((move) => move.type === 'pass') || moves[moves.length - 1];
-    }
-    if (stage === 'order') {
+
+    if (view.combat && view.combat.stage === 'order') {
       const orders = moves.filter((move) => move.type === 'orderBlockers');
-      return pickBest(orders, (move) => orderScore(view, move)) || orders[0] || moves[0];
+      return bestMove(orders, (move) => orderScore(view, move));
     }
-    const best = pickBest(moves, (move) => mainScore(view, move));
-    if (best) return best;
+    if (view.combat && view.combat.stage === 'blockers') return chooseBlockers(view, moves);
+    if (view.combat && view.combat.stage === 'attackers') {
+      return bestMove(moves, (move) => move.type === 'attack' ? attackScore(view, move) : 0);
+    }
+    if (view.combat && view.combat.stage === 'support') {
+      return bestMove(moves, (move) => supportScore(view, move));
+    }
+
+    const selected = bestMove(moves, (move) => normalScore(view, move));
+    if (selected) return selected;
   } catch (error) {
-    // 任何异常都退回引擎给出的让过动作。
+    // 异常时只退回引擎给出的让过动作。
   }
-  return moves.find((m) => m.type === 'pass') || moves[moves.length - 1];
+  return moves.find((move) => move.type === 'pass') || moves[moves.length - 1];
 }

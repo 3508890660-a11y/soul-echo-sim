@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11181b">
+  <title>基本卡图框架｜Soul Echo 灵魂回响</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath fill='%2311181b' d='M0 0h44v44H0z'/%3E%3Cpath fill='none' stroke='%23d3a55f' stroke-width='2' d='M22 4 38 13v18l-16 9-16-9V13Z'/%3E%3Ccircle fill='%23d3a55f' cx='22' cy='22' r='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .frame-main { display: grid; gap: 34px; }
+    .frame-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    .frame-head p { color: var(--muted); font-size: 13px; max-width: 62ch; }
+    .frame-section { display: grid; gap: 16px; }
+    .frame-section > h2 { font: 700 19px/1.3 "Noto Serif SC", serif; letter-spacing: .08em; }
+    .frame-section > h2 span { color: var(--accent); font-size: 13px; letter-spacing: .12em; margin-left: 10px; }
+    .diagram { border: 1px solid var(--line); background: #0d1618; padding: 8px; overflow: auto; }
+    .diagram svg { display: block; width: 100%; height: auto; }
+    .card-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(236px, 1fr)); }
+    .card-cell { display: grid; gap: 8px; align-content: start; }
+    .card-cell .artifact { border: 1px solid var(--line); background: #0b1416; border-radius: 6px; overflow: hidden; }
+    .card-cell svg { display: block; width: 100%; height: auto; }
+    .card-cell .meta { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); }
+    .card-cell .meta b { color: var(--text); font-weight: 600; font-size: 13px; }
+    .card-cell button { min-height: 32px; padding: 4px 10px; font-size: 12px; }
+    .frame-note { border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 14px 16px; color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
+    .frame-note code { color: var(--text); font-size: 12px; }
+    .toc { display: flex; flex-wrap: wrap; gap: 8px; }
+    .toc a { border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 12px; color: var(--muted); text-decoration: none; }
+    .toc a:hover { border-color: var(--accent); color: var(--text); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 38 12v20L22 41 6 32V12Z"/><path d="M13 23c4-11 14-11 18 0-4 11-14 11-18 0Z"/><circle cx="22" cy="23" r="3"/></svg>
+      <div><h1>灵魂回响</h1><p>SOUL ECHO · 基本卡图框架</p></div>
+    </div>
+    <nav class="mainnav" aria-label="主导航">
+      <a href="./index.html">观战台</a>
+      <a href="./deck.html">组卡</a>
+      <a href="./duel.html">双人对战</a>
+      <a href="./card-frame.html" class="current" aria-current="page">卡面</a>
+    </nav>
+  </header>
+
+  <main class="frame-main">
+    <section class="frame-head">
+      <div>
+        <h2>基本卡图框架</h2>
+        <p>按《卡牌基础模版》的分区用 SVG 重绘：左上同色／灰色双费圈、顶部卡名与类型、右上触发标记、中部卡图、词条条、效果文本框、底部攻击力・冲击力・生命力。卡框颜色即卡牌颜色。</p>
+      </div>
+      <div class="toc">
+        <a href="#structure">结构标注</a>
+        <a href="#colors">八色</a>
+        <a href="#types">四种类型</a>
+        <a href="#edge">边界样本</a>
+      </div>
+    </section>
+
+    <section class="frame-section" id="structure">
+      <h2>结构标注<span>尺寸 63×88mm · viewBox 630×880</span></h2>
+      <div class="diagram" id="diagram"></div>
+    </section>
+
+    <section class="frame-section" id="colors">
+      <h2>八色卡框<span>颜色只换框与强调色，版面不变</span></h2>
+      <div class="card-grid" id="colors-grid"></div>
+    </section>
+
+    <section class="frame-section" id="types">
+      <h2>四种类型<span>面板区随类型改变</span></h2>
+      <div class="card-grid" id="types-grid"></div>
+    </section>
+
+    <section class="frame-section" id="edge">
+      <h2>边界样本<span>混色、超高费、超长文本</span></h2>
+      <div class="card-grid" id="edge-grid"></div>
+    </section>
+
+    <div class="frame-note">
+      <div>所有卡面由 <code>src/card-frame.js</code> 的 <code>cardFrameSVG(card)</code> 生成，直接读引擎卡池，不手抄数值。</div>
+      <div>静态导出在 <code>assets/</code>：<code>card-frame.svg</code>（结构图）、<code>card-frame-blank.svg</code>（空框）、以及五张示例卡。</div>
+      <div>卡图区留空时会画品牌徽记占位；传入 <code>{ art: '图片地址' }</code> 即可替换成正式插画。</div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { BY_NAME, SPIRIT_DATA } from './js/engine/cards.js';
+    import { cardFrameSVG, annotatedFrameSVG } from './src/card-frame.js';
+
+    const $ = (s) => document.querySelector(s);
+
+    $('#diagram').innerHTML = annotatedFrameSVG();
+
+    function cell(card, tag = '') {
+      const svg = cardFrameSVG(card);
+      const name = card.name;
+      const sub = `${card.code || ''}${tag ? ` · ${tag}` : ''}`;
+      return `<figure class="card-cell">
+        <div class="artifact">${svg}</div>
+        <figcaption class="meta"><b>${name}</b><span>${sub}</span></figcaption>
+        <button type="button" data-download="${name}">下载 SVG</button>
+      </figure>`;
+    }
+
+    const colorSamples = ['渡魂人', '食魂者', '血怒', '次元超越', '森林狼王', '雷霆战将', '幻梦战将', '篝火营地'];
+    $('#colors-grid').innerHTML = colorSamples.map((n) => cell(BY_NAME.get(n))).join('');
+
+    const typeSamples = ['圣光战将', '血怒', '誓约之环'];
+    const spirit = SPIRIT_DATA.find((s) => s.name === '根脉育苗者');
+    $('#types-grid').innerHTML = [...typeSamples, spirit.name]
+      .map((n) => cell(BY_NAME.get(n) || spirit, BY_NAME.get(n) ? '' : '灵体')).join('');
+
+    const edgeSamples = [
+      ['荒原雷兽', '混色'],
+      ['次元超越', '15 费'],
+      ['森林狼王', '104 字'],
+    ];
+    $('#edge-grid').innerHTML = edgeSamples.map(([n, tag]) => cell(BY_NAME.get(n), tag)).join('');
+
+    const svgOf = new Map();
+    for (const el of document.querySelectorAll('.artifact > svg')) {
+      svgOf.set(el.closest('figure').querySelector('b').textContent, el.outerHTML);
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-download]');
+      if (!b) return;
+      const name = b.dataset.download;
+      const svg = svgOf.get(name);
+      if (!svg) return;
+      const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SE01_${name}.svg`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    });
+  </script>
+</body>
+</html>

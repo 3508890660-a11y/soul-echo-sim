@@ -1,5 +1,5 @@
 import { BY_NAME, BY_ID, BY_SPIRIT, CARD_DATA } from './cards.js';
-import { PRECONS } from './precons.js';
+import { PRECONS, PRECON_COLORS } from './precons.js';
 import {
   APPROXIMATIONS, targetGroups, costReduction, availableModes,
   resolveEffect, implementationStatus,
@@ -61,6 +61,21 @@ export const MODES = Object.freeze({
 export const MODE_IDS = Object.freeze(Object.keys(MODES));
 export const DEFAULT_MODE = 'standard';
 
+/**
+ * 全局构筑硬约束：与模式无关，任何模式都生效。
+ * 同色比例只按卡牌自身的颜色字段计：混色卡按其主色计，灰是中性色，
+ * 只有灵体本身为灰时，灰卡才算同色。
+ */
+export const DECK_RULES = Object.freeze({
+  sameNameMax: 4,
+  spiritColorRatio: 0.6,
+});
+
+/** 灵体卡的颜色；名称不是八色灵体之一时返回 null。 */
+export function spiritColorOf(spiritName) {
+  return BY_SPIRIT.get(spiritName)?.color || null;
+}
+
 /** 统计卡组覆盖到的非灰色颜色（按「包含该色的卡牌张数」计，混色卡同时计入两色）。 */
 export function deckColors(deck) {
   const tally = {};
@@ -74,9 +89,18 @@ export function deckColors(deck) {
   return tally;
 }
 
-export function validateDeck(deck, mode = DEFAULT_MODE) {
+/**
+ * 卡组合法性。
+ * @param {object|string[]} deck 卡名数组或「卡名 → 张数」
+ * @param {string} mode 模式 id
+ * @param {object|string} [opts] 传字符串等价于 { spirit }；也可传 { spirit } 或 { spiritColor } / { color }
+ *   ——同色 60% 需要知道灵体颜色，未提供时跳过该条（引擎内部路径都会提供）。
+ */
+export function validateDeck(deck, mode = DEFAULT_MODE, opts = {}) {
   const m = MODES[mode] || MODES[DEFAULT_MODE];
   const list = asArray(deck);
+  const options = typeof opts === 'string' ? { spirit: opts } : (opts || {});
+  const spiritColor = options.spiritColor || spiritColorOf(options.spirit) || options.color || null;
   const errors = [];
   if (list.length < m.deckMin || list.length > m.deckMax) errors.push(`主卡组须为 ${m.deckMin}—${m.deckMax} 张，当前 ${list.length}`);
   const counts = {};
@@ -86,7 +110,17 @@ export function validateDeck(deck, mode = DEFAULT_MODE) {
     else if (c.type === '灵体') errors.push(`灵体不能投入主卡组：${name}`);
     counts[name] = (counts[name] || 0) + 1;
   }
-  for (const [name, n] of Object.entries(counts)) if (n > 4) errors.push(`${name} 超过同名 4 张：${n}`);
+  for (const [name, n] of Object.entries(counts)) if (n > DECK_RULES.sameNameMax) errors.push(`${name} 超过同名 ${DECK_RULES.sameNameMax} 张：${n}`);
+  const sameColor = spiritColor
+    ? list.filter((name) => {
+      const c = BY_NAME.get(name) || BY_ID.get(name);
+      return c && c.color === spiritColor;
+    }).length
+    : 0;
+  const sameColorNeed = list.length ? Math.ceil(list.length * DECK_RULES.spiritColorRatio) : 0;
+  if (spiritColor && list.length && sameColor < sameColorNeed) {
+    errors.push(`主卡组中与灵体同色（${spiritColor}）的卡牌须至少 ${Math.round(DECK_RULES.spiritColorRatio * 100)}%：当前 ${sameColor}/${list.length}，至少需要 ${sameColorNeed} 张`);
+  }
   if (m.requireColors) {
     const tally = deckColors(list);
     const colors = Object.entries(tally).sort((a, b) => b[1] - a[1]);
@@ -95,7 +129,7 @@ export function validateDeck(deck, mode = DEFAULT_MODE) {
     }
     for (const [c, n] of colors) if (n < m.colorMin) errors.push(`【${m.name}】${c}色覆盖 ${n} 张，少于 ${m.colorMin} 张`);
   }
-  return { ok: errors.length === 0, errors, list, mode: m.id };
+  return { ok: errors.length === 0, errors, list, mode: m.id, spiritColor, sameColor, sameColorNeed };
 }
 
 function newPlayer(g, side, name, deck, color, spiritName) {
@@ -124,9 +158,19 @@ function newPlayer(g, side, name, deck, color, spiritName) {
 export function createGame(opts = {}) {
   const modeId = MODES[opts.mode] ? opts.mode : DEFAULT_MODE;
   const mode = MODES[modeId];
-  const deckA = opts.deckA || PRECONS[opts.preconA || '灰色基准'];
-  const deckB = opts.deckB || PRECONS[opts.preconB || '红色快攻'];
-  const va = validateDeck(deckA, modeId), vb = validateDeck(deckB, modeId);
+  const preconA = opts.preconA || '灰色基准';
+  const preconB = opts.preconB || '红色快攻';
+  const deckA = opts.deckA || PRECONS[preconA];
+  const deckB = opts.deckB || PRECONS[preconB];
+  // 预组用通用灵体（「测试灵体（色）」），灵体名不带颜色，故同色基准取预组主色。
+  const spiritA = opts.spiritA || '测试灵体';
+  const spiritB = opts.spiritB || '测试灵体';
+  // 灵体颜色优先：八色灵体直接用其颜色，通用灵体才回落到显式 color / 预组主色。
+  const colorA = spiritColorOf(spiritA) || opts.colorA || PRECON_COLORS[preconA] || '灰';
+  const colorB = spiritColorOf(spiritB) || opts.colorB || PRECON_COLORS[preconB] || '红';
+  // 同色 60% 为硬约束：没有绕过开关，旧构筑规则已于 2026-11-14 废除。
+  const va = validateDeck(deckA, modeId, { spiritColor: colorA });
+  const vb = validateDeck(deckB, modeId, { spiritColor: colorB });
   if (!va.ok || !vb.ok) throw new Error([...va.errors, ...vb.errors].join('；'));
   const g = {
     version: 'soul-echo-engine-0.2.0', seed: opts.seed ?? 20261112,
@@ -139,8 +183,8 @@ export function createGame(opts = {}) {
   };
   const first = opts.first ?? (opts.randomFirst ? g.rng.int(2) : 0);
   g.first = first; g.active = first; g.priority = first;
-  g.players.push(newPlayer(g, 0, opts.nameA || '玩家 A', deckA, opts.colorA || '灰', opts.spiritA || '测试灵体'));
-  g.players.push(newPlayer(g, 1, opts.nameB || '玩家 B', deckB, opts.colorB || '红', opts.spiritB || '测试灵体'));
+  g.players.push(newPlayer(g, 0, opts.nameA || '玩家 A', deckA, colorA, spiritA));
+  g.players.push(newPlayer(g, 1, opts.nameB || '玩家 B', deckB, colorB, spiritB));
   for (const p of g.players) {
     g.rng.shuffle(p.deck);
     for (let i = 0; i < mode.life; i++) moveCard(g, p.deck[0], 'life', p.idx, { silent: true });
